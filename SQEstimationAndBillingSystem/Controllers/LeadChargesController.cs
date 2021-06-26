@@ -126,7 +126,10 @@ namespace SQEstimationAndBillingSystem.Controllers
             try
             {
                 LoggedInUserSessionModel objLoggedInUserSession = new LoggedInUserSessionModel();
-                objLoggedInUserSession.SelectedDSRId = 6;
+                if (Session["LoggedInUserSession"] != null)
+                {
+                    objLoggedInUserSession = (LoggedInUserSessionModel)(Session["LoggedInUserSession"]);
+                }
                 var Result = _repository.GetLeadInKMData(Material, LeadInKM, Convert.ToInt16(objLoggedInUserSession.SelectedDSRId));
                 return Json(Result, JsonRequestBehavior.AllowGet);
             }

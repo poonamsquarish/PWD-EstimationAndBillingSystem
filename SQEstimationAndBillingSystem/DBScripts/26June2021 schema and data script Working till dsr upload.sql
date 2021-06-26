@@ -9840,7 +9840,7 @@ select  ID as id,
 		LabourRateExcludingGSTInRs 
 from	DSRDetails
 where	DSRId=@DSRId and
-		DescriptionOfTheItem is not null and DescriptionOfTheItem like  '%'+@search+'%'
+		DescriptionOfTheItem is not null and (ISNULL(SSRItemNo,'')+ ' : ' + DescriptionOfTheItem) like  '%'+@search+'%'
 
 SELECT 'success'
 
