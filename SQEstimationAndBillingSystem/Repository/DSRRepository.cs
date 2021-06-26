@@ -88,7 +88,7 @@ namespace SQEstimationAndBillingSystem.Repository
                             }
                             else
                             {
-                                return "DSR allready uploaded.";
+                                return "DSR already uploaded.";
                             }
                         }
 
@@ -428,7 +428,7 @@ namespace SQEstimationAndBillingSystem.Repository
                         if (item != null)
                         {
 
-                            if (item.ToLower() == "c1machine$" || item.ToLower() == "c2machine$" || item.ToLower() == "c1manual$" || item.ToLower() == "c2manual$" || item.ToLower() == "'labour rate for ssr 2019-20 (f)$'" || item.ToLower() == "'material rates for ssr 2019 (f)$'" || item.ToLower() == "'ssr 2019-20$'" || item.ToLower() == "specificrates$" || item.ToLower() == "labourinsurance$" || item.ToLower() == "floorrates$")
+                            if (item.ToLower() == "c1machine$" || item.ToLower() == "c2machine$" || item.ToLower() == "c1manual$" || item.ToLower() == "c2manual$" || item.ToLower() == "'labour rate$'" || item.ToLower() == "'material rates$'" || item.ToLower() == "ssr$" || item.ToLower() == "specificrates$" || item.ToLower() == "labourinsurance$" || item.ToLower() == "floorrates$")
                             {
                                 // dtExcelData = new DataTable();
 
@@ -555,16 +555,11 @@ namespace SQEstimationAndBillingSystem.Repository
                                             sqlBulkCopy.ColumnMappings.Add("Cost of loader per trip of tipper", "CostOfLoaderPerTripOfTipper");
                                             sqlBulkCopy.ColumnMappings.Add("Total Cost Per Trip", "TotalCostPerTrip");
 
-
-
-
-
-
                                             sqlBulkCopy.WriteToServer(dtExcelData);
                                         }
                                         else if (item.ToLower().Contains("c1manual"))
                                         {
-                                            dtExcelData.Rows.RemoveAt(0);
+                                            
                                             //  MachineManualGroup
                                             sqlBulkCopy.DestinationTableName = "dbo.C1Manual";
                                             sqlBulkCopy.ColumnMappings.Add("DSRId", "DSRId");
@@ -585,11 +580,12 @@ namespace SQEstimationAndBillingSystem.Repository
                                             sqlBulkCopy.ColumnMappings.Add("Cost per Trip=(Col 14/4)", "CostPerTrip");
                                             sqlBulkCopy.ColumnMappings.Add("Fuel   Componant", "FuelComponent");
                                             sqlBulkCopy.ColumnMappings.Add("Cost Per trip 10 MT", "CostPerTrip10MT");
+                                            dtExcelData.Rows.RemoveAt(0);
                                             sqlBulkCopy.WriteToServer(dtExcelData);
                                         }
                                         else if (item.ToLower().Contains("c2machine"))
                                         {
-                                            dtExcelData.Rows.RemoveAt(0);
+                                            
                                             sqlBulkCopy.DestinationTableName = "dbo.C2Machine";
                                             sqlBulkCopy.ColumnMappings.Add("DSRId", "DSRId");
                                             sqlBulkCopy.ColumnMappings.Add("Lead In Km", "LeadInKm");
@@ -605,12 +601,13 @@ namespace SQEstimationAndBillingSystem.Repository
                                             sqlBulkCopy.ColumnMappings.Add("Group4FC", "Group4FC");
                                             sqlBulkCopy.ColumnMappings.Add("Group5LF", "Group5LF");
                                             sqlBulkCopy.ColumnMappings.Add("Group5FC", "Group5FC");
-
+                                            dtExcelData.Rows.RemoveAt(0);
+                                            dtExcelData.Rows.RemoveAt(0);
                                             sqlBulkCopy.WriteToServer(dtExcelData);
                                         }
                                         else if (item.ToLower().Contains("c2manual"))
                                         {
-                                            dtExcelData.Rows.RemoveAt(0);
+                                           
                                             sqlBulkCopy.DestinationTableName = "dbo.C2Manual";
                                             sqlBulkCopy.ColumnMappings.Add("DSRId", "DSRId");
                                             sqlBulkCopy.ColumnMappings.Add("Lead In Km", "LeadInKm");
@@ -630,6 +627,8 @@ namespace SQEstimationAndBillingSystem.Repository
                                             sqlBulkCopy.ColumnMappings.Add("Group6FC", "Group6FC");
                                             sqlBulkCopy.ColumnMappings.Add("Group7LF", "Group7LF");
                                             sqlBulkCopy.ColumnMappings.Add("Group7FC", "Group7FC");
+                                            dtExcelData.Rows.RemoveAt(0);
+                                            dtExcelData.Rows.RemoveAt(0);
                                             sqlBulkCopy.WriteToServer(dtExcelData);
                                         }
                                         else if (item.ToLower().Contains("ssr"))
@@ -695,7 +694,7 @@ namespace SQEstimationAndBillingSystem.Repository
                 filePath = item.FullName;
             }
 
-          var result =   _dbContext.Database.SqlQuery<int>("IsDSRPresent @DSRName,@FileName", new SqlParameter("DSRName", string.Concat("DSR", " ", DateTime.Now.Year)), new SqlParameter("FileName", filePath)).First();
+          var result =   _dbContext.Database.SqlQuery<int>("SQSPIsDSRPresent @DSRName,@FileName", new SqlParameter("DSRName", string.Concat("DSR", " ", DateTime.Now.Year)), new SqlParameter("FileName", filePath)).First();
 
             return result;
         }

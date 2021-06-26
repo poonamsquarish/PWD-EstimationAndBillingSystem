@@ -6756,6 +6756,12 @@
       <DependentUpon>SQEstimationAndBillingSystemDbEntities.edmx</DependentUpon>
       <LastGenOutput>FeedbackEntities.cs</LastGenOutput>
     </Content>
+    <Content Include="DBScripts\18Jan2020InitialScript.sql" />
+    <Content Include="DBScripts\21Apr2020FullDbScript.sql" />
+    <Content Include="DBScripts\26June2021 schema and data script.sql" />
+    <Content Include="DBScripts\CleanDbScript.sql" />
+    <Content Include="DBScripts\FinalSchemaAndDataScrript.sql" />
+    <Content Include="DBScripts\Script_V1.txt" />
     <Content Include="dist\css\AdminLTE.css" />
     <Content Include="dist\css\AdminLTE.min.css" />
     <Content Include="dist\css\alt\AdminLTE-bootstrap-social.css" />
@@ -6873,6 +6879,20 @@
     <Content Include="images\tick.png" />
     <Content Include="images\user_identity.gif" />
     <Content Include="images\user_identity_plus.gif" />
+    <Content Include="Logs\ServiceLog_13-03-2020.txt" />
+    <Content Include="Logs\ServiceLog_14-03-2020.txt" />
+    <Content Include="Logs\ServiceLog_16-01-2020.txt" />
+    <Content Include="Logs\ServiceLog_16-03-2020.txt" />
+    <Content Include="Logs\ServiceLog_18-01-2020.txt" />
+    <Content Include="Logs\ServiceLog_23-04-2020.txt" />
+    <Content Include="Logs\ServiceLog_24-03-2020.txt" />
+    <Content Include="Logs\ServiceLog_25-04-2020.txt" />
+    <Content Include="Logs\ServiceLog_26-01-2020.txt" />
+    <Content Include="Logs\ServiceLog_26-04-2020.txt" />
+    <Content Include="Logs\ServiceLog_27-02-2020.txt" />
+    <Content Include="Logs\ServiceLog_27-04-2020.txt" />
+    <Content Include="Logs\ServiceLog_28-02-2020.txt" />
+    <Content Include="Logs\ServiceLog_29-02-2020.txt" />
     <Content Include="Scripts\bootbox.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -7378,6 +7398,12 @@
       <DependentUpon>SQEstimationAndBillingSystemDbEntities.edmx</DependentUpon>
     </Content>
     <Content Include="Content\jquery-ui-1.12.1\package.json" />
+    <Content Include="DBScripts\SSR_2019-20.xlsx" />
+    <Content Include="Documents\01 .Construction of  Asphalt Road At  Jain Sthanak Road %24 .xls" />
+    <Content Include="Documents\01. Praposed Construction Of  Ladies Toilet Block %40 Satana  .xls" />
+    <Content Include="Documents\02. Construction of Concrete Road at Proposed Construction of Concrete Road  %40 From Sanmitra Housing Society    ..xls" />
+    <Content Include="Documents\New folder\SSR_2019-20.xlsx" />
+    <Content Include="Documents\SSR_2019-20.xlsx" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\dataTables.editor.min.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
@@ -7526,6 +7552,9 @@
     <Content Include="Scripts\SlickGrid\slick.remotemodel.js" />
     <Content Include="Scripts\toastr.js" />
     <Content Include="Scripts\toastr.min.js" />
+    <Content Include="Uploads\0_1.txt" />
+    <Content Include="Uploads\10_Buffing_in.txt" />
+    <Content Include="Uploads\2_1.txt" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -7559,6 +7588,10 @@
     <Content Include="Views\MeasurementSheet\CreateEdit.cshtml" />
     <Content Include="Views\MeasurementSheet\Index.cshtml" />
     <Content Include="Views\MeasurementSheet\_MeasurementSheetItemDetails.cshtml" />
+    <Content Include="Uploads\01 .Construction of  Asphalt Road At  Jain Sthanak Road  .xls" />
+    <Content Include="Uploads\01. Praposed Construction Of  Ladies Toilet Block %40 Satana  .xls" />
+    <Content Include="Uploads\0_02. Construction of Concrete Road at Proposed Construction of Concrete Road  %40 From Sanmitra Housing Society    ..xls" />
+    <Content Include="Uploads\4_SSR 18-19.pdf" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

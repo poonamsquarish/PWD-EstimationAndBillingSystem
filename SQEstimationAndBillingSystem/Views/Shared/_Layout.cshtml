@@ -344,8 +344,10 @@ desired effect
         debugger;
         if ($('#liDSRDropdown:has(> a)').length == 0 || ($('#liDSRDropdown:has(> a)').length > 0 && $("#liDSRDropdown a").data("islatestdsr").toLowerCase() == "false")) {
             //if ($('#liDSRDropdown:has(> a)').length == 0 || ($('#liDSRDropdown:has(> a)').length > 0 && true)) {
-            $("input[type='submit']").attr("disabled", "disabled");
-            toastr.warning("Please upload DSR and Project for DSR");
+            if ($("input[type='submit']").closest("form").attr("id") != "frmChildProjectDetail") {
+                $("input[type='submit']").attr("disabled", "disabled");
+                toastr.warning("Please upload DSR and Project for DSR");
+            }
         } else {
             $("input[type='submit']").removeAttr("disabled");
             if ($('#liDSRProjectsDropdown:has(> a)').length == 0) {
