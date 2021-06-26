@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="SQEstimationAndBillingSystemDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="DSR">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DSRDetails">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SrNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="Chapter" Type="nvarchar" MaxLength="400" />
+          <Property Name="SSRItemNo" Type="nvarchar" MaxLength="100" />
+          <Property Name="ReferenceNo" Type="nvarchar" MaxLength="100" />
+          <Property Name="DescriptionOfTheItem" Type="nvarchar(max)" />
+          <Property Name="AdditionalSpecification" Type="nvarchar(max)" />
+          <Property Name="Unit" Type="nvarchar" MaxLength="100" />
+          <Property Name="CompletedRateExcludingGSTInRs" Type="nvarchar" MaxLength="100" />
+          <Property Name="LabourRateExcludingGSTInRs" Type="nvarchar" MaxLength="100" />
+          <Property Name="DSRID" Type="int" />
+        </EntityType>
+        <EntityType Name="M_Roles">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Role" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="M_Users">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="1000" Nullable="false" />
+          <Property Name="RoleID" Type="int" Nullable="false" />
+          <Property Name="LastLoginDate" Type="datetime" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="MiddleName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Department" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_DSRDetails_DSR_DSRID">
+          <End Role="DSR" Type="Self.DSR" Multiplicity="0..1" />
+          <End Role="DSRDetails" Type="Self.DSRDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DSR">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DSRDetails">
+              <PropertyRef Name="DSRID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SQEstimationAndBillingSystemDbModelStoreContainer">
+          <EntitySet Name="DSR" EntityType="Self.DSR" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DSRDetails" EntityType="Self.DSRDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="M_Roles" EntityType="Self.M_Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="M_Users" EntityType="Self.M_Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_DSRDetails_DSR_DSRID" Association="Self.FK_DSRDetails_DSR_DSRID">
+            <End Role="DSR" EntitySet="DSR" />
+            <End Role="DSRDetails" EntitySet="DSRDetails" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SQEstimationAndBillingSystemDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="SQEstimationAndBillingSystemDbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="DSRs" EntityType="SQEstimationAndBillingSystemDbModel.DSR" />
+          <EntitySet Name="DSRDetails" EntityType="SQEstimationAndBillingSystemDbModel.DSRDetail" />
+          <EntitySet Name="M_Roles" EntityType="SQEstimationAndBillingSystemDbModel.M_Roles" />
+          <EntitySet Name="M_Users" EntityType="SQEstimationAndBillingSystemDbModel.M_Users" />
+          <AssociationSet Name="FK_DSRDetails_DSR_DSRID" Association="SQEstimationAndBillingSystemDbModel.FK_DSRDetails_DSR_DSRID">
+            <End Role="DSR" EntitySet="DSRs" />
+            <End Role="DSRDetail" EntitySet="DSRDetails" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="DSR">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FileName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="DSRDetails" Relationship="SQEstimationAndBillingSystemDbModel.FK_DSRDetails_DSR_DSRID" FromRole="DSR" ToRole="DSRDetail" />
+        </EntityType>
+        <EntityType Name="DSRDetail">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SrNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Chapter" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="SSRItemNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ReferenceNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DescriptionOfTheItem" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AdditionalSpecification" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Unit" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CompletedRateExcludingGSTInRs" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LabourRateExcludingGSTInRs" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DSRID" Type="Int32" />
+          <NavigationProperty Name="DSR" Relationship="SQEstimationAndBillingSystemDbModel.FK_DSRDetails_DSR_DSRID" FromRole="DSRDetail" ToRole="DSR" />
+        </EntityType>
+        <EntityType Name="M_Roles">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Role" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="M_Users">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="RoleID" Type="Int32" Nullable="false" />
+          <Property Name="LastLoginDate" Type="DateTime" Precision="3" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MiddleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Department" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_DSRDetails_DSR_DSRID">
+          <End Type="SQEstimationAndBillingSystemDbModel.DSR" Role="DSR" Multiplicity="0..1" />
+          <End Type="SQEstimationAndBillingSystemDbModel.DSRDetail" Role="DSRDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DSR">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DSRDetail">
+              <PropertyRef Name="DSRID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SQEstimationAndBillingSystemDbModelStoreContainer" CdmEntityContainer="SQEstimationAndBillingSystemDbEntities">
+          <EntitySetMapping Name="DSRs">
+            <EntityTypeMapping TypeName="SQEstimationAndBillingSystemDbModel.DSR">
+              <MappingFragment StoreEntitySet="DSR">
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DSRDetails">
+            <EntityTypeMapping TypeName="SQEstimationAndBillingSystemDbModel.DSRDetail">
+              <MappingFragment StoreEntitySet="DSRDetails">
+                <ScalarProperty Name="DSRID" ColumnName="DSRID" />
+                <ScalarProperty Name="LabourRateExcludingGSTInRs" ColumnName="LabourRateExcludingGSTInRs" />
+                <ScalarProperty Name="CompletedRateExcludingGSTInRs" ColumnName="CompletedRateExcludingGSTInRs" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="AdditionalSpecification" ColumnName="AdditionalSpecification" />
+                <ScalarProperty Name="DescriptionOfTheItem" ColumnName="DescriptionOfTheItem" />
+                <ScalarProperty Name="ReferenceNo" ColumnName="ReferenceNo" />
+                <ScalarProperty Name="SSRItemNo" ColumnName="SSRItemNo" />
+                <ScalarProperty Name="Chapter" ColumnName="Chapter" />
+                <ScalarProperty Name="SrNo" ColumnName="SrNo" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="M_Roles">
+            <EntityTypeMapping TypeName="SQEstimationAndBillingSystemDbModel.M_Roles">
+              <MappingFragment StoreEntitySet="M_Roles">
+                <ScalarProperty Name="Role" ColumnName="Role" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="M_Users">
+            <EntityTypeMapping TypeName="SQEstimationAndBillingSystemDbModel.M_Users">
+              <MappingFragment StoreEntitySet="M_Users">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Department" ColumnName="Department" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastLoginDate" ColumnName="LastLoginDate" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

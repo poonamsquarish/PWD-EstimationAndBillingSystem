@@ -1,0 +1,276 @@
+﻿@model SQEstimationAndBillingSystem.Models.RecaptionalModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/slick.grid.css" rel="stylesheet" />
+<link href="~/Content/jquery-ui-1.12.1/jquery-ui.css" rel="stylesheet" />
+<link href="~/Content/slick.pager.css" rel="stylesheet" />
+<style>
+    .cell-title {
+        font-weight: bold;
+    }
+
+    .cell-effort-driven {
+        text-align: center;
+    }
+
+    .cell-selection {
+        border-right-color: silver;
+        border-right-style: solid;
+        background: #f5f5f5;
+        color: gray;
+        text-align: right;
+        font-size: 10px;
+    }
+</style>
+
+<section class="content-header">
+    <h1>
+        Recaptional
+        <small>List</small>
+    </h1>
+</section>
+<div class="row">
+    <div class="col-xs-12" style="text-align:right; margin:5px">
+
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-body" id="divRecaptional" style="margin-left:100px; margin-right:100px; margin-top:30px">
+                <table cellspacing="0" border="0" style="width:100%">
+                    <colgroup span="5" width="67"></colgroup>
+                    <colgroup width="65"></colgroup>
+                    <colgroup width="56"></colgroup>
+                    <colgroup width="114"></colgroup>
+
+                    <tr>
+                        <td colspan=8 height="17" align="center" valign=middle><b><u><font size=3>RECAPUTULATION SHEET</font></u></b></td>
+                    </tr>
+                    <tr>
+                        <td height="17" align="center" valign=middle><b><u><br></u></b></td>
+                        <td align="center" valign=middle><b><u><br></u></b></td>
+                        <td align="center" valign=middle><b><u><br></u></b></td>
+                        <td align="center" valign=middle><b><u><br></u></b></td>
+                        <td align="center" valign=middle><b><u><br></u></b></td>
+                        <td align="center" valign=middle><b><u><br></u></b></td>
+                        <td align="center" valign=middle><b><u><br></u></b></td>
+                        <td align="center" valign=middle><b><u><br></u></b></td>
+                    </tr>
+                    <tr>
+                        <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000" height="17" align="left"><b>Sub Estimate </b></td>
+                        <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000" align="left"><b><br></b></td>
+                        <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000" align="left"><br></td>
+                        <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000" align="left"><b><br></b></td>
+                        <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000" align="left"><b><br></b></td>
+                        <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-right: 1px solid #000000" align="left"><b><br></b></td>
+                        <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="left"><br></td>
+                        <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" sdnum="1033;0;0.00"><b>Cost </b></td>
+                    </tr>
+                    <tr>
+                        <td height="17" align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left" sdnum="1033;0;0.00"><br></td>
+                    </tr>
+                    <tr>
+                        <td height="24" align="left"><b>Estimate : Work Portion</b></td>
+                        <td align="left"><b><br></b></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="center">  =</td>
+                        <td align="center">Rs.</td>
+                        <td align="right"><b>@Model.WorkPortion</b></td>
+                    </tr>
+                    <tr>
+                        <td style="border-top: 1px solid #000000" height="24" align="left"><b><br></b></td>
+                        <td style="border-top: 1px solid #000000" align="left"><b><br></b></td>
+                        <td style="border-top: 1px solid #000000" align="left"><br></td>
+                        <td style="border-top: 1px solid #000000" align="left"><b><font size=3>Total</font></b></td>
+                        <td style="border-top: 1px solid #000000" align="center"><b><font size=3>A</font></b></td>
+                        <td style="border-top: 1px solid #000000" align="center">  =</td>
+                        <td style="border-top: 1px solid #000000" align="center">Rs.</td>
+                        <td style="border-top: 1px solid #000000" align="right"><b>@Model.Total</b></td>
+                    </tr>
+                    <tr>
+                        <td height="24" align="left"><b><br></b></td>
+                        <td align="left"><b><br></b></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="center"><br></td>
+                        <td align="center"><br></td>
+                        <td align="left" sdnum="1033;0;0.00"><b><br></b></td>
+                    </tr>
+                    <tr>
+                        <td height="24" align="left"><b><br></b></td>
+                        <td align="left"><br></td>
+                        <td align="left"><b>Deduct For Royalty</b></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="center">  =</td>
+                        <td align="center">Rs.</td>
+                        <td align="right" ><b>@Model.DeductForRoyalty</b></td>
+                    </tr>
+                    <tr>
+                        <td height="24" align="left"><b><br></b></td>
+                        <td align="left"><b><br></b></td>
+                        <td align="left"><b>Deduct For Testing Charges</b></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="center">  =</td>
+                        <td align="center">Rs.</td>
+                        <td align="right" ><b>@Model.DeductForTestingCharges</b></td>
+                    </tr>
+                    <tr>
+                        <td style="border-bottom: 1px solid #000000" height="24" align="left"><br></td>
+                        <td style="border-bottom: 1px solid #000000" align="left"><br></td>
+                        <td style="border-bottom: 1px solid #000000" align="left"><br></td>
+                        <td style="border-bottom: 1px solid #000000" align="left"><br></td>
+                        <td style="border-bottom: 1px solid #000000" align="left"><br></td>
+                        <td style="border-bottom: 1px solid #000000" align="left"><br></td>
+                        <td style="border-bottom: 1px solid #000000" align="center"><br></td>
+                        <td style="border-bottom: 1px solid #000000" align="left" sdnum="1033;0;0.00"><br></td>
+                    </tr>
+                    <tr>
+                        <td height="24" align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><font size=3>Total Cost of Work Portion</font></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="center">  =</td>
+                        <td align="center">Rs.</td>
+                        <td align="right" ><b>@Model.TotalCostofWorkPortion</b></td>
+                    </tr>
+                    <tr>
+                        <td height="24" align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                    </tr>
+                    <tr>
+                        <td height="24" align="left"><br></td>
+                        <td align="left"><b>ADD 12 % For GST</b></td>
+                        <td align="left"><b><br></b></td>
+                        <td align="left"><br></td>
+                        <td align="center" valign=middle><b>B</b></td>
+                        <td align="center">  =</td>
+                        <td align="center">Rs.</td>
+                        <td align="right"><b>@Model.GST</b></td>
+                    </tr>
+                    <tr>
+                        <td height="24" align="left"><br></td>
+                        <td align="left"><b>Labour Insurance  1.00  % </b></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="center" valign=middle><b>C</b></td>
+                        <td align="center">  =</td>
+                        <td align="center">Rs.</td>
+                        <td align="right" ><b>@Model.LabourInsurancePer</b></td>
+                    </tr>
+                    <tr>
+                        <td height="24" align="left"><br></td>
+                        <td align="left"><b>Add 4% Contingency Charges </b></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="center" valign=middle><b>D</b></td>
+                        <td align="center">  =</td>
+                        <td align="center">Rs.</td>
+                        <td align="right" ><b>@Model.ContingencyChargesPer</b></td>
+                    </tr>
+                    <tr>
+                        <td height="24" align="left"><br></td>
+                        <td align="left"><b>Add 4% Administrative Charges </b></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="center" valign=middle><b>E</b></td>
+                        <td align="center">  =</td>
+                        <td align="center">Rs.</td>
+                        <td align="right" ><b>@Model.AdministrativeChargesPer</b></td>
+                    </tr>
+                    <tr>
+                        <td height="24" align="left"><br></td>
+                        <td align="left"><b><br></b></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="center"><br></td>
+                        <td align="center"><br></td>
+                        <td align="left" sdnum="1033;0;0.00"><b><br></b></td>
+                    </tr>
+                    <tr>
+                        <td colspan=5 height="24" align="center"><b>Total Gross Amount =   A + B + C + D + E</b></td>
+                        <td align="center">  =</td>
+                        <td align="center">Rs.</td>
+                        <td align="right" ><b><font size=3>@Model.TotalGrossAmount</font></b></td>
+                    </tr>
+                    <tr>
+                        <td height="24" align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left" sdnum="1033;0;0.00"><br></td>
+                    </tr>
+                    <tr>
+                        <td height="24" align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><b><font size=3>Say </font></b></td>
+                        <td align="center">=</td>
+                        <td align="center"><b>Rs.</b></td>
+                        <td style="border-top: 2px solid #000000; border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="right"><b><font size=3>@Model.Say</font></b></td>
+                    </tr>
+                    <tr>
+                        <td height="17" align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left" sdnum="1033;0;0.00"><br></td>
+                    </tr>
+                    <tr>
+                        <td height="17" align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left"><br></td>
+                        <td align="left" sdnum="1033;0;0.00"><br></td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    $(document).ready(function () {
+        LoadGridData();
+    });
+
+
+
+</script>

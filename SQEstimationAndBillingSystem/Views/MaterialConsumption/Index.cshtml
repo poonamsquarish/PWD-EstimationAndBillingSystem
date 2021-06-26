@@ -1,0 +1,484 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    var MaterialList = ViewBag.MaterialIdList;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*@using (Html.BeginForm("AddEditMaterialConsumption", "MaterialConsumption", FormMethod.Post, new { id = "frmChild" }))
+{*@
+    <input type="hidden" id="id" name="id" value="0">
+    <input type="hidden" id="DSRDetailId" name="DSRDetailId" value="0">
+    <div class="panel panel-default" style="padding-left: 1%">
+        <div style="color: #286090;padding-left: 0.3%;">
+            <h4> <strong>Add New Material Consumption</strong> </h4>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-3">
+                    <label class="control-label">Item Of Work Brief Description</label>
+                    <span style="color:red">*</span>
+                    <input type="text" id="ItemOfWork" name="ItemOfWork" maxlength="1500" class="form-control" />
+                </div>
+                <div class="col-lg-3">
+                    <label class="control-label">Quantity</label>
+                    <span style="color:red">*</span>
+                    <input type="text" id="Quantity" name="Quantity" maxlength="50" class="form-control" />
+                </div>
+                <div class="col-lg-6">
+                
+                        <label>Material</label>
+                        <br />
+                        @Html.ListBox("ddlMaterial", new SelectList(MaterialList, "Value", "Text"), new { @class = "form-control select2", @multiple = "multiple", placeholder = "Material" })
+                        <br />
+
+                </div>
+  
+
+            </div>
+            <div class="row" id="divMaterialForEdit">
+                <div class="col-lg-12">
+
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-lg-3">
+
+                </div>
+                <div class="col-lg-3">
+
+                </div>
+                <div class="col-lg-3">
+
+                </div>
+                <div class="col-lg-1" style="float: right !important;">
+                    <label class="control-label" style="color: transparent;"> Submit</label>
+                    <span style="color:transparent">*</span>
+                    <input type="button" value="Submit" class="form-control btn btn-default mybtn" onclick="ValidateFields()">
+                </div>
+            </div>
+        </div>
+    </div>
+@*}*@
+<div class="panel panel-default" style="padding-left: 1%">
+    <div class="card">
+        <div class="card-body" style="padding:0.25em !important;">
+            <!-- style="padding:0.25em !important;" -->
+            <div id="tableDiv" class="dt-bootstrap4 table-responsive">
+
+            </div>
+        </div>
+    </div>
+</div>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+        LoadGridData();
+        $("#ddlMaterial").select2();
+
+    });
+
+    var ControlNames = [];
+ 
+
+    //$('.select2').on('select2:select', function (e) {
+    //    var data = e.params.data;
+    //    console.log(data);
+    //});
+
+    function ValueFactorChange(obj) {
+        debugger;
+        var value = $("#txtValue_" + obj).val() != null ? $("#txtValue_" + obj).val() : 0;
+        var factor = $("#txtFactor_" + obj).val() != null ? $("#txtFactor_" + obj).val() : 1;
+        var result = parseFloat(value) * parseFloat(factor)
+        $("#txtQuantity_" + obj).val(result);
+    }
+
+    $('.select2').on('change', function (e) {
+        debugger;
+        
+       
+        var selectedIDs = $('#ddlMaterial').select2("data");
+        ControlNames = [];
+        $("#divMaterialForEdit").empty();
+        $("#divMaterialForEdit").html('<div class="col-lg-12"></div>');
+        var MaterialControls = "";
+        for (var i = 0; i < selectedIDs.length; i++) {
+            MaterialControls = MaterialControls + '<div class="row" style="margin-right:0 !important;margin-left:0 !important;">';
+            if (i == 0) {
+                
+                MaterialControls = MaterialControls + '<div class="col-lg-3"><label class="control-label">Material</label><span style="color:red">*</span><input type="text" id="txtMaterial_' + selectedIDs[i].id + '" value="' + selectedIDs[i].text + '" maxlength="50" class="form-control" readonly/></div>'
+                MaterialControls = MaterialControls + '<div class="col-lg-3"><label class="control-label">Value</label><span style="color:red">*</span><input type="text" onchange="ValueFactorChange('+ selectedIDs[i].id +')" id="txtValue_' + selectedIDs[i].id + '" name="txtValue" maxlength="50" class="form-control" /></div>'
+                MaterialControls = MaterialControls + '<div class="col-lg-3"><label class="control-label">Factor</label><span style="color:red">*</span><input type="text" onchange="ValueFactorChange('+selectedIDs[i].id+')" id="txtFactor_' + selectedIDs[i].id + '" name="txtFactor" maxlength="50" class="form-control" /></div>'
+                MaterialControls = MaterialControls + '<div class="col-lg-3"><label class="control-label">Total</label><span style="color:red">*</span><input type="text" id="txtQuantity_' + selectedIDs[i].id + '" name="Quantity" maxlength="50" class="form-control" readonly /></div>'
+                ControlNames.push("txtMaterial_" + selectedIDs[i].id);
+                ControlNames.push("txtValue_" + selectedIDs[i].id);
+                ControlNames.push("txtFactor_" + selectedIDs[i].id);
+                ControlNames.push("txtQuantity_" + selectedIDs[i].id);
+            }
+            else {
+                MaterialControls = MaterialControls + '<div class="col-lg-3"><label class="control-label">Material</label><span style="color:red">*</span><input type="text" id="txtMaterial_' + selectedIDs[i].id + '" value="' + selectedIDs[i].text + '" maxlength="50" class="form-control" readonly/></div>'
+                MaterialControls = MaterialControls + '<div class="col-lg-3"><label class="control-label">Value</label><span style="color:red">*</span><input type="text" onchange="ValueFactorChange(' + selectedIDs[i].id +')" id="txtValue_' + selectedIDs[i].id + '"  maxlength="50" class="form-control" /></div>'
+                MaterialControls = MaterialControls + '<div class="col-lg-3"><label class="control-label">Factor</label><span style="color:red">*</span><input type="text" onchange="ValueFactorChange(' + selectedIDs[i].id +')" id="txtFactor_' + selectedIDs[i].id + '" maxlength="50" class="form-control" /></div>'
+                MaterialControls = MaterialControls + '<div class="col-lg-3"><label class="control-label">Total</label><span style="color:red">*</span><input type="text" id="txtQuantity_' + selectedIDs[i].id + '"  maxlength="50" class="form-control" readonly/></div>'
+                ControlNames.push("txtMaterial_" + selectedIDs[i].id);
+                ControlNames.push("txtValue_" + selectedIDs[i].id);
+                ControlNames.push("txtFactor_" + selectedIDs[i].id);
+                ControlNames.push("txtQuantity_" + selectedIDs[i].id);
+            }
+            MaterialControls = MaterialControls + '</div>';
+        }
+        $("#divMaterialForEdit").html(MaterialControls);
+       
+    })
+
+    $("#ItemOfWork").on("keyup", function (e) {
+        if ($(this).val().trim() == '') {
+            $("#Quantity").val('');
+            $('.select2').val('');
+            $("#DSRDetailId").val('0');
+        }
+    })
+
+    $('#ItemOfWork').autoComplete({
+                    minChars: 3,
+                    delay: 5,
+                    cache: true,
+                    source: function (term, suggest) {
+
+                        term = term.toLowerCase();
+                        if ( term.trim().length > 0) {
+
+                        //var choices = [['Australia', 'au'], ['Austria', 'at'], ['Brasil', 'br'], ['Bulgaria', 'bg'], ['Canada', 'ca'], ['China', 'cn'], ['Czech Republic', 'cz'], ['Denmark', 'dk'], ['Finland', 'fi'], ['France', 'fr'], ['Germany', 'de'], ['Hungary', 'hu'], ['India', 'in'], ['Italy', 'it'], ['Japan', 'ja'], ['Netherlands', 'nl'], ['Norway', 'no'], ['Portugal', 'pt'], ['Romania', 'ro'], ['Russia', 'ru'], ['Spain', 'es'], ['Swiss', 'ch'], ['Turkey', 'tr'], ['USA', 'us']];
+                        //var suggestions = [];
+                        //for (i = 0; i < choices.length; i++)
+                        //    if (~(choices[i][0] + ' ' + choices[i][1]).toLowerCase().indexOf(term)) suggestions.push(choices[i]);
+                        //    suggest(suggestions);
+
+
+                     var choices = [];
+                        // var MLData = CallMLPredictSenseOnSearchModel(groupName);
+
+                        $.ajax({
+                            url: '@Url.Action("GetItemOfWorkList", "MaterialConsumption")',
+                            type: 'POST',
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify({ request: term }),
+                            async: true,
+                            dataType: 'json',
+                            success: function (data) {
+                                $.each(data.ItemOfWorkList, function (i, type) {
+                                    var theResults = [type.value,type.id]; // THIS ARRAY NEEDS TO BE CLEARED OF PREVIOUS VALUES EACH ITERATION SO THAT IT CAN BE PROPERLEY USED BELOW
+
+                                    choices.push(theResults);
+                                });
+                                var suggestions = [];
+                                for (i = 0; i < choices.length; i++) {
+                                    if (~(choices[i][0] + ' ' + choices[i][1]).toLowerCase().indexOf(term)) {
+                                        suggestions.push(choices[i]);
+                                    }
+                                }
+                                suggest(suggestions);
+
+                            },
+                            error: function () {
+
+                                // toastr.error("Something went wrong while processing your request.");
+                                console.log("GetSearchModalData");
+                            }
+                            });
+
+                    }
+                },
+             renderItem: function (item, search) {
+
+        search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                    var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
+                    $('[data-toggle="tooltip"]').tooltip();
+                    return '<div data-SSRItemNo="' + item[0] +'" class="autocomplete-suggestion" title="' + item[0] +'"   data-ItemOfWorkDesc="'+item[0]+'" data-ItemOfWorkId="'+item[1]+'" data-val="'+search+'">'+item[0].replace(re, "<b>$1</b>")+'</div>';
+    },
+             onSelect: function (e, term, item) {
+                 $("#ItemOfWork").val(item.data('itemofworkdesc'));
+                 $("#DSRDetailId").val(item.data('itemofworkid'));
+                 //if (MeasurementSheetItems) {
+                 //    var arr = jQuery.grep(MeasurementSheetItems, function (n, i) {
+                 //        return (n.ItemId == $("#DSRDetailId").val());
+                 //    });
+                 //    if (arr.length>0) {
+                 //        $("#Quantity").attr("readonly","readonly");
+                 //        $("#Quantity").val(arr[0].TotalQty);
+                 //    } else {
+                 //        $("#Quantity").removeAttr("readonly");
+                 //        $("#Quantity").val('');
+                 //    }
+                 //}
+                 return false;
+        //alert('Item "'+item.data('langname')+' ('+item.data('lang')+')" selected by '+(e.type == 'keydown' ? 'pressing enter' : 'mouse click')+'.');
+    }
+            });
+
+
+
+    function ValidateFields() {
+        var result = true;
+        if ($('.select2').val() != "") {
+            ControlNames.forEach(function (item) {
+                if ($("#" + item).val() == "") {
+                    result = false;
+                }
+            });
+
+            if (result == false) {
+                toastr.error("Please enter mandatory fields(*).");
+                return false
+            }
+
+            AddEditMaterialConsumption(0);
+            return true;
+        }
+        else {
+            toastr.error("Please select materials.");
+            return false
+        }
+  
+    }
+
+
+
+
+    function LoadGridData() {
+        $.ajax({
+                type: 'GET',
+            url: '@Url.Action("GetAllMaterialConsumption", "MaterialConsumption")',
+           // data: { id: id },
+            success: function (data) {
+                debugger;
+
+                if (data == "") {
+                    $("#tableDiv").empty();
+                    $("#tableDiv").html("<div>No Records Found</div>");
+                    return;
+                }
+
+                data = JSON.parse(data);
+                $('#tableDiv').css("display", "");
+                var tblPopup = "<table id='tblMaterialConsumption' style='width:100%' class='table table-striped table-bordered tableBorder'><thead><tr><th style='text-align: center !important'>Action</th>";
+
+                Object.keys(data.MaterialConsumption[0]).forEach(function (key) {
+                 tblPopup = tblPopup + "<th style='text-align: center !important; min-width: 50px;'>" + key + "</th>";
+                });
+
+                tblPopup = tblPopup + "</tr>" + "</thead>" + "<tbody>";
+
+                data.MaterialConsumption.forEach(function (item) {
+                    editaction = '<a href="#" title="Edit" class="links data-edit-btn" onclick="return AddEditMaterialComsumptionById(' +
+                        item.MaterialConsumptionID +
+                            ')">' +
+                                "<img src='" + '@Url.Content("~/Content/Images/Edit.svg")' + "'></img>" +
+                                "</a> ";
+                    deleteaction = '<a href="#" title="Delete" class="links data-edit-btn" onclick="return DeleteConfirm(' +
+                            item.MaterialConsumptionID +
+                            ')">' +
+                            "<img src='" + '@Url.Content("~/Content/Images/delete.svg")' + "'></img>";
+
+                    tblPopup = tblPopup + "<tr style='text-align: center !important; min-width: 50px;'>";
+                    tblPopup = tblPopup + "<td style='text-align: center !important; min-width: 50px;'>" + editaction + deleteaction +"</td>";
+
+                    Object.keys(item).forEach(function (key) {
+                        tblPopup = tblPopup + "<td style='text-align: center !important; min-width: 50px;'>" + (item[key] != null ? item[key] : 0) + "</td>";
+                    });
+
+                    tblPopup = tblPopup + "</tr>";
+                });
+
+                tblPopup = tblPopup + "</tbody></table>";
+
+                $("#tableDiv").empty();
+                $("#tableDiv").html(tblPopup);
+
+                table = $('#tableDiv').DataTable({
+                    dom: "lftrR"
+                });
+
+                },
+                error: function (result) {
+                    toastr.error("Something went wrong. Please contact to administrator.");
+                }
+            });
+    }
+
+    function AddEditMaterialComsumptionById(id) {
+         $.ajax({
+                type: 'GET',
+            url: '@Url.Action("CreateEdit", "MaterialConsumption")',
+            data: { id: id },
+             success: function (response) {
+                 debugger;
+                $("#ItemOfWork").val(response.ItemOfWork);
+                 $("#Quantity").val(response.Quantity);
+                var ids = [];
+                for (var i = 0; i < response.MaterialList.length; i++) {
+
+                    ids.push(response.MaterialList[i].MaterialId);
+                }
+                 $('.select2').val(ids);
+                 $('.select2').trigger("change");
+                 debugger;
+                 ControlNames.forEach(function (item) {
+                     for (var i = 0; i < response.MaterialList.length; i++) {
+                         if (item.includes(response.MaterialList[i].MaterialId)) {
+                             if (item.includes("Factor")) {
+
+                                 $("#" + item).val(response.MaterialList[i].MaterialFactor);
+                             }
+                         else if (item.includes("Value")) {
+                                 $("#" + item).val(response.MaterialList[i].MaterialValue)
+
+                             }
+                             else if (item.includes("Quantity")) {
+                                 var factor = response.MaterialList[i].MaterialFactor != 0 ? response.MaterialList[i].MaterialFactor : 1;
+                                 var value = response.MaterialList[i].MaterialValue != 0 ? response.MaterialList[i].MaterialValue : 0;
+                                 $("#" + item).val(value * factor )
+
+                             }
+                         }
+                     }
+                     
+                 });
+                 debugger;
+                $("#id").val(response.id);
+                 $("#DSRDetailId").val(response.DSRDetailId);
+                    },
+                error: function (result) {
+                    toastr.error("Something went wrong. Please contact to administrator.");
+                }
+            });
+    }
+
+    function AddEditMaterialConsumption(id) {
+        debugger;
+        var Values = [];
+        var objMaterialConsumptionModel;
+        ControlNames.forEach(function (item) {
+            if (item.includes("txtMaterial"))
+            { 
+                var tempid = item.split('_')[1];
+                Values.push({ DSRId:0, MaterialConsumptionID: id, MaterialId: tempid, MaterialValue: $("#txtValue_" + tempid).val(), MaterialFactor: $("#txtFactor_" + tempid).val(), Quantity:$("#txtQuantity_" + tempid).val() });
+            }
+        });
+       
+        objMaterialConsumptionModel = {
+            id: $("#id").val(),
+            DSRDetailId: $("#DSRDetailId").val(),
+            ItemOfWork: $("#ItemOfWork").val(),
+            Quantity: $("#Quantity").val(),
+            DSRId: 0,
+            ProjectId: 0,
+            ProjectName: ""
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("AddEditMaterialConsumption", "MaterialConsumption")',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({ 'objMaterialConsumptionModel': objMaterialConsumptionModel, 'obj': Values}),
+            success: function (response) {
+
+                $("#ItemOfWork").val(response.Material);
+                $("#ItemOfWorkBriefDescription").val(response.Unit);
+                $("#Quantity").val("");
+                $("#id").val(0);
+                $("#DSRDetailsId").val(0);
+                $('.select2').val("");
+                $('.select2').trigger("change");
+
+                LoadGridData();
+                toastr.success("Saved successfully");
+                    },
+                error: function (result) {
+                    toastr.error("Something went wrong. Please contact to administrator.");
+                }
+            });
+
+    }
+    function DeleteConfirm(obj) {
+        bootbox.confirm({
+            title: "Confirmation",
+            message: "Are you sure you want to delete this record?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: ' mybtn bootboxbutton'
+                },
+                cancel: {
+                    label: 'No',
+                    className: ' cancelbtn bootboxbutton'
+                }
+            },
+            callback: function (confirmation) {
+                if (confirmation) {
+                    var url = '@Url.Action("DeleteMaterialConsumption", "MaterialConsumption")';
+
+                    $.ajax({
+                        url: url,
+                        type: 'Post',
+                        dataType: "json",
+                        data: { id: obj },
+                        success: function (result) {
+                            if (result.success) {
+                                toastr.success("Measurement sheet deleted successfully!");
+
+                               // $('#grdMaterialConsumption').DataTable().clear().destroy();
+                                LoadGridData();
+                                //$('html,body').animate({
+                                //    scrollTop: $(".container-fluid").offset().top
+                                //},
+                                //    'slow');
+                            }
+                            else {
+                                toastr.error("Error");
+                            }
+                        },
+                        error: function () {
+                            toastr.error("Error");
+                        }
+                    })
+                }
+            }
+        })
+    }
+    
+
+    function GetLeadInKMData() {
+
+        if ($("#txtMaterial").val() != "" && $("#txtLeadInKM").val() != "") {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetLeadInKMData", "MaterialConsumption")',
+                data: { Material: $("#txtMaterial").val(), LeadInKM: $("#txtLeadInKM").val() },
+                success: function (response) {
+                    $("#ddlTotalMaterialConsumption").empty();
+                    $("#ddlTotalMaterialConsumption").append($("<option></option>").val('-1').html('Select'));
+                    $("#txtNetMaterialConsumption").val("");
+                    $.each(response, function (i, type) {
+
+
+                        $("#ddlTotalMaterialConsumption").append($("<option></option>").val(type.MaterialConsumption).html(type.Type + ': ' + type.MaterialConsumption));
+                    });
+
+                },
+                error: function (result) {
+                    toastr.error("Something went wrong. Please contact to administrator.");
+                }
+            });
+        }
+        else {
+            toastr.error("Please enter material and lead in km.");
+        }
+    }
+
+</script>
+

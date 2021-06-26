@@ -1,0 +1,18 @@
+CREATE PROCEDURE [dbo].[SQSPGetAllDSRDetails]	
+AS
+BEGIN
+
+select  ID as id,
+		SrNo,
+		Chapter,
+		SSRItemNo,
+		ReferenceNo,
+		DescriptionOfTheItem,
+		AdditionalSpecification,
+		Unit,
+		CompletedRateExcludingGSTInRs,
+		LabourRateExcludingGSTInRs 
+from	DSRDetails
+
+SELECT 'success'
+END

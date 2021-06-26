@@ -1,0 +1,492 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>*@
+@using (Html.BeginForm("AddEditProjectDetails", "ProjectDetails", FormMethod.Post, new { id = "frmChild", enctype = "multipart/form-data" }))
+{
+    <input type="hidden" id="id" name="id" value="0">
+    <input type="hidden" id="DSRDetailsId" name="DSRDetailsId" value="0">
+    <div class="panel panel-default" style="padding-left: 1%">
+        <div style="color: #286090;padding-left: 0.3%;">
+            <h4> <strong>Add New Project Details</strong> </h4>
+            @*@Html.ActionLink("Download", "DownloadFile", new { FileName = "2_imagddddes - Copy.jpg" })*@
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-3">
+                    <label class="control-label">Project Name</label>
+                    <span style="color:red">*</span>
+                    <input type="text" id="txtProjectName" name="ProjectName" maxlength="200" class="form-control" onblur="CheckProjectNameExist()" />
+                </div>
+
+                <div class="col-lg-3">
+                    <label class="control-label">Project Address</label>
+                    <span style="color:red">*</span>
+                    <textarea id="txtProjectAddress" rows="4" name="ProjectAddress" maxlength="200" class="form-control"> </textarea>
+                </div>
+                <div class="col-lg-3">
+                    <label class="control-label">Project Description</label>
+                    <span style="color:red">*</span>
+                    <textarea id="txtProjectDescription" rows="4" name="ProjectDescription" maxlength="1000" class="form-control"> </textarea>
+                </div>
+
+                @*<div class="col-lg-2" style="float: right !important;">
+                
+                </div>*@
+                <div class="col-lg-3" style="float: right !important;">
+                    <label class="control-label" style="color: transparent;"> Select Document</label>
+                    <span style="color:transparent">*</span>
+                    <input type="file" name="postedFile" />
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-lg-3">
+
+                </div>
+                <div class="col-lg-3">
+
+                </div>
+                <div class="col-lg-3">
+                    <label class="control-label" style="color: transparent;"> Submit</label>
+                    <span style="color:transparent">*</span>
+                    <input type="button" value="View Documents" class="form-control btn btn-default mybtn" onclick="ViewAllDocumentList()">
+                </div>
+                <div class="col-lg-3" style="float: right !important;">
+                    <label class="control-label" style="color: transparent;"> Submit</label>
+                    <span style="color:transparent">*</span>
+                    <input type="submit" value="Submit" class="form-control btn btn-default mybtn" onclick="return ValidateFields()">
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div class="panel panel-default" style="padding-left: 1%">
+    <div class="card">
+        <div class="card-body" style="padding:0.25em !important;">
+            <!-- style="padding:0.25em !important;" -->
+            <div id="tableDiv" class="dt-bootstrap4 table-responsive">
+                <table id="tblProjectDetails" class="table table-striped table-bordered" style="width:100% !important;" data-request-url="@Url.Action("GetAllProjectDetails", "ProjectDetails")">
+                    <thead class="thead-light" style="border-top-left-radius: 15px;border-top-right-radius: 15px !important;background-color: #e9ecef !important;">
+                        <tr style="line-height:15px;" class="font-weight-bold">
+                            <th class="no-sort">Action</th>
+                            <th class="no-sort">Sr No</th>
+                            <th class="no-sort">Project Name</th>
+                            <th class="no-sort">Project Address</th>
+                            <th class="no-sort">Project Description</th>
+                            <th class="no-sort">Measurment Available</th>
+                            <th class="no-sort">Abstract Sheet Available</th>
+                            <th class="no-sort">Lead Charges Available</th>
+                            <th class="no-sort">Material Consumption Available</th>
+                            <th class="no-sort">Rate Analysis Available</th>
+                            <th class="no-sort">Recaptional Sheet Available</th>
+                            <th class="no-sort">Billing</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ShowAllDocumentModal" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h5 class="modal-title" id="modalFileTitleID"></h5>
+            </div>
+            <div id="divModelBfileBody" class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        LoadGridData();
+       
+    });
+
+    function ValidateFields() {
+        if ($("#txtProjectName").val() == "" || $("#txtProjectAddress").val() == "" || $("#txtProjectDescription").val() == "") {
+            toastr.error("Please enter mandatory fields(*).");
+            return false;
+        }
+        return true;
+    }
+
+    function CheckProjectNameExist() {
+        debugger;
+        if ($("#txtProjectName").val() != "") {
+            var table = $('#tblProjectDetails').DataTable();
+            var data = table
+                .rows()
+                .data();
+
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].ProjectName.toLowerCase() == $("#txtProjectName").val().toLowerCase()) {
+                    if (parseInt($("#id").val()) == 0) {
+                        $("#txtProjectName").val("");
+                        toastr.error("Project name already exist. Please try another project name.");
+                        return false;
+                    }
+                    else {
+                        if (data[i].id != $("#id").val()) {
+                            $("#txtProjectName").val("");
+                            toastr.error("Project name already exist. Please try another project name.");
+                            return false;
+                        }
+                    }
+                }
+         }
+        }
+
+        return true;
+        }
+    
+
+    function ViewAllDocumentList() {
+
+        if ($("#id").val() != 0) {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetAllDocuments", "ProjectDetails")',
+                data: { id: $("#id").val() },
+                success: function (response) {
+                    
+                    var result = "No document found.";
+                    if (response.length > 0)
+                        result = "";
+
+                    for (var i = 0; i < response.length; i++) {
+                        var url = "/ProjectDetails/DownloadFile?FileName=" + response[i] ;
+                        result = result + '<div>' + '<a href="' + url + '">' + response[i] + '</a>' + '</div>';
+                        //result = result + '<div>' + '<a href=javascript:DownloadFile("' + response[i].replace(/ /g, '__') + '")>' + response[i] +'</a>'+ '</div>'
+                    }
+                    $('#divModelBfileBody').html(result)
+                    $('#modalFileTitleID').text("Uploaded Documents list.");
+                    $('#ShowAllDocumentModal').modal('show');  
+                },
+                error: function (result) {
+                    toastr.error("Something went wrong. Please contact to administrator.");
+                }
+            });
+        }
+        else {
+            toastr.error("Please click on edit button first to select project.");
+        }
+    }
+
+    function DownloadFile(FileName) {
+        
+         $.ajax({
+                type: 'GET',
+                url: '@Url.Action("DownloadFile", "ProjectDetails")',
+             data: { FileName: FileName.replace(/__/g, ' ') },
+                success: function (response) {
+                    
+                },
+                error: function (result) {
+                    toastr.error("Something went wrong. Please contact to administrator.");
+                }
+            });
+    }
+
+    function LoadGridData() {
+        var indexurl = $('#tblProjectDetails').data("request-url");
+        //indexurl = indexurl + "?FromDate=" + $('#min-date').val() + "&&ToDate=" + $('#max-date').val();
+        var whInTable = $('#tblProjectDetails').dataTable({
+            "paging": false,
+           // "select": true,
+            "language": {
+                "sLengthMenu": "Records Per Page _MENU_",
+                "search": '',//'<i class="fa fa-search"></i>',
+                "searchPlaceholder": "Search",
+                "oPaginate": {
+                    "sNext": '<i class="fa fa-angle-right"></i>',
+                    "sPrevious": '<i class="fa fa-angle-left"></i>',
+                }
+            },
+            // dom: '<"floatRight"B><"clear">frtip',
+
+            //dom: "lfBtrR",
+            dom: "lftrR",
+            //buttons: [
+            //    {
+            //        extend: 'excel',
+            //        title: 'WIP Report ' + 'From Date: ' + $('#min-date').val() + ' To Date: ' + $('#max-date').val(),
+            //        filename: 'WIP Report: ' + 'From Date: ' + $('#min-date').val() + ' To Date: ' + $('#max-date').val(),
+            //        messageTop: 'The information in this table is copyright to Sirius Cybernetics Corp.'
+            //    },
+
+            //    {
+            //        extend: 'pdfHtml5',
+            //        title: 'WIP Report: ' + 'From Date: ' + $('#min-date').val() + ' To Date: ' + $('#max-date').val(),
+            //        customize: function (doc) {
+            //            doc.content.splice(0, 0, {
+            //                text: ""
+            //            });
+
+            //        }
+            //    },
+            //    'print'
+            //    //'excelHtml5',
+            //    //'csvHtml5',
+            //    //'pdfHtml5'
+            //],
+            'fnDrawCallback': function (oSettings) {
+                $('.dataTables_filter').each(function () {
+                    //if ($("#min-date").length == 0) {
+                    //    $(this).append('<span style="padding-left:10px">From Date: </span><input type="text" id="min-date" name="min-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd" placeholder="From:"/><span style="padding-left:10px">To Date: </span><input type="text" id="max-date" name="max-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd" placeholder="To:">');
+
+                    //}
+                    // var table = $('#example').DataTable();
+
+                });
+            },
+            "autoWidth": false,
+            "bServerSide": false,
+            "bSortable": true,
+            "bSearchable": true,
+            "bRetrieve": false,
+            "bDestroy": true,
+            "bFilter": true,
+            "searching": true,
+            "bProcessing": false,
+            "sAjaxSource": indexurl,
+            "fnServerParams": function (aoData) {
+                aoData.push({ "name": "more_data", }); //"value": searchForm
+            },
+            "aaSorting": [],
+            "columnDefs": [{
+                "targets": 'no-sort',
+                "orderable": false,
+            }],
+            "aoColumns": [
+                {
+                    "title": "Action", "autoWidth": false, "orderable": false, "className": "no-sort text-right batch-no ",
+                    "render": function (data, type, row, meta) {
+                        editaction = '<a href="#" title="Edit" class="links data-edit-btn" onclick="return AddEditProjectDetails(' +
+                            row.id +
+                            ')">' +
+                                "<img src='" + '@Url.Content("~/Content/Images/Edit.svg")' + "'></img>" +
+                                "</a> ";
+
+
+
+                        deleteaction = '<a href="#" title="Delete" class="links data-edit-btn" onclick="return DeleteProjectDetails(' +
+                            row.id +
+                            ')">' +
+                            "<img src='" + '@Url.Content("~/Content/Images/delete.svg")' + "'></img>";
+                        return '<div class="row"> <div class="col-lg-3">' + editaction + '</div>' + '<div class="col-lg-3">' + deleteaction + '</div></div>';
+                    },
+                },
+                {
+                    "title": "Sr No", "autoWidth": true, "orderable": false, "className": "no-sort text-right batch-no",
+                    "render": function (data, type, row, meta) {
+                        a = meta.row + 1
+                        return a;
+                    },
+                },
+                { "title": "Project Name", "autoWidth": true, "orderable": false, "className": "no-sort text-left", "data": "ProjectName" },
+                { "title": "Project Address", "autoWidth": true, "orderable": false, "className": "no-sort text-left ScrollForColText", "data": "ProjectAddress" },
+                { "title": "Project Description", "autoWidth": true, "orderable": false, "className": "no-sort text-left ScrollForColText", "data": "ProjectDescription" },
+                {
+                    "title": "Measurment Available", "autoWidth": true, "orderable": false, "className": "no-sort text-left", "data": "IsMeasurment",
+                    fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
+                        
+                       // if (oData.IsMeasurment) {
+                            // $(nTd).html("<a href='javascript:OpenModel('"+ oData.CompoundName + "')'>" + oData.ThreeTo7Days + "</a>");
+                            $(nTd).html('<a href=javascript:OpenModel("' + oData.IsMeasurment + '","IsMeasurment")>' + oData.IsMeasurment + '</a>');
+                       // }
+                    }},
+                {
+                    "title": "Abstract Sheet Available", "autoWidth": true, "orderable": false, "className": "no-sort text-left", "data": "IsAbstractSheet",
+                    fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
+                        
+                      //  if (oData.IsAbstractSheet) {
+                            // $(nTd).html("<a href='javascript:OpenModel('"+ oData.CompoundName + "')'>" + oData.ThreeTo7Days + "</a>");
+                            $(nTd).html('<a href=javascript:OpenModel("' + oData.IsAbstractSheet + '","IsAbstractSheet")>' + oData.IsAbstractSheet + '</a>');
+                     //   }
+                    }},
+                {
+                    "title": "Lead Charges Available", "autoWidth": true, "orderable": false, "className": "no-sort text-left", "data": "IsLeadCharges",
+                    fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
+                        
+                      //  if (oData.IsLeadCharges) {
+                            // $(nTd).html("<a href='javascript:OpenModel('"+ oData.CompoundName + "')'>" + oData.ThreeTo7Days + "</a>");
+                            $(nTd).html('<a href=javascript:OpenModel("' + oData.IsLeadCharges + '","IsLeadCharges")>' + oData.IsLeadCharges + '</a>');
+                      //  }
+                    }},
+                {
+                    "title": "Material Consumption Available", "autoWidth": true, "orderable": false, "className": "no-sort text-left", "data": "IsMaterialConsumption",
+                    fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
+                        
+                      //  if (oData.IsMaterialConsumption) {
+                            // $(nTd).html("<a href='javascript:OpenModel('"+ oData.CompoundName + "')'>" + oData.ThreeTo7Days + "</a>");
+                            $(nTd).html('<a href=javascript:OpenModel("' + oData.IsMaterialConsumption + '","IsMaterialConsumption")>' + oData.IsMaterialConsumption + '</a>');
+                       /// }
+                    }},
+                {
+                    "title": "Rate Analysis Available", "autoWidth": true, "orderable": false, "className": "no-sort text-left", "data": "IsRateAnalysis",
+                    fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
+                        
+                      //  if (oData.IsRateAnalysis) {
+                            // $(nTd).html("<a href='javascript:OpenModel('"+ oData.CompoundName + "')'>" + oData.ThreeTo7Days + "</a>");
+                            $(nTd).html('<a href=javascript:OpenModel("' + oData.IsRateAnalysis + '","IsRateAnalysis")>' + oData.IsRateAnalysis + '</a>');
+                       // }
+                    }},
+                {
+                    "title": "Recaptional Sheet Available", "autoWidth": true, "orderable": false, "className": "no-sort text-left", "data": "IsRecaptionalSheet",
+                    fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
+                        
+                       // if (oData.IsRecaptionalSheet) {
+                            // $(nTd).html("<a href='javascript:OpenModel('"+ oData.CompoundName + "')'>" + oData.ThreeTo7Days + "</a>");
+                            $(nTd).html('<a href=javascript:OpenModel("' + oData.IsRecaptionalSheet + '","IsRecaptionalSheet")>' + oData.IsRecaptionalSheet + '</a>');
+                      //  }
+                    }},
+                {
+                    "title": "Billing Available", "autoWidth": true, "orderable": false, "className": "no-sort text-left", "data": "IsBilling",
+                    fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
+                        
+                      //  if (oData.IsBilling) {
+                            // $(nTd).html("<a href='javascript:OpenModel('"+ oData.CompoundName + "')'>" + oData.ThreeTo7Days + "</a>");
+                            $(nTd).html('<a href=javascript:OpenModel("' + oData.IsBilling + '","IsBilling")>' + oData.IsBilling + '</a>');
+                     //   }
+                    }},
+                //{
+                //    "title": "IsDocumnetUploaded", "autoWidth": true, "orderable": false, "className": "no-sort text-left", "data": "IsDocumnetUploaded",
+                //    fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
+                        
+                //     //   if (oData.IsDocumnetUploaded) {
+                //            // $(nTd).html("<a href='javascript:OpenModel('"+ oData.CompoundName + "')'>" + oData.ThreeTo7Days + "</a>");
+                //            $(nTd).html('<a href=javascript:OpenModel("' + oData.IsDocumnetUploaded + '","IsDocumnetUploaded")>' + oData.IsDocumnetUploaded + '</a>');
+                //      //  }
+                //    }},
+            ]
+        });
+        
+
+        whInTable.fnDraw();
+
+
+    }
+
+    function OpenModel(value, PageName) {
+        
+
+        if (PageName == "IsMeasurment") {
+
+            window.location.href = '@Url.Action("Index", "MeasurementSheet")';
+        }
+
+        if (PageName == "IsAbstractSheet") {
+            window.location.href = '@Url.Action("Index", "AbstractSheet")';
+        }
+
+        if (PageName == "IsLeadCharges") {
+
+           window.location.href = '@Url.Action("Index", "LeadCharges")';
+        }
+        if (PageName == "IsMaterialConsumption") {
+
+            window.location.href = '@Url.Action("Index", "MaterialConsumption")';
+        }
+
+        if (PageName == "IsRateAnalysis") {
+            window.location.href = '@Url.Action("Index", "RateAnalysis")';
+        }
+
+        if (PageName == "IsRecaptionalSheet" ) {
+
+           window.location.href = '@Url.Action("Index", "RecaptionalSheet")';
+        }
+        if (PageName == "IsBilling" ) {
+
+            window.location.href = '@Url.Action("Index", "Billing")';
+        }
+
+        if (PageName == "IsDocumnetUploaded" ) {
+            window.location.href = '@Url.Action("Index", "ProjectDetails")';
+        }
+
+    }
+
+    function AddEditProjectDetails(id) {
+
+        $.ajax({
+                type: 'GET',
+            url: '@Url.Action("CreateEdit", "ProjectDetails")',
+            data: { id: id },
+            success: function (response) {
+
+                $("#txtProjectName").val(response.ProjectName);
+                $("#txtProjectAddress").val(response.ProjectAddress);
+                $("#txtProjectDescription").val(response.ProjectDescription);
+                $("#id").val(response.id);
+                    },
+                error: function (result) {
+                    toastr.error("Something went wrong. Please contact to administrator.");
+                }
+            });
+
+    }
+    function DeleteProjectDetails(id) {
+        bootbox.confirm({
+                message: "Are you sure?",
+                buttons: {
+                    confirm: {
+                        label: "Yes",
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: "No",
+                        className: 'btn-danger'
+                    }
+                }, callback: function (result) {
+                    
+                    if (!result)
+                        return;
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("DeleteProjectDetails", "ProjectDetails")',
+                        data: { id: id },
+                        success: function (response) {
+                            
+                            if (response == "success") {
+                                toastr.success("Project Details deleted Successfully");
+                                LoadGridData();
+                              }
+                            else {
+                                toastr.error("Something went wrong. Please contact to administrator.")
+                                return;
+                            }
+
+
+                        },
+                        error: function (result) {
+                            toastr.error("Something went wrong. Please contact to administrator.");
+                        }
+                    });
+                }
+
+            });
+    }
+
+   
+
+</script>
+
+<style>
+    .ScrollForColText {
+        max-width: 150px !important;
+        width: 150px !important;
+        overflow-x: scroll !important;
+        white-space: nowrap !important;
+    }
+</style>
+

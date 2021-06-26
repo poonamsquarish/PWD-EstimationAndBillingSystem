@@ -1,0 +1,226 @@
+InsertData Started
+
+InsertData started with file name : SSR_2019-20.xlsx
+
+SSR with FileName : SSR_2019-20.xlsx completed.
+
+InsertData Completed
+
+InsertData Started
+
+InsertData started with file name : SSR_2019-20.xlsx
+
+InsertData Started
+
+InsertData started with file name : SSR_2019-20.xlsx
+
+InsertData Started
+
+InsertData started with file name : SSR_VISHAL.xlsx
+
+InsertData Started
+
+InsertData started with file name : SSR_VISHAL.xlsx
+
+InsertData Started
+
+InsertData started with file name : SSR_VISHAL.xlsx
+
+InsertData Started
+
+InsertData started with file name : SSR_VISHAL.csv
+
+InsertData Started
+
+InsertData started with file name : SSR_2019-20.csv
+
+InsertData Started
+
+InsertData started with file name : SSR_2019-20.csv
+
+InsertData Started
+
+InsertData started with file name : SSR_2019-20.csv
+
+InsertData Started
+
+InsertData started with file name : SSR_2019-20.csv
+
+InsertData Started
+
+InsertData started with file name : SSR_2019-20.csv
+
+InsertData Started
+
+InsertData started with file name : SSR_2019-20.xlsx
+
+InsertData Started
+
+InsertData started with file name : SSR_2019-20.xlsx
+
+InsertData Started
+
+InsertData started with file name : SSR_2019-20.xlsx
+
+InsertData Started
+
+InsertData started with file name : SSR_2019-20.csv
+
+BulkInsert Started
+
+BulkInsert Started
+
+InsertData Started
+
+InsertData started with file name : SSR_2019-20.csv
+
+BulkInsert Started
+
+InsertData Started
+
+InsertData started with file name : SSR_2019-20.csv
+
+BulkInsert Started
+
+InsertData Started
+
+InsertData started with file name : SSR_2019-20.csv
+
+BulkInsert Started
+
+InsertData Started
+
+InsertData started with file name : SSR_2019-20.csv
+
+BulkInsert Started
+
+InsertData Started
+
+InsertData started with file name : SSR_2019-20.csv
+
+BulkInsert Started
+
+InsertData Started
+
+InsertData started with file name : SSR_2019-20.csv
+
+BulkInsert Started
+
+InsertData Started
+
+InsertData started with file name : SSR_2019-20.csv
+
+BulkInsert Started
+
+InsertData Started
+
+InsertData started with file name : SSR_2019-20.csv
+
+BulkInsert Started
+
+InsertData Started
+
+InsertData started with file name : SSR_2019-20.csv
+
+BulkInsert Started
+
+InsertData Started
+
+InsertData started with file name : SSR_2019-20.csv
+
+BulkInsert Started
+
+InsertData Started
+
+InsertData started with file name : SSR_2019-20.csv
+
+BulkInsert Started
+
+File name: 
+No Of Records To Copy: 2064
+No Of Records Copied Successfully: 2064
+No Of Records Failed: 0
+SSR with FileName : SSR_2019-20.csv completed.
+
+InsertData Completed
+
+InsertData Started
+
+InsertData started with file name : SSR_2019-20.csv
+
+ with FileName : SSR_2019-20.csv completed.
+
+InsertData Completed
+
+InsertData Started
+
+InsertData started with file name : SSR_2019-20.csv
+
+InsertData Started
+
+InsertData started with file name : SSR_2019-20.csv
+
+BulkInsert Started
+
+File name: SSR_2019-20.csv
+No Of Records To Copy: 2064
+No Of Records Copied Successfully: 0
+No Of Records Failed: 2064
+ with FileName :  failed.
+
+Exception Occured while Getting File List: 
+{"ClassName":"System.InvalidOperationException","Message":"The connection was not closed. The connection's current state is open.","Data":null,"InnerException":null,"HelpURL":null,"StackTraceString":"   at System.Data.ProviderBase.DbConnectionInternal.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)\r\n   at System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)\r\n   at System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)\r\n   at System.Data.SqlClient.SqlConnection.Open()\r\n   at SQEstimationAndBillingSystem.Repository.DSRRepository.BulkInsert(String fileName, String tableName, DataTable dataTable)\r\n   at SQEstimationAndBillingSystem.Repository.DSRRepository.InsertData()","RemoteStackTraceString":null,"RemoteStackIndex":0,"ExceptionMethod":"8\nTryOpenConnection\nSystem.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\nSystem.Data.ProviderBase.DbConnectionInternal\nBoolean TryOpenConnection(System.Data.Common.DbConnection, System.Data.ProviderBase.DbConnectionFactory, System.Threading.Tasks.TaskCompletionSource`1[System.Data.ProviderBase.DbConnectionInternal], System.Data.Common.DbConnectionOptions)","HResult":-2146233079,"Source":"System.Data","WatsonBuckets":null}
+
+InsertData Completed
+
+InsertData Started
+
+InsertData started with file name : SSR_2019-20.csv
+
+BulkInsert Started
+
+Exception Occured while performing Bulk Insert :
+{"ClassName":"System.InvalidOperationException","Message":"The given value of type String from the data source cannot be converted to type nvarchar of the specified target column.","Data":null,"InnerException":{"ClassName":"System.InvalidOperationException","Message":"String or binary data would be truncated.","Data":null,"InnerException":null,"HelpURL":null,"StackTraceString":"   at System.Data.SqlClient.SqlBulkCopy.ConvertValue(Object value, _SqlMetaData metadata, Boolean isNull, Boolean& isSqlType, Boolean& coercedToDataFeed)","RemoteStackTraceString":null,"RemoteStackIndex":0,"ExceptionMethod":"8\nConvertValue\nSystem.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\nSystem.Data.SqlClient.SqlBulkCopy\nSystem.Object ConvertValue(System.Object, System.Data.SqlClient._SqlMetaData, Boolean, Boolean ByRef, Boolean ByRef)","HResult":-2146233079,"Source":"System.Data","WatsonBuckets":null},"HelpURL":null,"StackTraceString":"   at System.Data.SqlClient.SqlBulkCopy.ConvertValue(Object value, _SqlMetaData metadata, Boolean isNull, Boolean& isSqlType, Boolean& coercedToDataFeed)\r\n   at System.Data.SqlClient.SqlBulkCopy.ReadWriteColumnValueAsync(Int32 col)\r\n   at System.Data.SqlClient.SqlBulkCopy.CopyColumnsAsync(Int32 col, TaskCompletionSource`1 source)\r\n   at System.Data.SqlClient.SqlBulkCopy.CopyRowsAsync(Int32 rowsSoFar, Int32 totalRows, CancellationToken cts, TaskCompletionSource`1 source)\r\n   at System.Data.SqlClient.SqlBulkCopy.CopyBatchesAsyncContinued(BulkCopySimpleResultSet internalResults, String updateBulkCommandText, CancellationToken cts, TaskCompletionSource`1 source)\r\n   at System.Data.SqlClient.SqlBulkCopy.CopyBatchesAsync(BulkCopySimpleResultSet internalResults, String updateBulkCommandText, CancellationToken cts, TaskCompletionSource`1 source)\r\n   at System.Data.SqlClient.SqlBulkCopy.WriteToServerInternalRestContinuedAsync(BulkCopySimpleResultSet internalResults, CancellationToken cts, TaskCompletionSource`1 source)\r\n   at System.Data.SqlClient.SqlBulkCopy.WriteToServerInternalRestAsync(CancellationToken cts, TaskCompletionSource`1 source)\r\n   at System.Data.SqlClient.SqlBulkCopy.WriteToServerInternalAsync(CancellationToken ctoken)\r\n   at System.Data.SqlClient.SqlBulkCopy.WriteRowSourceToServerAsync(Int32 columnCount, CancellationToken ctoken)\r\n   at System.Data.SqlClient.SqlBulkCopy.WriteToServer(DataTable table, DataRowState rowState)\r\n   at System.Data.SqlClient.SqlBulkCopy.WriteToServer(DataTable table)\r\n   at SQEstimationAndBillingSystem.Repository.DSRRepository.BulkInsert(String fileName, String tableName, DataTable dataTable)","RemoteStackTraceString":null,"RemoteStackIndex":0,"ExceptionMethod":"8\nConvertValue\nSystem.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\nSystem.Data.SqlClient.SqlBulkCopy\nSystem.Object ConvertValue(System.Object, System.Data.SqlClient._SqlMetaData, Boolean, Boolean ByRef, Boolean ByRef)","HResult":-2146233079,"Source":"System.Data","WatsonBuckets":null}
+
+File name: SSR_2019-20.csv
+No Of Records To Copy: 2064
+No Of Records Copied Successfully: 0
+No Of Records Failed: 2064
+ with FileName : SSR_2019-20.csv failed.
+
+InsertData Completed
+
+InsertData Started
+
+InsertData started with file name : SSR_2019-20.csv
+
+BulkInsert Started
+
+InsertData Started
+
+InsertData started with file name : SSR_2019-20.csv
+
+BulkInsert Started
+
+File name: SSR_2019-20.csv
+No Of Records To Copy: 2064
+No Of Records Copied Successfully: 2064
+No Of Records Failed: 0
+ with FileName : SSR_2019-20.csv completed.
+
+InsertData Completed
+
+InsertData Started
+
+InsertData started with file name : SSR_2019-20.csv
+
+BulkInsert Started
+
+File name: SSR_2019-20.csv
+No Of Records To Copy: 2064
+No Of Records Copied Successfully: 2064
+No Of Records Failed: 0
+ with FileName : SSR_2019-20.csv completed.
+
+InsertData Completed
+

@@ -1,0 +1,398 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>*@
+@using (Html.BeginForm("AddEditLeadCharges", "LeadCharges", FormMethod.Post, new { id = "frmChild" }))
+{
+    <input type="hidden" id="id" name="id" value="0">
+    <input type="hidden" id="DSRDetailsId" name="DSRDetailsId" value="0">
+<div class="panel panel-default" style="padding-left: 1%">
+        <div style="color: #286090;padding-left: 0.3%;">
+            <h4> <strong>Add New Lead Charges</strong> </h4>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-3">
+                    <label class="control-label">Material</label>
+                    <span style="color:red">*</span>
+                    <input type="text" id="txtMaterial" name="Material" maxlength="1500" class="form-control" />
+                </div>
+                @*<div class="col-lg-3">
+            <label class="control-label">Sub Material</label>
+            <span style="color:red"></span>
+            <select class="form-control" id="ddlSubMaterial" style="padding: 0; padding-left:2px"></select>
+        </div>*@
+                <div class="col-lg-3">
+                    <label class="control-label">Unit</label>
+                    <span style="color:red">*</span>
+                    <input type="text" id="txtUnit" name="Unit" maxlength="50" class="form-control" />
+                </div>
+                <div class="col-lg-3">
+                    <label class="control-label">Lead In KM</label>
+                    <span style="color:red">*</span>
+                    <input type="text" id="txtLeadInKM" name="LeadInKm"  maxlength="50" class="form-control allow_decimal" onblur="GetLeadInKMData()" />
+                </div>
+                <div class="col-lg-3">
+                    <label class="control-label">Total Lead Charges</label>
+                    <span style="color:red">*</span>
+                    <select class="form-control" id="ddlTotalLeadCharges" name="TotalLeadChargesAtQuarry" style="padding: 0; padding-left:2px"></select>
+                    @*<input type="text" id="txtTotalLeadCharges" name="TotalLeadChargesAtQuarry" class="form-control" />*@
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-lg-3">
+                    <label class="control-label">Net Lead Charges</label>
+                    <span style="color:red">*</span>
+                    <input type="text" id="txtNetLeadCharges"  maxlength="50" name="NetLeadChargesForCompletedCol" class="form-control" readonly />
+                </div>
+                <div class="col-lg-3">
+
+                </div>
+                <div class="col-lg-3">
+
+                </div>
+                <div class="col-lg-1" style="float: right !important;">
+                    <label class="control-label" style="color: transparent;"> Submit</label>
+                    <span style="color:transparent">*</span>
+                    <input type="submit" value="Submit" class="form-control btn btn-default mybtn" onclick="return ValidateFields()">
+                </div>
+            </div>
+</div>
+    </div>
+}
+<div class="panel panel-default" style="padding-left: 1%">
+    <div class="card">
+        <div class="card-body" style="padding:0.25em !important;">
+            <!-- style="padding:0.25em !important;" -->
+            <div id="tableDiv" class="dt-bootstrap4 table-responsive">
+                <table id="tblLeadCharges" class="table table-striped table-bordered" style="width:100% !important;" data-request-url="@Url.Action("GetAllLeadCharges", "LeadCharges")">
+                    <thead class="thead-light" style="border-top-left-radius: 15px;border-top-right-radius: 15px !important;background-color: #e9ecef !important;">
+                        <tr style="line-height:15px;" class="font-weight-bold">
+                            <th class="no-sort">Action</th>
+                            <th class="no-sort">Sr No</th>
+                            <th class="no-sort">Project Name</th>
+                            <th class="no-sort">Material</th>
+                            <th class="no-sort">Unit</th>
+                            <th class="no-sort">Lead In Km</th>
+                            <th class="no-sort">Total lead charges At Quarry</th>
+                            <th class="no-sort">Net Lead charges for completed Col.</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        LoadGridData();
+        $("#ddlTotalLeadCharges").append($("<option></option>").val('-1').html('Select'));
+        $("#ddlTotalLeadCharges").on('change', function () {
+            $("#txtNetLeadCharges").val(this.value);
+        });
+           
+    });
+
+    function ValidateFields() {
+        if ($("#txtMaterial").val() == "" || $("#txtUnit").val() == "" || $("#txtLeadInKM").val() == "" || $("#txtTotalLeadCharges").val() == "" || $("#txtNetLeadCharges").val() == "") {
+            toastr.error("Please enter mandatory fields(*).");
+            return false;
+        }
+        return true;
+    }
+
+    $('#txtMaterial').autoComplete({
+            minChars: 3,
+            delay: 5,
+            cache: true,
+            source: function (term, suggest) {
+
+                term = term.toLowerCase();
+                if (term.trim().length > 0) {
+
+                    //var choices = [['Australia', 'au'], ['Austria', 'at'], ['Brasil', 'br'], ['Bulgaria', 'bg'], ['Canada', 'ca'], ['China', 'cn'], ['Czech Republic', 'cz'], ['Denmark', 'dk'], ['Finland', 'fi'], ['France', 'fr'], ['Germany', 'de'], ['Hungary', 'hu'], ['India', 'in'], ['Italy', 'it'], ['Japan', 'ja'], ['Netherlands', 'nl'], ['Norway', 'no'], ['Portugal', 'pt'], ['Romania', 'ro'], ['Russia', 'ru'], ['Spain', 'es'], ['Swiss', 'ch'], ['Turkey', 'tr'], ['USA', 'us']];
+                    //var suggestions = [];
+                    //for (i = 0; i < choices.length; i++)
+                    //    if (~(choices[i][0] + ' ' + choices[i][1]).toLowerCase().indexOf(term)) suggestions.push(choices[i]);
+                    //    suggest(suggestions);
+
+
+                    var choices = [];
+                    // var MLData = CallMLPredictSenseOnSearchModel(groupName);
+
+                    $.ajax({
+                        url: '@Url.Action("GetMaterialList", "LeadCharges")',
+                        type: 'POST',
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify({ request: term }),
+                        async: true,
+                        dataType: 'json',
+                        success: function (data) {
+                            $.each(data.ItemOfWorkList, function (i, type) {
+                                var theResults = [type.DescriptionOfTheItem, type.id, type.SSRItemNo, type.Unit, type.CompletedRateExcludingGSTInRs]; // THIS ARRAY NEEDS TO BE CLEARED OF PREVIOUS VALUES EACH ITERATION SO THAT IT CAN BE PROPERLEY USED BELOW
+
+                                choices.push(theResults);
+                            });
+                            var suggestions = [];
+                            for (i = 0; i < choices.length; i++) {
+                                if (~(choices[i][0] + ' ' + choices[i][1]).toLowerCase().indexOf(term)) {
+                                    suggestions.push(choices[i]);
+                                }
+                            }
+                            suggest(suggestions);
+
+                        },
+                        error: function () {
+
+                            // toastr.error("Something went wrong while processing your request.");
+                            console.log("GetSearchModalData");
+                        }
+                    });
+
+                }
+            },
+            renderItem: function (item, search) {
+
+                search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
+                $('[data-toggle="tooltip"]').tooltip();
+                return '<div data-SSRItemNo="' + item[0] + '" class="autocomplete-suggestion" title="' + item[0] + '"   data-ItemOfWorkDesc="' + item[0] + '" data-ItemOfWorkId="' + item[1] + '" data-SSRItemNo1="' + item[2] + '" data-Unit="' + item[3] + '" data-CompletedRateExcludingGSTInRs="' + item[4] + '" data-val="' + search + '">' + item[0].replace(re, "<b>$1</b>") + '</div>';
+            },
+            onSelect: function (e, term, item) {
+                $("#txtMaterial").val(item.data('itemofworkdesc'));
+                $("#DSRDetailsId").val(item.data('itemofworkid'));
+
+                $("#txtUnit").val(item.data('unit'));
+                //$("#txtSSRItemNo").val(item.data('ssritemno1'));
+                //$("#txtCompletedRateForSSR").val(item.data('completedrateexcludinggstinrs'));
+
+
+                //if (MeasurementSheetItems) {
+                //    var arr = jQuery.grep(MeasurementSheetItems, function (n, i) {
+                //        return (n.ItemId == $("#DSRDetailId").val());
+                //    });
+                //    if (arr.length > 0) {
+                //        $("#Quantity").attr("readonly", "readonly");
+                //        $("#Quantity").val(arr[0].TotalQty);
+                //    } else {
+                //        $("#Quantity").removeAttr("readonly");
+                //        $("#Quantity").val('');
+                //    }
+                //}
+                return false;
+                //alert('Item "'+item.data('langname')+' ('+item.data('lang')+')" selected by '+(e.type == 'keydown' ? 'pressing enter' : 'mouse click')+'.');
+            }
+        });
+
+
+    function LoadGridData() {
+        var indexurl = $('#tblLeadCharges').data("request-url");
+        //indexurl = indexurl + "?FromDate=" + $('#min-date').val() + "&&ToDate=" + $('#max-date').val();
+        var whInTable = $('#tblLeadCharges').dataTable({
+            "paging": false,
+           // "select": true,
+            "language": {
+                "sLengthMenu": "Records Per Page _MENU_",
+                "search": '',//'<i class="fa fa-search"></i>',
+                "searchPlaceholder": "Search",
+                "oPaginate": {
+                    "sNext": '<i class="fa fa-angle-right"></i>',
+                    "sPrevious": '<i class="fa fa-angle-left"></i>',
+                }
+            },
+            // dom: '<"floatRight"B><"clear">frtip',
+
+            //dom: "lfBtrR",
+            dom: "lftrR",
+            //buttons: [
+            //    {
+            //        extend: 'excel',
+            //        title: 'WIP Report ' + 'From Date: ' + $('#min-date').val() + ' To Date: ' + $('#max-date').val(),
+            //        filename: 'WIP Report: ' + 'From Date: ' + $('#min-date').val() + ' To Date: ' + $('#max-date').val(),
+            //        messageTop: 'The information in this table is copyright to Sirius Cybernetics Corp.'
+            //    },
+
+            //    {
+            //        extend: 'pdfHtml5',
+            //        title: 'WIP Report: ' + 'From Date: ' + $('#min-date').val() + ' To Date: ' + $('#max-date').val(),
+            //        customize: function (doc) {
+            //            doc.content.splice(0, 0, {
+            //                text: ""
+            //            });
+
+            //        }
+            //    },
+            //    'print'
+            //    //'excelHtml5',
+            //    //'csvHtml5',
+            //    //'pdfHtml5'
+            //],
+            'fnDrawCallback': function (oSettings) {
+                $('.dataTables_filter').each(function () {
+                    //if ($("#min-date").length == 0) {
+                    //    $(this).append('<span style="padding-left:10px">From Date: </span><input type="text" id="min-date" name="min-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd" placeholder="From:"/><span style="padding-left:10px">To Date: </span><input type="text" id="max-date" name="max-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd" placeholder="To:">');
+
+                    //}
+                    // var table = $('#example').DataTable();
+
+                });
+            },
+            "autoWidth": false,
+            "bServerSide": false,
+            "bSortable": true,
+            "bSearchable": true,
+            "bRetrieve": false,
+            "bDestroy": true,
+            "bFilter": true,
+            "searching": true,
+            "bProcessing": false,
+            "sAjaxSource": indexurl,
+            "fnServerParams": function (aoData) {
+                aoData.push({ "name": "more_data", }); //"value": searchForm
+            },
+            "aaSorting": [],
+            "columnDefs": [{
+                "targets": 'no-sort',
+                "orderable": false,
+            }],
+            "aoColumns": [
+                {
+                    "title": "Action", "autoWidth": true, "orderable": false, "className": "no-sort text-right batch-no",
+                    "render": function (data, type, row, meta) {
+                        editaction = '<a href="#" title="Edit" class="links data-edit-btn" onclick="return AddEditLeadCharges(' +
+                            row.id +
+                            ')">' +
+                                "<img src='" + '@Url.Content("~/Content/Images/Edit.svg")' + "'></img>" +
+                                "</a> ";
+
+
+
+                        deleteaction = '<a href="#" title="Delete" class="links data-edit-btn" onclick="return DeleteLeadCharges(' +
+                            row.id +
+                            ')">' +
+                            "<img src='" + '@Url.Content("~/Content/Images/delete.svg")' + "'></img>";
+                        return editaction + deleteaction;
+                    },
+                },
+                {
+                    "title": "Sr No", "autoWidth": true, "orderable": false, "className": "no-sort text-right batch-no",
+                    "render": function (data, type, row, meta) {
+                        a = meta.row + 1
+                        return a;
+                    },
+                },
+                { "title": "Project Name", "autoWidth": true, "orderable": false, "className": "no-sort text-left", "data": "ProjectName" },
+                { "title": "Material", "autoWidth": true, "orderable": false, "className": "no-sort text-left", "data": "Material" },
+                { "title": "Unit", "autoWidth": true, "orderable": false, "className": "no-sort text-left", "data": "Unit" },
+                { "title": "Lead In Km", "autoWidth": true, "orderable": false, "className": "no-sort text-left", "data": "LeadInKm" },
+                { "title": "Total lead charges At Quarry", "autoWidth": true, "orderable": false, "className": "no-sort text-left", "data": "TotalLeadChargesAtQuarry" },
+                { "title": "Net Lead charges for completed Col", "autoWidth": true, "orderable": false, "className": "no-sort text-left", "data": "NetLeadChargesForCompletedCol" }
+            ]
+        });
+
+
+        whInTable.fnDraw();
+
+
+    }
+
+    function AddEditLeadCharges(id) {
+
+        $.ajax({
+                type: 'GET',
+            url: '@Url.Action("CreateEdit", "LeadCharges")',
+            data: { id: id },
+            success: function (response) {
+
+                $("#txtMaterial").val(response.Material);
+               // $("#ddlSubMaterial").val(response.SubMaterial);
+                $("#txtUnit").val(response.Unit);
+                $("#txtLeadInKM").val(response.LeadInKm);
+                $("#txtTotalLeadCharges").val(response.TotalLeadChargesAtQuarry);
+                $("#txtNetLeadCharges").val(response.NetLeadChargesForCompletedCol);
+                $("#id").val(response.id);
+                $("#DSRDetailsId").val(response.DSRDetailsId);
+                    },
+                error: function (result) {
+                    toastr.error("Something went wrong. Please contact to administrator.");
+                }
+            });
+
+    }
+    function DeleteLeadCharges(id) {
+        bootbox.confirm({
+                message: "Are you sure?",
+                buttons: {
+                    confirm: {
+                        label: "Yes",
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: "No",
+                        className: 'btn-danger'
+                    }
+                }, callback: function (result) {
+
+                    if (!result)
+                        return;
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("DeleteLeadCharges", "LeadCharges")',
+                        data: { id: id },
+                        success: function (response) {
+
+                            if (response == "success") {
+                                toastr.success("Lead charges Successfully");
+                                LoadGridData();
+                              }
+                            else {
+                                toastr.error("Something went wrong. Please contact to administrator.")
+                                return;
+                            }
+
+
+                        },
+                        error: function (result) {
+                            toastr.error("Something went wrong. Please contact to administrator.");
+                        }
+                    });
+                }
+
+            });
+    }
+
+    function GetLeadInKMData() {
+
+        if ($("#txtMaterial").val() != "" && $("#txtLeadInKM").val() != "") {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetLeadInKMData", "LeadCharges")',
+                data: { Material: $("#txtMaterial").val(), LeadInKM: $("#txtLeadInKM").val() },
+                success: function (response) {
+                    $("#ddlTotalLeadCharges").empty();
+                    $("#ddlTotalLeadCharges").append($("<option></option>").val('-1').html('Select'));
+                    $("#txtNetLeadCharges").val("");
+                    $.each(response, function (i, type) {
+
+
+                        $("#ddlTotalLeadCharges").append($("<option></option>").val(type.LeadCharges).html(type.Type + ': ' + type.LeadCharges));
+                    });
+
+                },
+                error: function (result) {
+                    toastr.error("Something went wrong. Please contact to administrator.");
+                }
+            });
+        }
+        else {
+            toastr.error("Please enter material and lead in km.");
+        }
+    }
+
+</script>
+

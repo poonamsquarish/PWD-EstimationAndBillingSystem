@@ -1,0 +1,444 @@
+﻿@using SQEstimationAndBillingSystem.Models;
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    @*<title>@ViewBag.Title - @SQEstimationAndBillingSystem.Resources.Payroll_System</title>*@
+    <title>@ViewBag.Title - PWD System</title>
+    <link rel="shortcut icon" href="@Url.Content("~/Content/Images/favicon.ico")" />
+    @Styles.Render("~/bundles/css/Content")
+    @Styles.Render("~/bundles/css/adminlte")
+    @Styles.Render("~/bundles/css/DataTables")
+    @Scripts.Render("~/bundles/js/jquery")
+    @Scripts.Render("~/bundles/js/jqueryval")
+    <script>
+        var URLPath = '';// '@System.Configuration.ConfigurationManager.AppSettings["URLPath"]';
+        URLPath = URLPath != '' ? '/' + URLPath : '';
+
+    </script>
+
+    @Scripts.Render("~/bundles/js/Unobtrusive_ajax")
+    @Scripts.Render("~/bundles/js/route")
+    @Scripts.Render("~/bundles/js/AjaxGlobalHandler")
+    @Scripts.Render("~/bundles/js/adminlte")
+    @Scripts.Render("~/bundles/js/DataTables")
+    @Scripts.Render("~/bundles/js/toastr")
+
+    @RenderSection("Scripts", required: false)
+</head>
+<!--
+BODY TAG OPTIONS:
+=================
+Apply one or more of the following classes to get the
+desired effect
+|---------------------------------------------------------|
+| SKINS         | skin-blue                               |
+|               | skin-black                              |
+|               | skin-purple                             |
+|               | skin-yellow                             |
+|               | skin-red                                |
+|               | skin-green                              |
+|---------------------------------------------------------|
+|LAYOUT OPTIONS | fixed                                   |
+|               | layout-boxed                            |
+|               | layout-top-nav                          |
+|               | sidebar-collapse                        |
+|               | sidebar-mini                            |
+|---------------------------------------------------------|
+-->
+<body class="fixed hold-transition skin-purple sidebar-mini main-body">
+    <div class="wrapper">
+        <!-- Main Header -->
+        <header class="main-header">
+            <!-- Logo -->
+            <a href=@Url.Action("Index","Home") class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini"><b>P</b></span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg"><b>PWD System</b></span>
+            </a>
+            <!-- Header Navbar -->
+            <nav class="navbar navbar-static-top" role="navigation">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+
+                @*@{
+                        foreach (var i in SQEstimationAndBillingSystem.LanguageManage.AvailableLanguages)
+                        {
+                            @Html.ActionLink(i.LanguageFullName, "ChangeLanguage", "Home", new { lang = i.LanguageCultureName }, null) <text> </text>
+                        }
+                    }*@
+                <ul class="nav navbar-nav">
+
+                    <li id="liDSRDropdown" role="presentation" class="dropdown">
+
+                        @{Html.RenderAction("PopulateDSR", "Home");}
+
+                    </li>
+                    <li id="liDSRProjectsDropdown" role="presentation" class="dropdown">
+                        @if (Session["LoggedInUserSession"] != null)
+                        {
+                            Html.RenderAction("PopulateDSRProjects", "Home", new { id = ((LoggedInUserSessionModel)Session["LoggedInUserSession"]).SelectedDSRId });
+                        }
+
+                    </li>
+                </ul>
+
+                <!-- Navbar Right Menu -->
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <!-- User Account Menu -->
+                        <li class="dropdown user user-menu">
+                            <!-- Menu Toggle Button -->
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <span class="hidden-xs" style="text-transform:capitalize;">@(((LoggedInUserSessionModel)Session["LoggedInUserSession"]).LoggedInUserName) (@(((LoggedInUserSessionModel)Session["LoggedInUserSession"]).RoleName))</span>
+                            </a>
+                        </li>
+                        <!-- Control Sidebar Toggle Button -->
+                        <li>
+                            <a href="@Url.Action("Logout","Login")">@SQEstimationAndBillingSystem.Resources.SignOut</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- Left side column. contains the logo and sidebar -->
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            @*<section class="sidebar">
+                    <!-- Sidebar Menu -->
+                    <ul class="sidebar-menu" data-widget="tree">
+                        <li class="">@Html.ActionLink("Home", "Index", "Home")</li>
+                        <li class="active">@Html.ActionLink("Department", "Index", "Department")
+
+                        </li>
+                        <li class="">@Html.ActionLink("Allowance", "Index", "Allowance")</li>
+                    </ul>
+                    <!-- /.sidebar-menu -->
+                </section>*@
+            <section class="sidebar" style="height:auto">
+                <ul id="sidebar-menu" class="sidebar-menu tree" style="white-space: normal" data-widget="tree">
+                    <li>
+                        <a href=@Url.Action("Index","Home") class="clsHome">
+                            <i class="fa fa-home"></i> <span>Home</span>
+                        </a>
+                    </li>
+
+                    <li class="treeview menu-open" style="white-space: normal">
+                        <a href="#" class="clsMaster">
+                            <i class="fa fa-list"></i>
+                            <span style="padding-right: 50px;white-space: normal;">Master</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu" style="display: block;">
+                            <li>
+                                <a href="#" class="clsUserDetails">
+                                    <div style="margin-left: 35px;width:100%;display:inline-block">
+                                        <div style="width:10%;float:left;">
+                                            <i class="fa fa-circle-o"></i>
+                                        </div>
+                                        <div style="width:90%;float:right">
+                                            @Html.ActionLink("User", "Index", "User")
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="clsDepartment">
+                                    <div style="margin-left: 35px;width:100%;display:inline-block">
+                                        <div style="width:10%;float:left;">
+                                            <i class="fa fa-circle-o"></i>
+                                        </div>
+                                        <div style="width:90%;float:right">
+                                            @Html.ActionLink("DSR", "Index", "DSR")
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="clsDepartment">
+                                    <div style="margin-left: 35px;width:100%;display:inline-block">
+                                        <div style="width:10%;float:left;">
+                                            <i class="fa fa-circle-o"></i>
+                                        </div>
+                                        <div style="width:90%;float:right">
+                                            @Html.ActionLink("Project Details", "Index", "ProjectDetails")
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#" class="clsAllowance">
+                                    <div style="margin-left: 35px;width:100%;display:inline-block">
+                                        <div style="width:10%;float:left;">
+                                            <i class="fa fa-circle-o"></i>
+                                        </div>
+                                        <div style="width:90%;float:right">
+                                            @Html.ActionLink("Measurement Sheet", "Index", "MeasurementSheet")
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="clsDeduction">
+                                    <div style="margin-left: 35px;width:100%;display:inline-block">
+                                        <div style="width:10%;float:left;">
+                                            <i class="fa fa-circle-o"></i>
+                                        </div>
+                                        <div style="width:90%;float:right">
+                                            @Html.ActionLink("Lead Charges", "Index", "LeadCharges")
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="clsMasterList">
+                                    <div style="margin-left: 35px;width:100%;display:inline-block">
+                                        <div style="width:10%;float:left;">
+                                            <i class="fa fa-circle-o"></i>
+                                        </div>
+                                        <div style="width:90%;float:right">
+                                            @Html.ActionLink("Material Consumption", "Index", "MaterialConsumption")
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="clsDeduction">
+                                    <div style="margin-left: 35px;width:100%;display:inline-block">
+                                        <div style="width:10%;float:left;">
+                                            <i class="fa fa-circle-o"></i>
+                                        </div>
+                                        <div style="width:90%;float:right">
+                                            @Html.ActionLink("Lab Test", "Index", "LabTest")
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="clsEmployee">
+                                    <div style="margin-left: 35px;width:100%;display:inline-block">
+                                        <div style="width:10%;float:left;">
+                                            <i class="fa fa-circle-o"></i>
+                                        </div>
+                                        <div style="width:90%;float:right">
+                                            @Html.ActionLink("Rate Analysis", "Index", "RateAnalysis")
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="clsNetSalary">
+                                    <div style="margin-left: 35px;width:100%;display:inline-block">
+                                        <div style="width:10%;float:left;">
+                                            <i class="fa fa-circle-o"></i>
+                                        </div>
+                                        <div style="width:90%;float:right">
+                                            @Html.ActionLink("Abstract Sheet", "Index", "AbstractSheet")
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="clsSalarySlip">
+                                    <div style="margin-left: 35px;width:100%;display:inline-block">
+                                        <div style="width:10%;float:left;">
+                                            <i class="fa fa-circle-o"></i>
+                                        </div>
+                                        <div style="width:90%;float:right">
+                                            @Html.ActionLink("Recaptional Sheet", "Index", "RecaptionalSheet")
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="clsSalaryDetails">
+                                    <div style="margin-left: 35px;width:100%;display:inline-block">
+                                        <div style="width:10%;float:left;">
+                                            <i class="fa fa-circle-o"></i>
+                                        </div>
+                                        <div style="width:90%;float:right">
+                                            @Html.ActionLink("Billing", "Index", "Billing")
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+
+                </ul>
+            </section>
+            <!-- /.sidebar -->
+        </aside>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Main content -->
+            <section class="content container-fluid">
+                @RenderBody()
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+        <!-- Main Footer -->
+        <footer class="main-footer">
+            <!-- To the right -->
+            <div class="pull-right hidden-xs">
+                @*Anything you want*@
+            </div>
+            <!-- Default to the left -->
+            <strong>@SQEstimationAndBillingSystem.Resources.Copyright &copy; @DateTime.Now.Year <a href="#">@SQEstimationAndBillingSystem.Resources.Squarish_Technology</a>.</strong> @SQEstimationAndBillingSystem.Resources.All_rights_reserved_
+        </footer>
+    </div>
+</body>
+</html>
+<style>
+    .toast-success {
+        background-color: #605ca8 !important;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+
+        //$(".allow_decimal").on("input", function (evt) {
+        //    var self = $(this);
+        //    self.val(self.val().replace(/[^0-9\.]/g, ''));
+        //    if ((evt.which != 46 || self.val().indexOf('.') != -1) && (evt.which < 48 || evt.which > 57)) {
+        //        evt.preventDefault();
+        //    }
+        //});
+        $(function () {
+            $(document).on('keypress', '.allow_decimal', function (evt) {
+                var charCode = (evt.which) ? evt.which : event.keyCode
+                if (charCode > 31 && (charCode < 48 || charCode > 57) && !(charCode == 46 || charCode == 8))
+                    return false;
+                else {
+                    var len = $(this).val().length;
+                    var index = $(this).val().indexOf('.');
+                    if (index > 0 && charCode == 46) {
+                        return false;
+                    }
+                    if (index > 0) {
+                        var CharAfterdot = (len + 1) - index;
+                        if (CharAfterdot > 4) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            })
+            $(".allow_decimal").bind("paste", function (e) {
+                return false;
+            });
+        })
+
+        debugger;
+        if ($('#liDSRDropdown:has(> a)').length == 0 || ($('#liDSRDropdown:has(> a)').length > 0 && $("#liDSRDropdown a").data("islatestdsr").toLowerCase() == "false")) {
+            //if ($('#liDSRDropdown:has(> a)').length == 0 || ($('#liDSRDropdown:has(> a)').length > 0 && true)) {
+            $("input[type='submit']").attr("disabled", "disabled");
+            toastr.warning("Please upload DSR and Project for DSR");
+        } else {
+            $("input[type='submit']").removeAttr("disabled");
+            if ($('#liDSRProjectsDropdown:has(> a)').length == 0) {
+                toastr.warning("Please upload DSR and Project for DSR");
+            }
+        }
+
+
+        toastr.options = {
+            "debug": false,
+            "positionClass": "toast-bottom-right",
+            "onclick": null,
+            "fadeIn": 300,
+            "fadeOut": 1000,
+            "timeOut": 5000,
+            "extendedTimeOut": 1000
+        }
+
+        var inputIDs = [];
+
+        $(document).on('keydown', 'input[pattern]', function (e) {
+            var input = $(this);
+            var oldVal = input.val();
+            var regex = new RegExp(input.attr('pattern'), 'g');
+
+            setTimeout(function () {
+                var newVal = input.val();
+                if (!regex.test(newVal)) {
+                    input.val(oldVal);
+                }
+            }, 0);
+        });
+    });
+
+    /*If Selected DSR is not latest DSR then make all forms readonly */
+    function MakeReadOnlyIfNotLatestDSR(div) {
+
+        if ($('#liDSRDropdown:has(> a)').length > 0 && $("#liDSRDropdown a").data("islatestdsr").toLowerCase() == "false") {
+            //if (true) {
+            $("#" + div).find('* :not(#btnCancel)').prop("disabled", true);
+            $($("#" + div).find('.btn :not(#btnCancel)')).unbind("click,submit");
+
+            $("#" + div).find('input[type="submit"]').attr("disabled", true);
+            $($("#" + div).find('input[type="submit"]')).unbind("click,submit");
+
+            $("body").on("focus", "table tbody tr a[title='Delete'], a.clsProjectLink", function (e) {
+                $(this).removeAttr('onclick');
+                $(this).removeAttr('href');
+                return false;
+            })
+        }
+    }
+
+</script>
+
+<style>
+
+    input {
+        font-family: gist_marathi_font, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    .content-header {
+        padding-bottom: 8px;
+    }
+
+    ::-webkit-scrollbar {
+        width: 8px !important;
+        height: 5px !important;
+    }
+
+    ::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 0px grey;
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #333;
+        border-radius: 10px;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 0 !important;
+        display: inline !important;
+    }
+
+    .btn {
+        background-color: #337ab7 !important;
+        color: #fff !important;
+        cursor: pointer !important;
+    }
+
+    a {
+        cursor: pointer;
+    }
+</style>
+

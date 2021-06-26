@@ -1,0 +1,174 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+
+    .group-end {
+        border-bottom: 1px solid black !important;
+    }
+
+    .required .control-label:after {
+        content: "*";
+        color: red;
+    }
+
+    div.slick-header {
+        height: 30px;
+    }
+
+    div.slick-header-column {
+        height: 100% !important;
+    }
+
+    span.slick-pager-nav {
+        padding: 0px !important;
+    }
+
+    span.slick-pager-settings {
+        padding: 0px !important;
+    }
+
+    #MaterialConsumptionGrid {
+        font-size: small !important;
+    }
+
+    .cell-title {
+        font-weight: bold;
+    }
+
+    .cell-effort-driven {
+        text-align: center;
+    }
+
+    .cell-selection {
+        border-right-color: silver;
+        border-right-style: solid;
+        background: #f5f5f5;
+        color: gray;
+        text-align: right;
+        font-size: 10px;
+    }
+</style>
+
+<section class="content-header">
+    <h1>
+        Abstract Sheet
+        <small>List</small>
+    </h1>
+</section>
+@if (ViewBag.IsAbstractSheetSaveEnable)
+{
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <a class="btn btn-primary pull-right" id="lnkAddAbstractSheet" href="#"
+               data-href="@Url.Content("~/AbstractSheet/ManageAbstractSheet/0")"><i class="glyphicon glyphicon-plus"></i>&nbsp;Save Abstract Sheet</a>
+        </div>
+    </div>
+}
+
+<div class="col-lg-12" style="width:100%;">
+    <br />
+    <div style="margin:0 auto;" class="list-form">
+        <table id="grdAbstractSheet" class="row-border table-responsive" data-request-url="@Url.Action("GetAllAbstractSheetDetails","AbstractSheet")">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>DSR Detail Id</th>
+                    <th>Item Of Work</th>
+                    <th>Quantity</th>
+                    <th>Rate</th>
+                    <th>Unit</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        LoadGridData();
+    });
+
+    $("#lnkAddAbstractSheet").click(function (e) {
+        var url = $(this).data("href");
+        $.get(url, function (data) {
+         
+        });
+    });
+
+    function LoadGridData() {
+        $.ajax({
+            type: 'GET',
+            datatype: 'json',
+            cache:false,
+            contentType: "application/json; charset=utf-8",
+            url: '@Url.Action("GetAllAbstractSheetDetails", "AbstractSheet")',
+            success: function (data) {
+         grdAbstractSheetTable = $('#grdAbstractSheet').DataTable({
+             "aaData": data,
+             //"scrollX": true,
+            "aoColumns": [
+                { "data": "id", "title": "Id", "autoWidth": true, "visible": false},
+                { "data": "DSRDetailId", "title": "DSRDetailId",  "visible": false, "autoWidth": true},
+                {
+                    "data": "Description", "orderable": false, "title": "Item Of Work", "visible": true, "width": "150px","autoWidth": false, render: $.fn.dataTable.render.ellipsis()
+                },
+                { "data": "Quantity", "title": "Quantity", "width": "50px" },
+                { "data": "Unit", "title": "Unit", "width": "70px" },
+                { "data": "Rate", "title": "Rate", "name": "Rate", "width": "70px", "orderable": false },
+                { "data": "Amount", "title": "Amount", "name": "Amount", "width": "70px", "orderable": false }
+             ],
+             order: [[2, 'asc']],
+             "footerCallback": function (row, data, start, end, display) {
+                 var api = this.api(), data;
+                 // Remove the formatting to get integer data for summation
+                 var intVal = function (i) {
+                     return typeof i === 'string' ?
+                         i.replace(/[\$,]/g, '') * 1 :
+                         typeof i === 'number' ?
+                             i : 0;
+                 };
+
+                 // Total over all pages
+                 Col6total = api.column(6).data().reduce(function (a, b) {return intVal(a) + intVal(b);}, 0);
+                 // Total over this page
+                 Col6pageTotal = api.column(6, { page: 'current' }).data().reduce(function (a, b) {return intVal(a) + intVal(b);}, 0);
+                 // Update footer
+                 $(api.column(6).footer()).html(Col6pageTotal + ' <br/>(' + Col6total + ' total)');
+             }
+        });
+            }
+        });
+    }
+
+    $.fn.dataTable.render.ellipsis = function () {
+        return function (data, type, row) {
+            return type === 'display' && data.length > 10 ?
+                data.substr(0, 50) + '…' :
+                data;
+        }
+    };
+
+
+
+
+
+
+
+
+</script>

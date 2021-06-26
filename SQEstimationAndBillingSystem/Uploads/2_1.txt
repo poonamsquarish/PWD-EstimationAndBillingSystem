@@ -1,0 +1,16 @@
+$sqla="SELECT * FROM db_gigs ORDER BY city ASC";
+$resulta=mysql_query($sqla);
+
+
+while($myrowa=mysql_fetch_array($resulta)){
+	$IDEE=$myrowa["idContact"];
+	$CITTA=$myrowa["city"];
+	$DATTA=$myrowa["dates"];
+	$LOCATTI=$myrowa["location"];
+	
+	$sqlb="SELECT * FROM db_contacts WHERE idContact='$IDEE'";
+	$resultb=mysql_query($sqlb);
+	$myrowb=mysql_fetch_array($resultb);
+		$GROSSO=$myrowb["contact"];
+		$FONO=$myrowb["phone"];
+		$POSTALI=$myrowb["mail"];

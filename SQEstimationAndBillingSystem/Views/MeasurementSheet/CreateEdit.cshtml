@@ -1,0 +1,312 @@
+﻿@model SQEstimationAndBillingSystem.Models.MeasurementSheetModel
+@{
+    ViewBag.Title = "Add/Edit Measurement Sheet";
+}
+
+<section class="content-header">
+    <h3>
+        Add/Edit Measurement Sheet
+    </h3>
+</section>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+
+        @using (Ajax.BeginForm("AddEditMeasurementSheet", "MeasurementSheet",
+            new { @id = Model.id },
+            new AjaxOptions
+            {
+                HttpMethod = "POST",
+                AllowCache = false,
+                UpdateTargetId = "partialMeasurementSheet",
+                OnSuccess = "OnMeasurementSheetSuccess",
+                OnFailure = "OnMeasurementSheetFailure",
+                InsertionMode = InsertionMode.Replace
+            }, new { @id = "frmMeasurementSheet" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    @Html.HiddenFor(model => model.id)
+                    @Html.HiddenFor(model => model.ProjectName)
+                    @Html.HiddenFor(model => model.ProjectId)
+                    @Html.HiddenFor(model => model.DSRId)
+                    @Html.HiddenFor(model => model.DSRDetailId)
+                    @Html.Hidden("hdnSubmitValue")
+
+                    <div class="row required">
+                        <div class="col-md-12">
+
+                            @Html.LabelFor(model => model.ItemOfWork, new { @class = "control-label" })
+
+                            @Html.TextAreaFor(model => model.ItemOfWork, new { @class = "form-control", @cols = "20", @rows = "3", @maxlength = "1500", @style = "max-width:950px!important;" })
+                            @Html.ValidationMessageFor(model => model.ItemOfWork, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <fieldset class="form-group">
+                                @Html.LabelFor(model => model.ItemOfWorkBriefDescription, new { @class = "control-label" })
+                                @Html.TextBoxFor(model => model.ItemOfWorkBriefDescription, new { @class = "form-control", @maxlength = "1000",style="max-width:unset;" })
+                                @Html.ValidationMessageFor(model => model.ItemOfWorkBriefDescription, "", new { @class = "text-danger", @style = "float:left" })
+                            </fieldset>
+                        </div>
+                    </div>
+
+
+                    <div class="row required">
+                        <div class="col-md-3 required">
+                            <fieldset class="form-group">
+                                @Html.LabelFor(model => model.No, new { @class = "control-label" })
+                                @Html.TextBoxFor(model => model.No, new { @class = "form-control", @maxlength = "50" })
+                                @Html.ValidationMessageFor(model => model.No, "", new { @class = "text-danger", @style = "float:left" })
+                            </fieldset>
+                        </div>
+                        <div class="col-md-3">
+                            <fieldset class="form-group">
+                                @Html.LabelFor(model => model.Length, new { @class = "control-label" })
+                                @Html.TextBoxFor(model => model.Length, new { @class = "form-control allow_decimal", @maxlength = "50", })
+                                @Html.ValidationMessageFor(model => model.Length, "", new { @class = "text-danger", @style = "float:left" })
+                            </fieldset>
+                        </div>
+                        <div class="col-md-3">
+                            <fieldset class="form-group">
+                                @Html.LabelFor(model => model.Breadth, new { @class = "control-label" })
+                                @Html.TextBoxFor(model => model.Breadth, new { @class = "form-control allow_decimal", @maxlength = "50", })
+                                @Html.ValidationMessageFor(model => model.Breadth, "", new { @class = "text-danger", @style = "float:left" })
+                            </fieldset>
+                        </div>
+                        <div class="col-md-3">
+                            <fieldset class="form-group">
+                                @Html.LabelFor(model => model.Height, new { @class = "control-label" })
+                                @Html.TextBoxFor(model => model.Height, new { @class = "form-control allow_decimal", @maxlength = "50", })
+                                @Html.ValidationMessageFor(model => model.Height, "", new { @class = "text-danger", @style = "float:left" })
+                            </fieldset>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3 required">
+                            <fieldset class="form-group">
+                                @Html.LabelFor(model => model.Quantity, new { @class = "control-label" })
+                                @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control allow_decimal", @maxlength = "50", })
+                                @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger", @style = "float:left" })
+                            </fieldset>
+                        </div>
+                        <div class="col-md-3">
+                            <fieldset class="form-group">
+                                @Html.LabelFor(model => model.Unit, new { @class = "control-label" })
+                                @Html.TextBoxFor(model => model.Unit, new { @class = "form-control", @maxlength = "50",@readonly="readonly" })
+                                @Html.ValidationMessageFor(model => model.Unit, "", new { @class = "text-danger", @style = "float:left" })
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-12" style="text-align:right">
+                        @*<input type="submit" value="Submit" style="margin-right: 15px;" class="btnbtn-default mybtn" onclick="OnSubmitClick(1)">
+                            <input type="submit" value="Submit And Add New" style="margin-right: 15px;" class="btnbtn-default mybtn" onclick="OnSubmitClick(2)">*@
+                        @if (Model.id == 0)
+                        {
+                            <input type="submit" id="btnMeasurementSheetSubmit" value="Add" name="Add" class="btn btn-primary" />
+                        }
+                        else
+                        {
+                            <input type="submit" id="btnSubmit" value="Update" name="Update" class="btn btn-primary" />
+                        }
+                        @*<input type="button" style="margin-right:21px; width:64px;" value="Cancel" onclick="BackToIndex()" />*@
+                        <input style="margin:0 5px;" type="button" id="btnGroupLineCancel" value="Cancel" name="Cancel" class="btn btn-primary pull-right" onclick="MeasurementSheetCancel();" />
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(function () {
+
+            $("#btnMeasurementSheetSubmit,#btnSubmit").click(function (e) {
+               
+                if ($("#DSRDetailId").val() == "0") {
+                    toastr.error("Please search for the Item Of Work. Do not manually enter.");
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+
+            $("#ItemOfWork").on("keyup", function (e) {
+                    if ($(this).val().trim()=='') {
+                        $("#Unit").val('');
+                        $("#DSRDetailId").val('0');
+                    }
+            })
+
+
+         $('#ItemOfWork').autoComplete({
+                    minChars: 3,
+                    delay: 5,
+                    cache: true,
+                    source: function (term, suggest) {
+
+                        term = term.toLowerCase();
+                        if ( term.trim().length > 0) {
+
+                        //var choices = [['Australia', 'au'], ['Austria', 'at'], ['Brasil', 'br'], ['Bulgaria', 'bg'], ['Canada', 'ca'], ['China', 'cn'], ['Czech Republic', 'cz'], ['Denmark', 'dk'], ['Finland', 'fi'], ['France', 'fr'], ['Germany', 'de'], ['Hungary', 'hu'], ['India', 'in'], ['Italy', 'it'], ['Japan', 'ja'], ['Netherlands', 'nl'], ['Norway', 'no'], ['Portugal', 'pt'], ['Romania', 'ro'], ['Russia', 'ru'], ['Spain', 'es'], ['Swiss', 'ch'], ['Turkey', 'tr'], ['USA', 'us']];
+                        //var suggestions = [];
+                        //for (i = 0; i < choices.length; i++)
+                        //    if (~(choices[i][0] + ' ' + choices[i][1]).toLowerCase().indexOf(term)) suggestions.push(choices[i]);
+                        //    suggest(suggestions);
+
+
+                     var choices = [];
+                        // var MLData = CallMLPredictSenseOnSearchModel(groupName);
+
+                        $.ajax({
+                            url: '@Url.Action("GetItemOfWorkList", "MeasurementSheet")',
+                            type: 'POST',
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify({ request: term }),
+                            async: true,
+                            dataType: 'json',
+                            success: function (data) {
+                                $.each(data.ItemOfWorkList, function (i, type) {
+                                    var theResults = [type.value,type.id]; // THIS ARRAY NEEDS TO BE CLEARED OF PREVIOUS VALUES EACH ITERATION SO THAT IT CAN BE PROPERLEY USED BELOW
+
+                                    choices.push(theResults);
+                                });
+                                var suggestions = [];
+                                for (i = 0; i < choices.length; i++) {
+                                    if (~(choices[i][0] + ' ' + choices[i][1]).toLowerCase().indexOf(term)) {
+                                        suggestions.push(choices[i]);
+                                    }
+                                }
+                                suggest(suggestions);
+
+                            },
+                            error: function () {
+
+                                // toastr.error("Something went wrong while processing your request.");
+                                console.log("GetSearchModalData");
+                            }
+                            });
+
+                    }
+                },
+             renderItem: function (item, search) {
+
+        search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                    var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
+                    $('[data-toggle="tooltip"]').tooltip();
+                    return '<div data-SSRItemNo="' + item[0] +'" class="autocomplete-suggestion" title="' + item[0] +'"   data-ItemOfWorkDesc="'+item[0]+'" data-ItemOfWorkId="'+item[1]+'" data-val="'+search+'">'+item[0].replace(re, "<b>$1</b>")+'</div>';
+    },
+             onSelect: function (e, term, item) {
+                 $("#ItemOfWork").val(item.data('itemofworkdesc'));
+                 $("#DSRDetailId").val(item.data('itemofworkid'));
+                 PopulateUnitOfSelectedDSRItem(item.data('itemofworkid'));
+                 return false;
+        //alert('Item "'+item.data('langname')+' ('+item.data('lang')+')" selected by '+(e.type == 'keydown' ? 'pressing enter' : 'mouse click')+'.');
+    }
+            });
+
+        })
+    })
+</script>
+<script>
+    function OnSubmitClick(data) {
+
+        $("#hdnSubmitValue").val(data);
+    }
+
+   
+
+    function PopulateUnitOfSelectedDSRItem(ItemOfWorkId){
+       $.ajax({
+                           url: '@Url.Action("GetUnitOfDSRItem", "MeasurementSheet")',
+                           type: 'POST',
+                           contentType: "application/json; charset=utf-8",
+           data: JSON.stringify({ id: ItemOfWorkId }),
+                           async: true,
+                           dataType: 'json',
+                           success: function (data) {
+                                $("#Unit").val(data.unit);
+                            },
+                            error: function () {
+                                console.log("GetSearchModalData");
+                            }
+              });
+    }
+
+    function BackToIndex() {
+        bootbox.confirm({
+            title: "Confirmation",
+            message: "Your changes will be discarded! Are you sure?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: ' mybtn bootboxbutton'
+                },
+                cancel: {
+                    label: 'No',
+                    className: ' cancelbtn bootboxbutton'
+                }
+            },
+            callback: function (confirmation) {
+                if (confirmation) {
+                    document.location.href = "/MeasurementSheet/Index";
+                }
+            }
+        })
+    }
+
+
+
+    function Clear() {
+        $('#frmMeasurementSheet')[0].reset();
+    }
+
+
+    function OnMeasurementSheetFailure(xhr, status, error) {
+
+        if (xhr.status == 400) {
+            var errors = $.parseJSON(xhr.responseText);
+            //displayBranchLineValidationErrors(errors);
+        }
+        else {
+            toastr.error("An Error occurred whilst performing requested operation, this could be due to internet connectivity issue too. If issue persits please contact the system Administrator for further assistance.");
+        }
+    }
+
+    function OnMeasurementSheetSuccess(data) {
+
+        if (data.success) {
+            $('#partialMeasurementSheet').html('');
+            $('#lnkAddMeasurementSheet').show();
+            toastr.success("Saved successfully");
+
+            $('#grdMeasurementSheet').DataTable().clear().destroy();
+            LoadGridData();
+            $('html,body').animate({
+                scrollTop: $(".container-fluid").offset().top
+            },
+                'slow');
+            return false;
+        }
+        else {
+            toastr.error("An Error occurred whilst saving changes to the Branch Line. Contact the system Administrator for further assistance.");
+        }
+    }
+</script>
+

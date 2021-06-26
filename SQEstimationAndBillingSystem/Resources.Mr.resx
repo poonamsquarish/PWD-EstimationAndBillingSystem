@@ -1,0 +1,441 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Actions" xml:space="preserve">
+    <value>क्रिया</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>सक्रिय</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>जोडा</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>पत्ता</value>
+  </data>
+  <data name="AdharNo" xml:space="preserve">
+    <value>आधार क्रमांक</value>
+  </data>
+  <data name="ajaxError" xml:space="preserve">
+    <value>आपल्या विनंतीवर प्रक्रिया करताना काहीतरी चूक झाली. कृपया पुन्हा प्रयत्न करा.</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>सर्व</value>
+  </data>
+  <data name="All rights reserved." xml:space="preserve">
+    <value>सर्व हक्क राखीव.</value>
+  </data>
+  <data name="AlreadyExists" xml:space="preserve">
+    <value>आधिपासूनच अस्तित्वात आहे!</value>
+  </data>
+  <data name="Apr" xml:space="preserve">
+    <value>एप्रिल</value>
+  </data>
+  <data name="Aug" xml:space="preserve">
+    <value>ऑगस्ट</value>
+  </data>
+  <data name="Bank" xml:space="preserve">
+    <value>बँक</value>
+  </data>
+  <data name="BankAccountNumber" xml:space="preserve">
+    <value>बँक खाते क्रमांक</value>
+  </data>
+  <data name="Bankbranch" xml:space="preserve">
+    <value>बँक शाखा</value>
+  </data>
+  <data name="BankDetails" xml:space="preserve">
+    <value>बँक तपशील</value>
+  </data>
+  <data name="Calculated" xml:space="preserve">
+    <value>गणित मूल्य</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>टिप्पणी</value>
+  </data>
+  <data name="ContactNo" xml:space="preserve">
+    <value>संपर्क क्रमांक</value>
+  </data>
+  <data name="Copyright" xml:space="preserve">
+    <value>कॉपीराइट</value>
+  </data>
+  <data name="CreatedOn" xml:space="preserve">
+    <value>रोजी तयार केले</value>
+  </data>
+  <data name="DateValidationError" xml:space="preserve">
+    <value>या तारखेपर्यंत या तारखेपासून पेक्षा कमी असणे आवश्यक आहे</value>
+  </data>
+  <data name="Dec" xml:space="preserve">
+    <value>डिसेंबर</value>
+  </data>
+  <data name="DeleteMessage" xml:space="preserve">
+    <value>आपण निवडलेले रेकॉर्ड हटवू इच्छित असल्याची आपल्याला खात्री आहे का?</value>
+  </data>
+  <data name="DOB" xml:space="preserve">
+    <value>जन्मतारीख</value>
+  </data>
+  <data name="DOJ" xml:space="preserve">
+    <value>रूजू होण्याची तारीख</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>संपादित करा</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>ईमेल</value>
+  </data>
+  <data name="EmptyTable" xml:space="preserve">
+    <value>टेबलमध्ये कोणताही डेटा उपलब्ध नाही</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>त्रुटी</value>
+  </data>
+  <data name="Excel" xml:space="preserve">
+    <value>एक्स्सेल</value>
+  </data>
+  <data name="Feb" xml:space="preserve">
+    <value>फेब्रुवारी</value>
+  </data>
+  <data name="filtered from" xml:space="preserve">
+    <value>पासून फिल्टर केले</value>
+  </data>
+  <data name="Filters" xml:space="preserve">
+    <value>फिल्टर करा</value>
+  </data>
+  <data name="FinancialYear" xml:space="preserve">
+    <value>आर्थिक वर्ष</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>पहिले नाव</value>
+  </data>
+  <data name="FromDate" xml:space="preserve">
+    <value>या तारखेपासून</value>
+  </data>
+  <data name="FromDateShouldBeGreaterThanToDate" xml:space="preserve">
+    <value>'तारखेपेक्षा' 'तारखेपासून' मोठी असणे आवश्यक आहे.</value>
+  </data>
+  <data name="home" xml:space="preserve">
+    <value>मुख्य</value>
+  </data>
+  <data name="InvalidUserLoginMsg" xml:space="preserve">
+    <value>अवैध वापरकर्ता. कृपया वैध वापरकर्ता नाव आणि पासवर्ड प्रविष्ट करा.</value>
+  </data>
+  <data name="IsLocked" xml:space="preserve">
+    <value>कुलूपबंद आहे</value>
+  </data>
+  <data name="Jan" xml:space="preserve">
+    <value>जानेवारी</value>
+  </data>
+  <data name="Jul" xml:space="preserve">
+    <value>जुलै</value>
+  </data>
+  <data name="Jun" xml:space="preserve">
+    <value>जून</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>आडनाव</value>
+  </data>
+  <data name="List" xml:space="preserve">
+    <value>यादी</value>
+  </data>
+  <data name="LogIn" xml:space="preserve">
+    <value>लॉग इन</value>
+  </data>
+  <data name="Mar" xml:space="preserve">
+    <value>मार्च</value>
+  </data>
+  <data name="master" xml:space="preserve">
+    <value>मुख्य</value>
+  </data>
+  <data name="master list" xml:space="preserve">
+    <value>मुख्य यादी</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>मे</value>
+  </data>
+  <data name="MiddleName" xml:space="preserve">
+    <value>मधले नाव</value>
+  </data>
+  <data name="Month" xml:space="preserve">
+    <value>महिना</value>
+  </data>
+  <data name="MonthlyBasicPay" xml:space="preserve">
+    <value>महिन्याचे मुळ वेतन</value>
+  </data>
+  <data name="MonthlyGradePay" xml:space="preserve">
+    <value>मासिक ग्रेड पे</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>नाव</value>
+  </data>
+  <data name="new" xml:space="preserve">
+    <value>नवीन</value>
+  </data>
+  <data name="next" xml:space="preserve">
+    <value>पुढे</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>नाही</value>
+  </data>
+  <data name="No records available" xml:space="preserve">
+    <value>कोणतेही रेकॉर्ड उपलब्ध नाहीत</value>
+  </data>
+  <data name="Nov" xml:space="preserve">
+    <value>नोव्हेंबर</value>
+  </data>
+  <data name="Oct" xml:space="preserve">
+    <value>ऑक्टोबर</value>
+  </data>
+  <data name="of" xml:space="preserve">
+    <value>च्या</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>इतर</value>
+  </data>
+  <data name="Overall" xml:space="preserve">
+    <value>एकूणच</value>
+  </data>
+  <data name="PAN" xml:space="preserve">
+    <value>पॅन</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>पासवर्ड</value>
+  </data>
+  <data name="PDF" xml:space="preserve">
+    <value>पीडीएफ</value>
+  </data>
+  <data name="PleaseSelectDuration" xml:space="preserve">
+    <value>कृपया कालावधी निवडा</value>
+  </data>
+  <data name="PleaseSelectFromToDate" xml:space="preserve">
+    <value>कृपया 'तारखेपासून'  आणि 'तारखेपर्यंत' निवडा</value>
+  </data>
+  <data name="PresentDays" xml:space="preserve">
+    <value>हजर दिवस</value>
+  </data>
+  <data name="previous" xml:space="preserve">
+    <value>मागील</value>
+  </data>
+  <data name="Print" xml:space="preserve">
+    <value>प्रिंट</value>
+  </data>
+  <data name="Records per page" xml:space="preserve">
+    <value>प्रति पृष्ठ रेकॉर्ड</value>
+  </data>
+  <data name="Remark" xml:space="preserve">
+    <value>शेरा</value>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>आठवनीत  ठेवा</value>
+  </data>
+  <data name="Report" xml:space="preserve">
+    <value>अहवाल</value>
+  </data>
+  <data name="ReqSignUpDetails" xml:space="preserve">
+    <value>कृपया साइन अप तपशीलांना पूर्णतः भरा किंवा सर्व फील्ड रिक्त ठेवा</value>
+  </data>
+  <data name="RequiredMessage" xml:space="preserve">
+    <value>कृपया आवश्यक फील्ड प्रविष्ट करा</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>भूमिका</value>
+  </data>
+  <data name="Rs" xml:space="preserve">
+    <value>रु</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>जतन करा</value>
+  </data>
+  <data name="Search all columns" xml:space="preserve">
+    <value>सर्व स्तंभ शोधा</value>
+  </data>
+  <data name="SearchText" xml:space="preserve">
+    <value>शोधा</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>निवडा</value>
+  </data>
+  <data name="SelectMonth" xml:space="preserve">
+    <value>महिना निवडा</value>
+  </data>
+  <data name="SelectReasonforInactive" xml:space="preserve">
+    <value>निष्क्रिय करण्यासाठी कारण निवडा</value>
+  </data>
+  <data name="SelectYear" xml:space="preserve">
+    <value>वर्ष निवडा</value>
+  </data>
+  <data name="Sep" xml:space="preserve">
+    <value>सप्टेंबर</value>
+  </data>
+  <data name="SerNo" xml:space="preserve">
+    <value>अनु क्रमांक.</value>
+  </data>
+  <data name="Showing page" xml:space="preserve">
+    <value>पृष्ठ दर्शवित आहे</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>बाहेर पड़ा</value>
+  </data>
+  <data name="SignUpDetails" xml:space="preserve">
+    <value>साइन अप तपशील</value>
+  </data>
+  <data name="Squarish Technology" xml:space="preserve">
+    <value>स्क्वेरिश तंत्रज्ञान</value>
+  </data>
+  <data name="Submit" xml:space="preserve">
+    <value>प्रवेश करा</value>
+  </data>
+  <data name="ToDate" xml:space="preserve">
+    <value>या तारखेपर्यंत</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>एकूण</value>
+  </data>
+  <data name="total records" xml:space="preserve">
+    <value>एकूण रेकॉर्ड</value>
+  </data>
+  <data name="update" xml:space="preserve">
+    <value>अद्ययावत करा</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>वापरकर्ता नाव</value>
+  </data>
+  <data name="ValidEmailMsg" xml:space="preserve">
+    <value>कृपया वैध ईमेल पत्ता प्रविष्ट करा.</value>
+  </data>
+  <data name="ValidPasswordMsg" xml:space="preserve">
+    <value>पासवर्ड किमान एक संख्या, एक लोअरकेस आणि एक अपरकेस अक्षर आणि किमान सहा वर्ण.</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>मूल्य</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>पहा</value>
+  </data>
+  <data name="WelComeMsg" xml:space="preserve">
+    <value>आपले स्वागत आहे</value>
+  </data>
+  <data name="Year" xml:space="preserve">
+    <value>वर्ष</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>हो</value>
+  </data>
+  <data name="SelectBank" xml:space="preserve">
+    <value>बँक निवडा</value>
+  </data>
+</root>

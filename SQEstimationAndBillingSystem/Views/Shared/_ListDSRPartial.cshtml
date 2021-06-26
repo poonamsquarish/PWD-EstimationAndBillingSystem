@@ -1,0 +1,78 @@
+﻿@using SQEstimationAndBillingSystem.Models;
+@model List<SQEstimationAndBillingSystem.Models.DSRFileModel>
+@{
+    Layout = null;
+}
+
+@{
+    if (Model != null && Model.Count > 0)
+    {
+
+        if (((LoggedInUserSessionModel)Session["LoggedInUserSession"]).SelectedDSRName != null)
+        {
+            <a href="#" data-IsLatestDSR="@(((LoggedInUserSessionModel)Session["LoggedInUserSession"]).IsLatestDSR)" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">@Convert.ToString(((LoggedInUserSessionModel)Session["LoggedInUserSession"]).SelectedDSRName) <span class="caret"></span></a>
+        }
+
+        if (Model.Count > 1)
+        {
+            <ul class="dropdown-menu" role="menu">
+                @foreach (SQEstimationAndBillingSystem.Models.DSRFileModel item in Model)
+                {
+                    if (((LoggedInUserSessionModel)Session["LoggedInUserSession"]).SelectedDSRName != null && Convert.ToString(((LoggedInUserSessionModel)Session["LoggedInUserSession"]).SelectedDSRName) != item.DSRName)
+                    {
+                        <li>
+                            <a name="tabs" data-IsLatestDSR="@item.IsLatestDSR" data-index="@item.id" href="#">
+                                <span> @item.DSRName</span>
+                                <span class="message"></span>
+                            </a>
+                        </li>
+                        @*<li class="divider"></li>*@
+                    }
+                }
+            </ul>
+        }
+
+    }
+}
+
+<!-- jQuery -->
+<script type="text/javascript">
+    $(function () {
+        $("#liDSRDropdown a[name=tabs]").on("click", function () {
+
+            var a = $(this).data('index');
+            debugger;
+            NavigateToDSR(a);
+            populateProjectsOfDSR(a);
+            window.location.reload();
+        });
+    });
+
+    //Login function to trigger asyncronous post back
+    function NavigateToDSR(ID) {
+        debugger;
+        $.ajax({
+            url: '/home/PopulateDSR/' + ID,
+            global: false,
+            cache: false,
+            async: true,
+            success: function (result) {
+                $('#liDSRDropdown').html(result);
+            }
+        });
+    }
+
+    function populateProjectsOfDSR(ID) {
+        $.ajax({
+            url: '/home/PopulateDSRProjects/' + ID,
+            global: false,
+            cache: false,
+            async: true,
+            success: function (result) {
+                $('#liDSRProjectsDropdown').html(result);
+
+            }
+        });
+    }
+
+</script>

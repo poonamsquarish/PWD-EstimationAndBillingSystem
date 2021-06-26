@@ -1,0 +1,61 @@
+﻿@using SQEstimationAndBillingSystem.Models;
+@model List<SQEstimationAndBillingSystem.Models.ProjectDetailsModel>
+@{
+    Layout = null;
+    var dsrID = ((LoggedInUserSessionModel)Session["LoggedInUserSession"]).SelectedDSRId;
+}
+
+@{
+    if (Model != null && Model.Count > 0)
+    {
+        if (((LoggedInUserSessionModel)Session["LoggedInUserSession"]).SelectedProjectName != null)
+        {
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">@Convert.ToString(((LoggedInUserSessionModel)Session["LoggedInUserSession"]).SelectedProjectName) <span class="caret"></span></a>
+        }
+
+        if (Model.Count > 1)
+        {
+            <ul class="dropdown-menu" role="menu">
+                @foreach (SQEstimationAndBillingSystem.Models.ProjectDetailsModel item in Model)
+                {
+                    if (((LoggedInUserSessionModel)Session["LoggedInUserSession"]).SelectedProjectName != null && Convert.ToString(((LoggedInUserSessionModel)Session["LoggedInUserSession"]).SelectedProjectName) != item.ProjectName)
+                    {
+                        <li>
+                            <a name="tabs" data-index="@item.id" href="#">
+                                <span> @item.ProjectName</span>
+                                <span class="message"></span>
+                            </a>
+                        </li>
+                        @*<li class="divider"></li>*@
+                    }
+                }
+            </ul>
+        }
+
+    }
+}
+
+<!-- jQuery -->
+<script type="text/javascript">
+    $(function () {
+        $("#liDSRProjectsDropdown a[name=tabs]").on("click", function () {
+            var a = $(this).data('index');
+            debugger;
+            RePopulateProjectsOfDSR(a);
+        });
+    });
+    function RePopulateProjectsOfDSR(ID) {
+        $.ajax({
+            url: '/home/RePopulateDSRProjects?id=' + ID,//+'&dsrid='+@dsrID,
+            global: false,
+            cache: false,
+            async: true,
+            success: function (result) {
+                $('#liDSRProjectsDropdown').html(result);
+                //window.location.reload();
+                var url = window.location.pathname.split("/");
+                window.location.href = url[0]+"/"+url[1]+'/Index';
+            }
+        });
+    }
+</script>

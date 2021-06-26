@@ -1,0 +1,506 @@
+﻿
+@{
+    ViewBag.Title = "User";
+}
+@Styles.Render("~/bundles/css/select2")
+@Scripts.Render("~/bundles/js/select2")
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        User
+        <small>List</small>
+    </h1>
+</section>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-body" id="divUser">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="UserModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true" data-backdrop="static" data-keyboard="true">
+    <div class="modal-dialog modal-dialog-centered" style="width:1000px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h5 class="modal-title" id="modalTitleID"></h5>
+            </div>
+            <div id="divUserModelBody" class="modal-body">
+                <div class="box-body">
+                    <div class="col-lg-12 " style="padding-right:0px">
+                        <div>
+                            <div class="panel panel-default" style="padding-left: 1%">
+                                <div style="color: #286090;padding-left: 0.3%;">
+                                    <h4> <strong> User Details</strong> </h4>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <label class="control-label">FirstName</label>
+                                            <span style="color:red">*</span>
+                                            <input type="text" id="txtFirstName" maxlength="20" class="form-control" />
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <label class="control-label">MiddleName</label>
+                                            <span style="color:red">*</span>
+                                            <input type="text" id="txtMiddleName" maxlength="20" class="form-control" />
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <label class="control-label">LastName</label>
+                                            <span style="color:red">*</span>
+                                            <input type="text" id="txtLastName" maxlength="20" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+
+                                        <div class="col-lg-4">
+                                            <label class="control-label">ContactNo</label>
+                                            <span style="color:red">*</span>
+                                            <input type="text" id="txtPhoneNumber" pattern="\d*" maxlength="10" class="form-control" />
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <label class="control-label">Email</label>
+                                            <span style="color:red">*</span>
+                                            <input type="text" id="txtEmail" maxlength="100" class="form-control" />
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <label class="control-label">Department</label>
+                                            <span style="color:red">*</span>
+                                            <input type="text" id="txtDepartment" maxlength="20" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        
+                                            <div class="col-lg-4">
+                                                <label class="control-label">UserName</label>
+                                                <span style="color:red">*</span>
+                                                <input type="text" id="txtUserName" maxlength="20" class="form-control" />
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <label class="control-label">Password</label>
+                                                <span style="color:red">*</span>
+                                                <input type="password" id="txtPassword" class="form-control" />
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <label class="control-label">Role</label>
+                                                <span style="color:red">*</span>
+                                                <select class="form-control" id="ddlRole" style="padding: 0; padding-left:2px">
+                                                    <option value="1">Admin</option>
+                                                    <option value="2">User</option>
+                                                </select>
+                                            </div>
+                                
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <label class="control-label">Active</label>
+                                            @*<input type="checkbox" id="txtLastName" class="form-control" />*@
+                                            <input type="checkbox" class="checkbox" id="chkActive" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                            <div style="text-align: right" class="btn-div-center">
+                                <button type="button" id="btnEmployeeSave" parentDeptid="0" class="btn btn-primary" onclick="AddEditButtonClick()">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+         var table;
+
+    $(document).ready(function () {
+
+        //$('#ddlRole').append($("<option></option>").val('-1').html('Select'));
+        GenerateDataTable();
+       // getDropDownList();
+
+    });
+
+
+    function getDropDownList() {
+        $.ajax({
+            url: '@Url.Action("UserDropDownLookUp", "User")',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+
+                $.each(data.RoleData, function (i, type) {
+                    $('#ddlRole').append($("<option></option>").val(type.ID).html(type.Role));
+                });
+            },
+            error: function () {
+                toastr.error("Something went wrong. Please contact to administrator.");
+            }
+        });
+    }
+
+    function getLocalDateTime(date) {
+        //  
+
+        if (date != null) {
+            var ds = date;//"/Date(" + date + ")/";
+            //var utcDate = moment.utc(moment(date).format(moment.defaultFormatUtc));
+            return moment.utc(moment(ds).format("DD/MM/YYYY"))._i;
+        }
+        else {
+            return '';
+        }
+    }
+
+    function getLocalDateTime1(date) {
+        //  
+
+        if (date != null) {
+            var ds = date;//"/Date(" + date + ")/";
+            //var utcDate = moment.utc(moment(date).format(moment.defaultFormatUtc));
+            return moment.utc(moment(ds).format("MM/DD/YYYY"))._i;
+        }
+        else {
+            return '';
+        }
+    }
+
+    function checkPassword() {
+
+        var passwordVal = $('#txtPassword').val();
+        // at least one number, one lowercase and one uppercase letter
+        // at least six characters
+        var re = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
+
+        if (passwordVal != '') {
+            if (re.test(passwordVal)) {
+                return true;
+            }
+            else {
+                toastr.info("Please enter valid password.");
+                return false;
+            }
+        }
+        return false;
+
+    }
+
+    function validateEmail() {
+        
+        var emailVal = $('#txtEmail').val();
+        var filter = /^([\w-\.]+)@('@')((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+        
+        if (emailVal != '') {
+            if (filter.test(emailVal)) {
+                return true;
+            }
+            else {
+                toastr.info("Please enter valid email address.");
+                return false;
+            }
+        }
+        return false;
+    }
+
+
+    function GetUserForEdit(txtTitle, UserId) {
+        
+             if (txtTitle != "Add New User") {
+                 $.ajax({
+                     type: 'POST',
+                     url: '@Url.Action("GetUserById", "User")',
+                     data: { UserId: UserId },
+                     success: function (result) {
+
+                         $('#modalTitleID').text(txtTitle);
+                         $('#txtFirstName').val(result.FirstName);
+                         $('#txtMiddleName').val(result.MiddleName);
+                         $('#txtLastName').val(result.LastName);
+                         $('#txtDepartment').val(result.Department);
+                         $('#txtEmail').val(result.Email);
+                         $('#txtPhoneNumber').val(result.PhoneNumber);
+                         $('#txtUserName').val(result.UserName);
+
+                         $('#txtPassword').val(result.Password);
+                         $('#chkActive').prop('checked', result.IsActive == true ? true : false);
+                         $('#chkActive').trigger('change');
+                         $('#ddlRole').val(result.RoleID);
+                         $('#ddlRole').trigger('change');
+                         $('#btnEmployeeSave').attr('parentUserId', UserId);
+                         $('#UserModal').modal('show');
+
+                     },
+                     error: function (result) {
+                         toastr.error("@SQEstimationAndBillingSystem.Resources.ajaxError");
+                     }
+                 });
+             }
+             else {
+                 $('#modalTitleID').text(txtTitle);
+                 $('#chkActive').prop('checked', true);
+                 $('#chkActive').trigger('change');
+                 $('#txtFirstName').val("");
+                 $('#txtMiddleName').val("");
+                 $('#txtLastName').val("");
+                 $('#txtDepartment').val("");
+                 $('#txtEmail').val("");
+                 $('#txtPassword').val("");
+                 $('#ddlRole').val(-1);
+
+                 $('#btnEmployeeSave').attr('parentUserId', UserId);
+                 $('#UserModal').modal('show');
+             }
+        };
+
+    function AddEditButtonClick(txtTitle, UserId) {
+        var isValidInputs = true;
+        var RequiredFields = ["txtFirstName", "txtMiddleName", "txtLastName", "txtDepartment", "txtEmail", "ddlRole", "txtPassword", "txtUserName","txtPhoneNumber"];
+        $.each(RequiredFields, function (i, item) {
+            if ($('#' + item).val() == "" || $('#' + item).val() == null || $('#' + item).val() == "-1") {
+                isValidInputs = false;
+                $('#' + item).addClass("customerror");
+            }
+            else {
+                $('#' + item).removeClass("customerror");
+            }
+
+
+        });
+
+
+        
+
+        if (isValidInputs && validateEmail() && checkPassword()) {
+
+                var data = {
+                    ID: $('#btnEmployeeSave').attr('parentUserId'),
+                    FirstName: $('#txtFirstName').val(),
+                    MiddleName: $('#txtMiddleName').val(),
+                    LastName: $('#txtLastName').val(),
+                    Department: $('#txtDepartment').val(),
+                    Email: $('#txtEmail').val(),
+                    PhoneNumber: $('#txtPhoneNumber').val(),
+                    RoleID: $('#ddlRole').val(),
+                    Password: $('#txtPassword').val(),
+                    UserName: $('#txtUserName').val(),
+                    IsActive: $('#chkActive').is(":checked") ? true : false,
+                    IsEdit: $('#btnEmployeeSave').attr('parentUserId') == "0" ? false : true,
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("AddEditUser", "User")',
+                    data: { objEmployeeModel: data },
+                    success: function (result) {
+                        GenerateDataTable();
+                        $('#UserModal').modal('hide');
+                        toastr.success("User added successfully.");
+                    },
+                    error: function (result) {
+                        toastr.error("Something went wrong. Please contact to administrator.");
+                    }
+                });
+            }
+            else {
+                toastr.info("Please enter required details.");
+            }
+        };
+
+    function deleteUser(UserId) {
+            
+
+             bootbox.confirm({
+                message: "Are you sure?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                }, callback: function (result) {
+                    
+                    if (!result)
+                        return;
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("deleteUser", "User")',
+                        data: { UserId: UserId },
+                        success: function (response) {
+                            if (response == "Deleted") {
+                                toastr.success("User deleted successfully.");
+                                GenerateDataTable();
+                              }
+                            else {
+                                toastr.error("Something went wrong. Please contact to administrator.")
+                                return;
+                            }
+
+
+                        },
+                        error: function (result) {
+                            toastr.error("Something went wrong. Please contact to administrator.");
+                        }
+                    });
+                }
+
+            });
+        }
+
+        function GenerateDataTable() {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetAllUser", "User")',
+                success: function (response) {
+                    
+                    var tblPopup = "<table id='tblUser' style='width:100%' class='table table-striped table-bordered tableBorder' >" +
+                        "<thead>" +
+                        "<tr>" +
+                        "<th style='text-align: center !important;width:100px!important;'>Actions</th>" +
+                        //"<th  class='uniquecode' style='text-align: center !important'>Select</th>" +
+                        "<th>Name</th>" +
+                        "<th>Department</th>" +
+                        "<th>Email</th>" +
+                        "<th>PhoneNumber</th>" +
+                        "<th>RoleName</th>" +
+                        "<th>IsActive</th>" +
+                        "</tr>" +
+                        "</thead>" +
+                        " <tbody>";
+
+
+
+                    for (var i = 0; i < response.length; i++) {
+                        var editaction, deleteaction;
+                        var DispActive = '';
+
+                        if (response[i].IsActive == true) {
+                            DispActive = 'Yes';//  '<input type="checkbox" disabled checked/>';
+                        } else {
+                            DispActive =  'No';// '<input type="checkbox" disabled/>';
+                        }
+
+
+
+                        editaction = '<a href="#" title="Edit" class="links data-edit-btn" onclick="return GetUserForEdit(' +
+                                "'Edit'" +
+                                ',' +
+                                "'" +
+                                response[i].ID +
+                                "'" +
+                                ')">' +
+                                "<img src='" + '@Url.Content("~/Content/Images/Edit.svg")' + "'></img>" +
+                                "</a> ";
+
+
+
+                        deleteaction = '<a href="#" title="Delete" class="links data-edit-btn" onclick="return deleteUser(' +
+                            response[i].ID +
+                            ')">' +
+                            "<img src='" + '@Url.Content("~/Content/Images/delete.svg")' + "'></img>";
+
+
+                        tblPopup = tblPopup + "<tr>";
+                        tblPopup = tblPopup +
+                            "<td style='text-align: center !important;width:100px!important;' nowrap=\"nowrap\">" +
+                            editaction +
+                            deleteaction +
+                            "</td > " +
+                            "<td>" + response[i].FirstName + " " + response[i].MiddleName + " " + response[i].LastName + "</td>" +
+                            "<td>" + response[i].Department + "</td>" +
+                            "<td>" + response[i].Email + "</td>" +
+                            "<td>" + response[i].PhoneNumber + "</td>" +
+                            "<td>" + response[i].RoleName + "</td>" +
+                            "<td style='text-align: center'>" + DispActive + "</td>";
+                        tblPopup = tblPopup + "</tr>";
+                    }
+
+                   
+                    $("#divUser").empty();
+                    $("#divUser").append(tblPopup)
+                    $('#UserModal').modal('hide');
+
+                    table = $('#tblUser').DataTable({
+                        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                        "language": {
+                            @*"emptyTable":"@SQEstimationAndBillingSystem.Resources.EmptyTable",
+                            "search": "@SQEstimationAndBillingSystem.Resources.SearchText.ToString():",
+                            "lengthMenu": "@SQEstimationAndBillingSystem.Resources.Records_per_page.ToString():  _MENU_ ",
+                            "searchPlaceholder": "@SQEstimationAndBillingSystem.Resources.Search_all_columns.ToString()",
+                            "info": "_PAGE_ @SQEstimationAndBillingSystem.Resources.of.ToString() _PAGES_ @SQEstimationAndBillingSystem.Resources.Showing_page",
+                            "infoEmpty": "@SQEstimationAndBillingSystem.Resources.No_records_available",
+                            "infoFiltered": "(@SQEstimationAndBillingSystem.Resources.filtered_from.ToString() _MAX_ @SQEstimationAndBillingSystem.Resources.total_records.ToString())",*@
+                            "paginate": {
+                                "previous": "previous",
+                                "next": "next"
+                            }
+                        },
+                        "scrollX": true,
+                        'autoWidth': true,
+                        responsive: true,
+                        'order': [2, 'asc'],
+                        "orderCellsTop": true,
+                        "fixedHeader": true,
+                        "scrollCollapse": true,
+                          'columnDefs': [
+                            {
+                                'targets': 0,
+                                'searchable': false,
+                                'orderable': false,
+                            },
+                            {
+                                'targets': 1,
+                                'searchable': false,
+                                'orderable': false,
+                                'checkboxes': {
+                                    'selectRow': true
+                                },
+                                'className': "text-center dt-head-center"
+                            }],
+                        dom: "<'box-body no-padding' <'col-sm-2 no-padding'l> <'col-sm-4 no-padding'f> <'col-sm-3'> <'col-sm-6 no-padding text-right' <'button-group' B>>  >" +
+                            "<'box-body no-padding' <'col-sm-12 no-padding'tr> >" +
+                            "<'box-body no-padding' <'col-sm-2 no-padding'i> <'col-sm-10 no-padding'p> R>",
+
+                        buttons: [
+
+
+                            {
+                                text:  "Add",
+                                className: "btn btn-primary",
+                                attr: {
+                                    id: 'addEmployee',
+                                    style: 'border-radius:5px;'
+
+                                },
+                                action: function (e, dt, node, config) {
+                                    GetUserForEdit("Add New User", 0);
+                                }
+                            }
+                        ],
+                        'select': {
+                            'style': 'multi',
+                            selector: 'td:last-child + td' //'td:first-child + td' //first-child + td
+                        },
+                    });
+
+
+                },
+                error: function (result) {
+                    toastr.error("Something went wrong. Please contact to administrator.");
+                }
+            });
+        }
+</script>
+<style>
+
+    .customerror {
+        border-color: red !important;
+    }
+
+</style>

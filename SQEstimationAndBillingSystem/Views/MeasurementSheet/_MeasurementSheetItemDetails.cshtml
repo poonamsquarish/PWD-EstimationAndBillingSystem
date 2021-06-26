@@ -1,0 +1,95 @@
+﻿@model long
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-lg-12" style="width:100%;">
+        <br />
+        <div style="margin:0 auto;" class="list-form">
+            <table id="grdMeasurementSheetItemDetails" data-request-url="@Url.Action("GetAllMeasurementSheetItemDetails","MeasurementSheet")" data-mmsId="@Model">
+                <thead>
+                    <tr>
+                       
+                        <th>Id</th>
+                        <th>MMS Id</th>
+                        <th>No</th>
+                        <th>Length</th>
+                        <th>Breadth</th>
+                        <th>Height</th>
+                        <th>Quantity</th>
+                        <th>Unit</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    var pagenumber = 0;
+    var ogridEntityMappedTable;;
+$(document).ready(function () {
+ 
+     EntitySiteGrid();
+});
+
+function EntitySiteGrid() {
+
+    var param = {};
+     param["id"] = $("#grdMeasurementSheetItemDetails").attr('data-mmsid');
+    var indexurl = $("#grdMeasurementSheetItemDetails").data('request-url');
+     ogridEntityMappedTable = $('#grdMeasurementSheetItemDetails').dataTable({
+        "language": {
+            "sLengthMenu": "Records Per Page _MENU_",
+            "search": '',//'<i class="fa fa-search"></i>',
+            "searchPlaceholder": "Search",
+            "oPaginate": {
+                "sNext": '<i class="fa fa-angle-right"></i>',
+                "sPrevious": '<i class="fa fa-angle-left"></i>',
+            }
+        },
+        "autoWidth": false,
+        "bServerSide": true,
+        "bSortable": false,
+        "bSearchable": true,
+        "bDestroy": true,
+        "bFilter": true,
+        "searching": true,
+        "bProcessing": false,
+        "sAjaxSource": indexurl,
+        "aLengthMenu": [[5, 10, 20], [5, 10, 20]],
+        "iDisplayLength": 5,
+        "fnServerParams": function (aoData) {
+            aoData.push({ "name": "more_data", "value": JSON.stringify(param) });
+            aoData.push({ "name": "iDisplayStart", "value": (pagenumber * 10) });
+
+        },
+        "aaSorting": [],
+        "columnDefs": [{
+            "targets": 'no-sort',
+            "orderable": false,
+        }],
+        "aoColumns": [
+            { "data": "id", "title": "Id", "autoWidth": true },
+            { "data": "MMSid", "title": "MMSid", "autoWidth": true },
+             { "data": "No", "title": "No", "autoWidth": true },
+            { "data": "Length", "title": "Length", "autoWidth": true },
+            { "data": "Breadth", "title": "Breadth", "name": "Breadth", "autoWidth": true },
+            { "data": "Height", "title": "Height", "name": "Height", "autoWidth": true },
+            { "data": "Quantity", "title": "Quantity", "name": "Quantity", "autoWidth": true },
+            { "data": "Unit", "name": "Unit", "autoWidth": true, "visible": true }
+        ],
+        "initComplete": function (settings, json) {
+            this.fnPageChange(pagenumber, true);
+        }
+
+    });
+
+    $('#grdMeasurementSheetItemDetails').on('page.dt', function () {
+
+        var table = $('#grdMeasurementSheetItemDetails').DataTable();
+        pagenumber = table.page.info().page;
+
+    });
+}
+</script>
