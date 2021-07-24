@@ -24,6 +24,7 @@ namespace SQEstimationAndBillingSystem.Models
 
     public class MaterialConsumptionDetailsModel
     {
+        public long Id { get; set; }
         public long MaterialConsumptionID { get; set; }
         public int DSRId { get; set; }
         public long MaterialId { get; set; }
@@ -50,6 +51,7 @@ namespace SQEstimationAndBillingSystem.Models
 
     public class MeasurementSheetItemAndQuantity
     {
+        public string DescriptionOfTheItem { get; set; }
         public long ItemId { get; set; }
         public Nullable<decimal> TotalQty { get; set; }
     }

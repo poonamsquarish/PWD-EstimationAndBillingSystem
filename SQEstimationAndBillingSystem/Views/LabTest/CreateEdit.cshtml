@@ -1,0 +1,781 @@
+﻿@model SQEstimationAndBillingSystem.Models.LabTestBasicModel
+@{
+    ViewBag.Title = "Add/Edit Lab Test";
+}
+
+<section class="content-header">
+    <h3>
+        Add/Edit Lab Test
+    </h3>
+</section>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+
+        @using (Ajax.BeginForm("AddEditLabTest", "LabTest",
+            new { @id = Model.id },
+            new AjaxOptions
+            {
+                HttpMethod = "POST",
+                AllowCache = false,
+                UpdateTargetId = "partialLabTest",
+                OnSuccess = "OnLabTestSuccess",
+                OnFailure = "OnLabTestFailure",
+                InsertionMode = InsertionMode.Replace
+            }, new { @id = "frmLabTest" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    @Html.HiddenFor(model => model.id)
+                    @Html.HiddenFor(model => model.ProjectName)
+                    @Html.HiddenFor(model => model.ProjectId)
+                    @Html.HiddenFor(model => model.DSRId)
+                    @Html.HiddenFor(model => model.DSRDetailId)
+                    @Html.HiddenFor(model => model.MaterialId)
+                    @Html.HiddenFor(m => m.NameOfTestJson)
+                    @Html.HiddenFor(m => m.NameOfTestId)
+                    @Html.Hidden("hdnSubmitValue")
+
+                    <div class="row required">
+                        <div class="col-md-12">
+                            @Html.LabelFor(model => model.ItemOfWork, new { @class = "control-label" })
+                            @Html.TextAreaFor(model => model.ItemOfWork, new { @class = "form-control", @cols = "20", @rows = "3", @maxlength = "1500", @style = "max-width:950px!important;" })
+                            @Html.ValidationMessageFor(model => model.ItemOfWork, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    @*<div class="row">
+                            <div class="col-md-12">
+                                <fieldset class="form-group">
+                                    @Html.LabelFor(model => model.ItemOfWorkBriefDescription, new { @class = "control-label" })
+                                    @Html.TextBoxFor(model => model.ItemOfWorkBriefDescription, new { @class = "form-control", @maxlength = "1000", style = "max-width:unset;" })
+                                    @Html.ValidationMessageFor(model => model.ItemOfWorkBriefDescription, "", new { @class = "text-danger", @style = "float:left" })
+                                </fieldset>
+                            </div>
+                        </div>*@
+
+
+                    <div class="row required">
+                        <div class="col-md-3 required">
+                            <fieldset class="form-group">
+                                @Html.LabelFor(model => model.Material, new { @class = "control-label" })
+                                @Html.TextBoxFor(model => model.Material, new { @class = "form-control", @maxlength = "50" })
+                                @Html.ValidationMessageFor(model => model.Material, "", new { @class = "text-danger", @style = "float:left" })
+                            </fieldset>
+                        </div>
+                        <div class="col-md-3">
+                            <fieldset class="form-group">
+                                @Html.LabelFor(model => model.Quantity, new { @class = "control-label" })
+                                @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control allow_decimal", @maxlength = "50", })
+                                @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger", @style = "float:left" })
+                            </fieldset>
+                        </div>
+                        <div class="col-md-3">
+                            <fieldset class="form-group">
+                                @Html.LabelFor(model => model.Unit, new { @class = "control-label" })
+                                @Html.TextBoxFor(model => model.Unit, new { @class = "form-control", @maxlength = "50", @readonly = "readonly" })
+                                @Html.ValidationMessageFor(model => model.Unit, "", new { @class = "text-danger", @style = "float:left" })
+                            </fieldset>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <fieldset class="form-group">
+                                @Html.LabelFor(model => model.NameOfTest, new { @class = "control-label" })
+                                @Html.TextBoxFor(model => model.NameOfTest, new { @class = "form-control NameOfTest",@placeholder= "Name Of Test", @maxlength = "500", @style = "max-width:950px!important;" })
+                                @Html.ValidationMessageFor(model => model.NameOfTest, "", new { @class = "text-danger", @style = "float:left" })
+                            </fieldset>
+                        </div>
+                        <div class="col-md-3">
+                            <fieldset class="form-group">
+                                @Html.LabelFor(model => model.Frequency, new { @class = "control-label" })
+                                @Html.TextBoxFor(model => model.Frequency, new { @class = "form-control NameOfTest",@placeholder = "Frequency", @maxlength = "50" })
+                                @Html.ValidationMessageFor(model => model.Frequency, "", new { @class = "text-danger", @style = "float:left" })
+                            </fieldset>
+                        </div>
+                        <div class="col-md-3">
+                            <fieldset class="form-group">
+                                @Html.LabelFor(model => model.NoOfTestReqd, new { @class = "control-label" })
+                                @Html.TextBoxFor(model => model.NoOfTestReqd, new { @class = "form-control allow_decimal NameOfTest", @placeholder = "No Of Test Reqd", @maxlength = "50" })
+                                @Html.ValidationMessageFor(model => model.NoOfTestReqd, "", new { @class = "text-danger", @style = "float:left" })
+                            </fieldset>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <fieldset class="form-group">
+                                @Html.LabelFor(model => model.TestToBeTakenFromLab, new { @class = "control-label" })
+                                @Html.TextBoxFor(model => model.TestToBeTakenFromLab, new { @class = "form-control allow_decimal NameOfTest", @placeholder = "Test To Be Taken From Lab", @maxlength = "50" })
+                                @Html.ValidationMessageFor(model => model.TestToBeTakenFromLab, "", new { @class = "text-danger", @style = "float:left" })
+                            </fieldset>
+                        </div>
+                        <div class="col-md-3">
+                            <fieldset class="form-group">
+                                @Html.LabelFor(model => model.Rate, new { @class = "control-label" })
+                                @Html.TextBoxFor(model => model.Rate, new { @class = "form-control", @maxlength = "50", @readonly = "readonly" })
+                                @Html.ValidationMessageFor(model => model.Rate, "", new { @class = "text-danger", @style = "float:left" })
+                            </fieldset>
+                        </div>
+                        <div class="col-md-3">
+                            <fieldset class="form-group">
+                                @Html.LabelFor(model => model.Amount, new { @class = "control-label" })
+                                @Html.TextBoxFor(model => model.Amount, new { @class = "form-control",  @maxlength = "50", @readonly = "readonly" })
+                                @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger", @style = "float:left" })
+                            </fieldset>
+                        </div>
+                        <div class="col-md-3">
+                            <fieldset class="form-group">
+                                <label class="">&nbsp;</label>
+                                <div class="row"></div>
+                                <input type="button" id="btnAddNameOfTest" value="Add Name Of Test" name="Add" class="btn btn-primary" />
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <br />
+                            <div style=" margin:0 auto;">
+                                <table id="gridNameOfTest" data-request-url="@Url.Action("GetNameOfTest", "LabTest")" class="table table-bordered  nowrap" width="100" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th class="no-sort boldheader text-wrap">Id</th>
+                                            <th class="no-sort boldheader text-wrap">Action</th>
+                                            <th class="no-sort boldheader text-wrap">Delete</th>
+                                            <th class="no-sort boldheader text-wrap">Name Of Test</th>
+                                            <th class="no-sort boldheader text-wrap">Frequency</th>
+                                            <th class="no-sort boldheader text-wrap">No Of Test Reqd</th>
+                                            <th class="no-sort boldheader text-wrap">30% Test To Be Taken From Lab</th>
+                                            <th class="no-sort boldheader text-wrap">Rate</th>
+                                            <th class="no-sort boldheader text-wrap">Amount</th>
+                                            <th class="no-sort boldheader text-wrap">Name Of Test Id</th>
+
+                                        </tr>
+                                </table>
+                            </div>
+                            @Html.TextBoxFor(m => m.NameOfTestJsonValidation, new { @style = "width:0px;visibility:hidden;" })
+                            @Html.ValidationMessageFor(m => m.NameOfTestJsonValidation, "", new { @class = "text-danger", @style = "float:left" })
+                        </div>
+                    </div>
+
+                    <br />
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-12" style="text-align:right">
+                        @if (Model.id == 0)
+                        {
+                            <input type="submit" id="btnLabTestSubmit" value="Add" name="Add" class="btn btn-primary" />
+                        }
+                        else
+                        {
+                            <input type="submit" id="btnSubmit" value="Update" name="Update" class="btn btn-primary" />
+                        }
+                        <input style="margin:0 5px;" type="button" id="btnCancel" value="Cancel" name="Cancel" class="btn btn-primary pull-right" onclick="LabTestCancel();" />
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+    var dtNameOfTest;//= $('#gridNameOfTest').DataTable();
+
+    $(document).ready(function () {
+        MakeReadOnlyIfNotLatestDSR("frmLabTest");
+        $(function () {
+            //$("#btnLabTestSubmit,#btnSubmit").click(function (e) {
+            //    if ($("#DSRDetailId").val() == "0" || $("#MaterialId").val() == "0") {
+            //        toastr.error("Please search for the Item Of Work and Material. Do not manually enter.");
+            //        e.preventDefault();
+            //        return false;
+            //    }
+            //});
+
+            $("#ItemOfWork").on("keyup", function (e) {
+                    if ($(this).val().trim()=='') {
+                        $("#DSRDetailId").val('0');
+                    }
+            })
+
+            $("#Material").on("keyup", function (e) {
+                if ($(this).val().trim() == '') {
+                    $("#Unit").val('');
+                    $("#MaterialId").val('0');
+                }
+            })
+
+            $("#NameOfTest").on("keyup", function (e) {
+                if ($(this).val().trim() == '') {
+                    $("#Rate").val('');
+                    $("#NameOfTestId").val('0');
+                }
+            })
+
+            $("#NoOfTestReqd").on("keyup", function () {
+                var Rate = $("#Rate").val();
+                var TestReqd = $(this).val();
+                if (TestReqd > 0 || Rate > 0) {
+                    var total = ($.isNumeric(TestReqd) && TestReqd > 0 ? TestReqd : 1) * ($.isNumeric(Rate) && Rate > 0 ? Rate : 1);
+                    $("#Amount").val(total.toFixed(3));
+                    $("#Amount").attr('readonly', 'readonly');
+                }
+                else {
+                    $("#Amount").val('');
+                    $("#Amount").removeAttr('readonly');
+                }
+            })
+
+         $('#ItemOfWork').autoComplete({
+                    minChars: 3,
+                    delay: 5,
+                    cache: true,
+                    source: function (term, suggest) {
+
+                        term = term.toLowerCase();
+                        if ( term.trim().length > 0) {
+
+                     var choices = [];
+
+                        $.ajax({
+                            url: '@Url.Action("GetItemOfWorkList", "LabTest")',
+                            type: 'POST',
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify({ request: term }),
+                            async: true,
+                            dataType: 'json',
+                            success: function (data) {
+                                $.each(data.ItemOfWorkList, function (i, type) {
+                                    var theResults = [type.value,type.id]; // THIS ARRAY NEEDS TO BE CLEARED OF PREVIOUS VALUES EACH ITERATION SO THAT IT CAN BE PROPERLEY USED BELOW
+
+                                    choices.push(theResults);
+                                });
+                                var suggestions = [];
+                                for (i = 0; i < choices.length; i++) {
+                                    if (~(choices[i][0] + ' ' + choices[i][1]).toLowerCase().indexOf(term)) {
+                                        suggestions.push(choices[i]);
+                                    }
+                                }
+                                suggest(suggestions);
+
+                            },
+                            error: function () {
+
+                                // toastr.error("Something went wrong while processing your request.");
+                                console.log("GetItemOfWorkList");
+                            }
+                            });
+
+                    }
+                },
+             renderItem: function (item, search) {
+        search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                    var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
+                    $('[data-toggle="tooltip"]').tooltip();
+                    return '<div data-SSRItemNo="' + item[0] +'" class="autocomplete-suggestion" title="' + item[0] +'"   data-ItemOfWorkDesc="'+item[0]+'" data-ItemOfWorkId="'+item[1]+'" data-val="'+search+'">'+item[0].replace(re, "<b>$1</b>")+'</div>';
+    },
+             onSelect: function (e, term, item) {
+                 $("#ItemOfWork").val(item.data('itemofworkdesc'));
+                 $("#DSRDetailId").val(item.data('itemofworkid'));
+                 return false;
+        //alert('Item "'+item.data('langname')+' ('+item.data('lang')+')" selected by '+(e.type == 'keydown' ? 'pressing enter' : 'mouse click')+'.');
+    }
+            });
+
+
+
+            $('#Material').autoComplete({
+                    minChars: 3,
+                    delay: 5,
+                    cache: true,
+                    source: function (term, suggest) {
+
+                        term = term.toLowerCase();
+                        if ( term.trim().length > 0) {
+
+                     var choices = [];
+
+                        $.ajax({
+                            url: '@Url.Action("GetMaterialList", "LabTest")',
+                            type: 'POST',
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify({ request: term }),
+                            async: true,
+                            dataType: 'json',
+                            success: function (data) {
+                                debugger;
+                                $.each(data.MaterialList, function (i, type) {
+                                    var theResults = [type.value,type.id,type.unit]; // THIS ARRAY NEEDS TO BE CLEARED OF PREVIOUS VALUES EACH ITERATION SO THAT IT CAN BE PROPERLEY USED BELOW
+
+                                    choices.push(theResults);
+                                });
+                                var suggestions = [];
+                                for (i = 0; i < choices.length; i++) {
+                                    if (~(choices[i][0] + ' ' + choices[i][1]).toLowerCase().indexOf(term)) {
+                                        suggestions.push(choices[i]);
+                                    }
+                                }
+                                suggest(suggestions);
+
+                            },
+                            error: function () {
+
+                                // toastr.error("Something went wrong while processing your request.");
+                                console.log("GetMaterialList");
+                            }
+                            });
+
+                    }
+                },
+             renderItem: function (item, search) {
+
+        search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                    var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
+                    $('[data-toggle="tooltip"]').tooltip();
+                    return '<div data-unit="' + item[2] +'" class="autocomplete-suggestion" title="' + item[0] +'"   data-MaterialDesc="'+item[0]+'" data-MaterialId="'+item[1]+'" data-val="'+search+'">'+item[0].replace(re, "<b>$1</b>")+'</div>';
+    },
+             onSelect: function (e, term, item) {
+                 $("#Material").val(item.data('materialdesc'));
+                 $("#MaterialId").val(item.data('materialid'));
+                 $("#Unit").val(item.data('unit'));
+                 //PopulateUnitOfSelectedMaterial(item.data('materialid'));
+                 return false;
+        //alert('Item "'+item.data('langname')+' ('+item.data('lang')+')" selected by '+(e.type == 'keydown' ? 'pressing enter' : 'mouse click')+'.');
+    }
+            });
+
+
+
+            $('#NameOfTest').autoComplete({
+                    minChars: 3,
+                    delay: 5,
+                    cache: true,
+                    source: function (term, suggest) {
+
+                        term = term.toLowerCase();
+                        if ( term.trim().length > 0) {
+
+                     var choices = [];
+
+                        $.ajax({
+                            url: '@Url.Action("GetNameOfTestList", "LabTest")',
+                            type: 'POST',
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify({ request: term }),
+                            async: true,
+                            dataType: 'json',
+                            success: function (data) {
+                                $.each(data.MaterialList, function (i, type) {
+                                    var theResults = [type.value,type.id,type.rate]; // THIS ARRAY NEEDS TO BE CLEARED OF PREVIOUS VALUES EACH ITERATION SO THAT IT CAN BE PROPERLEY USED BELOW
+
+                                    choices.push(theResults);
+                                });
+                                var suggestions = [];
+                                for (i = 0; i < choices.length; i++) {
+                                    if (~(choices[i][0] + ' ' + choices[i][1]).toLowerCase().indexOf(term)) {
+                                        suggestions.push(choices[i]);
+                                    }
+                                }
+                                suggest(suggestions);
+
+                            },
+                            error: function () {
+
+                                // toastr.error("Something went wrong while processing your request.");
+                                console.log("GetMaterialList");
+                            }
+                            });
+
+                    }
+                },
+                renderItem: function (item, search) {
+        search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                    var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
+                    $('[data-toggle="tooltip"]').tooltip();
+                 return '<div data-rate="' + item[2] + '" class="autocomplete-suggestion" title="' + item[0] + '"   data-NameOfTestDesc="' + item[0] +'" data-Id="'+item[1]+'" data-val="'+search+'">'+item[0].replace(re, "<b>$1</b>")+'</div>';
+    },
+                onSelect: function (e, term, item) {
+                    debugger;
+                    var nameOfTestTable = datatableToJson(['MapId', 'Edit', 'Action', 'NameOfTest', 'Frequency', 'NoOfTestReqd', 'TestToBeTakenFromLab', 'Rate', 'Amount', 'NameOfTestId'], dtNameOfTest.rows().data(), [1, 2]);
+                    var filteredLatest = nameOfTestTable.filter(function (e) { return e.NameOfTestId == item.data('id'); })[0];
+                    if (filteredLatest) {
+                        ClearNameOfTest();
+                        toastr.warning("Name of Test already added");
+                    } else {
+                        $("#NameOfTest").val(item.data('nameoftestdesc'));
+                        $("#NameOfTestId").val(item.data('id'));
+                        $("#Rate").val(item.data('rate'));
+                    }
+                 return false;
+        //alert('Item "'+item.data('langname')+' ('+item.data('lang')+')" selected by '+(e.type == 'keydown' ? 'pressing enter' : 'mouse click')+'.');
+    }
+            });
+
+
+            if ($("#id").val() > 0) {
+                debugger;
+                FillNameOfTestDetails();
+            }
+
+            dtNameOfTest = $('#gridNameOfTest').DataTable({
+                "language": {
+                    "sLengthMenu": "",
+                    "oPaginate": {
+                        "sNext": '<i class="fa fa-angle-right"></i>',
+                        "sPrevious": '<i class="fa fa-angle-left"></i>',
+                    },
+                    "emptyTable": 'No Data In Datatable'
+                },
+                "pageLength": 5,
+                "scrollX": true,
+                "bInfo": false,
+                "columnDefs": [{
+                    "targets": 'no-sort',
+                    "orderable": false,
+                },
+                {
+                    "targets": [0,9],
+                    "visible": false
+                }
+                ],
+                "bDestroy": false,
+                "aaSorting": [],
+                "bPaginate": true,
+                "bSearchable": false,
+                "searching": false,
+                "autoWidth": false,
+            });
+
+
+            $("#btnAddNameOfTest").click(function () {
+
+                if ($("#NameOfTest").val().trim() != '' && $("#NoOfTestReqd").val().trim() != '' && parseInt( $("#NameOfTestId").val())>0
+                    && !$("#Frequency").hasClass("input-validation-error") && !$("#TestToBeTakenFromLab").hasClass("input-validation-error") && !$("#NoOfTestReqd").hasClass("input-validation-error")
+                ) {
+                    var index = 0;
+                    if ($("#gridNameOfTest").find('.editedRow').length > 0) {
+                        var editedId = dtNameOfTest.rows($("#gridNameOfTest").find('.editedRow')).data()[0][0];
+                        var editedRowIndex = $("#gridNameOfTest").find('.cancelLink').closest('tr').index();
+                        dtNameOfTest.rows($("#gridNameOfTest").find('.editedRow')).remove().draw(false);
+                        index = editedRowIndex;
+                        //add edited row by deleting old one
+                        dtNameOfTest.row.add([
+                            editedId,
+                            '<a title="Edit" class="editLink" data-LabTestMapId=' + editedId + '>Edit</a>',
+                            '<a title="Delete" class="deleteLink" data-LabTestMapId=' + editedId + '>Delete</a>',
+                            $("#NameOfTest").val().trim(),
+                            $("#Frequency").val().trim(),
+                            $("#NoOfTestReqd").val().trim(),
+                            $("#TestToBeTakenFromLab").val().trim(),
+                            $("#Rate").val().trim(),
+                            $("#Amount").val().trim(),
+                            $("#NameOfTestId").val().trim()
+                        ]).draw(false);
+                    }
+                    else {
+                        //add new
+                        dtNameOfTest.row.add([
+                            '0',
+                            '<a title="Edit" class="editLink" data-LabTestMapId=' + 0 + '>Edit</a>',
+                            '<a title="Delete" class="deleteLink" data-LabTestMapId=' + 0 + '>Delete</a>',
+                            $("#NameOfTest").val().trim(),
+                            $("#Frequency").val().trim(),
+                            $("#NoOfTestReqd").val().trim(),
+                            $("#TestToBeTakenFromLab").val().trim(),
+                            $("#Rate").val().trim(),
+                            $("#Amount").val().trim(),
+                            $("#NameOfTestId").val().trim()
+
+                        ]).draw(false);
+                    }
+
+                    var currentPage = dtNameOfTest.page();
+
+                    var rowCount = dtNameOfTest.data().length - 1,
+                        insertedRow = dtNameOfTest.row(rowCount).data(),
+                        tempRow;
+
+                    for (var i = rowCount; i > index; i--) {
+                        tempRow = dtNameOfTest.row(i - 1).data();
+                        dtNameOfTest.row(i).data(tempRow);
+                        dtNameOfTest.row(i - 1).data(insertedRow);
+                    }
+                    //refresh the current page
+                    dtNameOfTest.page(currentPage).draw();
+
+                    ClearNameOfTest();
+
+                var nameOfTestTable = datatableToJson(['MapId', 'Edit', 'Action', 'NameOfTest', 'Frequency', 'NoOfTestReqd', 'TestToBeTakenFromLab','Rate','Amount','NameOfTestId'], dtNameOfTest.rows().data(), [1, 2]);
+
+                    if ($("#NameOfTestJson").val() != '') {
+                        var oldNameOfTest = JSON.parse($("#NameOfTestJson").val());
+                        var newNameOfTest = JSON.parse(JSON.stringify(nameOfTestTable));
+                        var newfinalNameOfTest = [];
+                        $.each(newNameOfTest, function (ind, ele) {
+                            var filteredLatest = oldNameOfTest.filter(function (e) { return e.MapId == ele.MapId; })[0];
+                            if (filteredLatest) {
+                                newfinalNameOfTest.push(ele);
+                            } else {
+                                if (ele.MapId == 0 )
+                                    newfinalNameOfTest.push(ele);
+                            }
+                        })
+                        $("#NameOfTestJson").val(JSON.stringify(newfinalNameOfTest));
+                    } else {
+                        $("#NameOfTestJson").val('');
+                        $("#NameOfTestJson").val(JSON.stringify(nameOfTestTable));
+                    }
+
+                    if (nameOfTestTable.length == 0) {
+                        $("#NameOfTestJsonValidation").val('');
+                    }
+                    else {
+                        $("#NameOfTestJsonValidation").val(JSON.stringify(nameOfTestTable));
+                        $("[data-valmsg-for='NameOfTestJsonValidation']").removeClass("field-validation-error").addClass("field-validation-valid");
+                        $("[data-valmsg-for='NameOfTestJsonValidation']").find("span:first").remove();
+                        $("#NameOfTestJsonValidation").removeClass("input-validation-error").addClass("valid");
+                    }
+                } else {
+                    if (parseInt($("#NameOfTestId").val()) == 0) {
+                        $("#NameOfTest").attr("data-val-required", $("#NameOfTest").attr("placeholder") + "select from suggestion list");
+                        $("[data-valmsg-for='NameOfTest']").html("<span style='color:red'>" + $("#NameOfTest").attr("placeholder") + " select from suggestion list </span>");
+                        $("#NameOfTest").addClass('input-validation-error');
+                    }
+                    else {
+                        $("#NameOfTest").removeClass('input-validation-error');
+                    }
+                    var $this = $(".NameOfTest");
+                    if ($this.toArray().some(element => element.value === "")) {
+                        $.each($this, function (index, ele) {
+                            var fieldname = $(this).attr("name");
+                            if ($(ele).val() == "") {
+                               
+                                $(ele).attr("data-val-required", $(this).attr("placeholder") + "required");
+                                $("[data-valmsg-for=" + fieldname + "]").html("<span style='color:red'>" + $(this).attr("placeholder") + " Required </span>");
+                                $(ele).addClass('input-validation-error');
+                            } else {
+                                $(ele).removeClass('input-validation-error');
+                            }
+                        });
+                    }
+                }
+
+            });
+
+            $(".NameOfTest").on("blur", function (e) {
+                if ($(this).hasClass("valid")) {
+                    $(this).removeAttr("data-val-required");
+                    $(this).removeClass('input-validation-error');
+                }
+            });
+
+
+
+            $('#gridNameOfTest').on('click', '.deleteLink', function (e) {
+                var id = $($(this).closest('a')).attr("data-LabTestMapId");
+                var tr = $(this).closest('tr');
+                var $this = $(this);
+                dtNameOfTest.rows($this.closest('tr')).remove().draw(false);
+                ClearNameOfTest();
+                var nameOfTestTable = datatableToJson(['MapId', 'Edit', 'Action', 'NameOfTest', 'Frequency', 'NoOfTestReqd', 'TestToBeTakenFromLab', 'Rate', 'Amount', 'NameOfTestId'], dtNameOfTest.rows().data(), [1, 2]);
+
+                $("#NameOfTestJson").val('');
+                $("#NameOfTestJson").val(JSON.stringify(nameOfTestTable));
+
+                if (nameOfTestTable.length == 0) {
+                    $("#NameOfTestJsonValidation").val('');
+                    dtNameOfTest.clear().draw();
+                    $("[data-valmsg-for='NameOfTestJsonValidation']").html('<span for="NameOfTestJsonValidation" class="">Add Atleast One Name Of Test </span>');
+                    $("[data-valmsg-for='NameOfTestJsonValidation']").removeClass("field-validation-valid").addClass("field-validation-error");
+                    $("#NameOfTestJsonValidation").addClass("input-validation-error").removeClass("valid");
+                }
+                else {
+                    $("#NameOfTestJsonValidation").val(JSON.stringify(nameOfTestTable));
+                }
+            });
+
+            $('#gridNameOfTest').on('click', '.cancelLink', function (e) {
+                $(this).addClass("editLink").removeClass("cancelLink");
+                ClearNameOfTest();
+                $(this).closest('tr').removeClass('editedRow');
+                $($(this).closest('a')).text("Edit");
+                $(this).attr("title", "Edit");
+                $("#btnAddNameOfTest").attr("title", "Add SPOC");
+                $('#ContactName').removeAttr("readonly");
+            });
+
+
+            $('#gridNameOfTest').on('click', '.editLink', function (e) {
+                ClearNameOfTestValidations();
+                if ($("#gridNameOfTest").find('.editedRow').length > 0) {
+                    $("#gridNameOfTest").find('.cancelLink').trigger("click");
+                }
+
+                $(this).attr("title", "Cancel");
+                $("#btnAddNameOfTest").attr("title", "Update Name Of Test");
+
+                $(this).addClass("cancelLink").removeClass("editLink");
+                var editid = $($(this).closest('a')).attr("data-LabTestMapId");
+                var id = $($(this).closest('a')).attr("data-LabTestMapId");
+                var tr = $(this).closest('tr');
+                //if (editid == 0) {
+                //    $(tr).find("td:first").text('0edit');
+                //    id = id + "edit";
+                //    dtNameOfTest.row(tr).data()[0] = "0edit";
+                //    dtNameOfTest.row(tr).draw(false);
+                //}
+
+                $(this).closest('tr').addClass('editedRow');
+                $(this).text("Cancel");
+                var EditClientSPOC = datatableToJson(['MapId', 'Edit', 'Action', 'NameOfTest', 'Frequency', 'NoOfTestReqd', 'TestToBeTakenFromLab', 'Rate', 'Amount', 'NameOfTestId'], dtNameOfTest.rows().data(), [1, 2]);
+
+                var editedRowData = EditClientSPOC.filter(function (element) { return element.MapId == id })[0];
+                $("#NameOfTest").val(editedRowData.NameOfTest);
+                $("#Frequency").val(editedRowData.Frequency);
+                $("#NoOfTestReqd").val(editedRowData.NoOfTestReqd);
+                $("#TestToBeTakenFromLab").val(editedRowData.TestToBeTakenFromLab);
+                $("#Rate").val(editedRowData.Rate);
+                $("#Amount").val(editedRowData.Amount);
+                $("#NameOfTestId").val(editedRowData.NameOfTestId);
+                //if (editid == 0) {
+                //    dtNameOfTest.row(tr).data()[0] = "0";
+                //    dtNameOfTest.row(tr).draw(false);
+                //    $(tr).find("td:first").text('0');
+                //    id = id.replace("edit", '');
+                //}
+            });
+
+
+
+
+        })
+    })
+
+    function ClearNameOfTest() {
+        $("#NameOfTestId").val('0');
+        $("#NameOfTest").val('');
+        $("#Frequency").val('');
+        $("#NoOfTestReqd").val('');
+        $("#TestToBeTakenFromLab").val('');
+        $("#Rate").val('');
+        $("#Amount").val('');
+    }
+
+    function ClearNameOfTestValidations() {
+        var $this = $(".NameOfTest");
+        $.each($this, function (index, ele) {
+            $(ele).removeClass('input-validation-error');
+            $("[data-valmsg-for='" + $(ele).attr("name") + "']").find("span:first").remove();
+        });
+    }
+    function BackToIndex() {
+        bootbox.confirm({
+            title: "Confirmation",
+            message: "Your changes will be discarded! Are you sure?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: ' mybtn bootboxbutton'
+                },
+                cancel: {
+                    label: 'No',
+                    className: ' cancelbtn bootboxbutton'
+                }
+            },
+            callback: function (confirmation) {
+                if (confirmation) {
+                    document.location.href = "/LabTest/Index";
+                }
+            }
+        })
+    }
+
+    function FillNameOfTestDetails() {
+        var SPOCurl = $("#gridNameOfTest").data('request-url');
+        $.ajax({
+            url: SPOCurl,
+            data: {
+                id: $("#id").val(),
+            },
+            type: "POST",
+            dataType: "json",
+            success: function (data) {
+                var nameOfTestTable = $('#gridNameOfTest').DataTable();
+                nameOfTestTable.clear();
+                $.each(data.data, function (index, value) {
+                    nameOfTestTable.row.add([
+                        value.MapId,
+                        '<a title="Edit" class="editLink" data-LabTestMapId=' + value.MapId + '>Edit</a>',
+                        '<a title="Delete" class="deleteLink" data-LabTestMapId=' + value.MapId + '>Delete</a>',
+                        value.NameOfTest,
+                        value.Frequency,
+                        value.NoOfTestReqd,
+                        value.TestToBeTakenFromLab,
+                        value.Rate,
+                        value.Amount,
+                        value.NameOfTestId
+                    ]);
+                });
+                nameOfTestTable.draw();
+                var nameOfTestTable = datatableToJson(['MapId',  'Edit', 'Action', 'NameOfTest', 'Frequency', 'NoOfTestReqd', 'TestToBeTakenFromLab', 'Rate', 'Amount', 'NameOfTestId'], dtNameOfTest.rows().data(), [1, 2]);
+
+                $("#NameOfTestJson").val('');
+                $("#NameOfTestJson").val(JSON.stringify(nameOfTestTable));
+
+                if (nameOfTestTable.length == 0) {
+                    $("#NameOfTestJsonValidation").val('');
+                }
+                else {
+                    $("#NameOfTestJsonValidation").val(JSON.stringify(nameOfTestTable));
+                }
+            },
+            error: function (jqXHR, textStatus, ex) {
+                //alert(textStatus + "," + ex + "," + jqXHR.responseText);
+            }
+        });
+    }
+
+    function Clear() {
+        $('#frmLabTest')[0].reset();
+    }
+
+
+    function OnLabTestFailure(xhr, status, error) {
+
+        if (xhr.status == 400) {
+            var errors = $.parseJSON(xhr.responseText);
+            //displayBranchLineValidationErrors(errors);
+        }
+        else {
+            toastr.error("An Error occurred whilst performing requested operation, this could be due to internet connectivity issue too. If issue persits please contact the system Administrator for further assistance.");
+        }
+    }
+
+    function OnLabTestSuccess(data) {
+
+        if (data.success) {
+            $('#partialLabTest').html('');
+            $('#lnkAddLabTest').show();
+            toastr.success("Saved successfully");
+
+            $('#grdLabTest').DataTable().clear().destroy();
+            LoadGridData();
+            $('html,body').animate({
+                scrollTop: $(".container-fluid").offset().top
+            },
+                'slow');
+            return false;
+        }
+        else {
+            toastr.error("An Error occurred whilst saving changes to the Lab Test. Contact the system Administrator for further assistance.");
+        }
+    }
+</script>
+

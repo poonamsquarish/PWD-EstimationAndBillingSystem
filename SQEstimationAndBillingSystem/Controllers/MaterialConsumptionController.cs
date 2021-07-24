@@ -74,7 +74,7 @@ namespace SQEstimationAndBillingSystem.Controllers
                     {
                         objMaterialConsumptionModel.ModifiedBy = objLoggedInUserSession.LoggedInUserId;
                     }
-                    var Result = _repository.AddEditMaterialConsumption(objMaterialConsumptionModel, obj);
+                var Result = _repository.AddEditMaterialConsumption(objMaterialConsumptionModel, obj);
 
                     return Json(new { success = true, message = "Saved successfully !!!" });
                 
@@ -96,7 +96,8 @@ namespace SQEstimationAndBillingSystem.Controllers
             {
                 objLoggedInUserSession = (LoggedInUserSessionModel)(Session["LoggedInUserSession"]);
             }
-            var list = _repository.GetAllMeasurementSheetItems(objLoggedInUserSession.SelectedProjectId).ToList();
+            var lists = _repository.GetAllMeasurementSheetItems(objLoggedInUserSession.SelectedProjectId).ToList();
+            var list = lists.Select(r => new { DescriptionOfTheItem= Convert.ToString(r.DescriptionOfTheItem), qty = Convert.ToString(r.TotalQty), id = r.ItemId.ToString() });
             return Json(new { MeasurementSheetItemList = list }, JsonRequestBehavior.AllowGet);
         }
 

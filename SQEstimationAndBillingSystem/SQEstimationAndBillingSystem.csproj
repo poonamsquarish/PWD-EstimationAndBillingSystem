@@ -143,6 +143,7 @@
     <Compile Include="Controllers\BillingController.cs" />
     <Compile Include="Controllers\DSRController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LabTestController.cs" />
     <Compile Include="Controllers\LeadChargesController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MaterialConsumptionController.cs" />
@@ -188,6 +189,7 @@
     <Compile Include="Models\DSRFileModel.cs" />
     <Compile Include="Models\DSRModel.cs" />
     <Compile Include="Models\DSRModelUpload.cs" />
+    <Compile Include="Models\LabTestModel.cs" />
     <Compile Include="Models\LeadChargesModel.cs" />
     <Compile Include="Models\LoggedInUserSessionModel.cs" />
     <Compile Include="Models\MaterialConsumptionModel.cs" />
@@ -201,6 +203,7 @@
     <Compile Include="Repository\AbstractSheetRepository.cs" />
     <Compile Include="Repository\BillingRepository.cs" />
     <Compile Include="Repository\DSRRepository.cs" />
+    <Compile Include="Repository\LabTestRepository.cs" />
     <Compile Include="Repository\LeadChargesRepository.cs" />
     <Compile Include="Repository\MaterialConsumptionRepository.cs" />
     <Compile Include="Repository\MeasurementSheetRepository.cs" />
@@ -7592,6 +7595,8 @@
     <Content Include="Uploads\01. Praposed Construction Of  Ladies Toilet Block %40 Satana  .xls" />
     <Content Include="Uploads\0_02. Construction of Concrete Road at Proposed Construction of Concrete Road  %40 From Sanmitra Housing Society    ..xls" />
     <Content Include="Uploads\4_SSR 18-19.pdf" />
+    <Content Include="Views\LabTest\CreateEdit.cshtml" />
+    <Content Include="Views\LabTest\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

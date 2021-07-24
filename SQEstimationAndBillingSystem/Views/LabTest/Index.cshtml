@@ -1,0 +1,298 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+    .hide_column {
+        display: none;
+    }
+    .group-end {
+        border-bottom: 1px solid black !important;
+    }
+
+    .required .control-label:after {
+        content: "*";
+        color: red;
+    }
+
+    .cell-title {
+        font-weight: bold;
+    }
+
+    .cell-effort-driven {
+        text-align: center;
+    }
+
+    .cell-selection {
+        border-right-color: silver;
+        border-right-style: solid;
+        background: #f5f5f5;
+        color: gray;
+        text-align: right;
+        font-size: 10px;
+    }
+</style>
+
+@Html.Hidden("hdnCreateEditURL", Url.Action("CreateEdit", "LabTest"))
+@Html.Hidden("hdnDeleteURL", Url.Action("DeleteLabTest", "LabTest"))
+<section class="content-header">
+    <h1>
+        Lab Test
+        <small>List</small>
+    </h1>
+</section>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <a class="btn btn-primary pull-right" id="lnkAddLabTest"
+           href="@Url.Content("~/LabTest/ManageLabTest/0")"
+           onclick="return ManageLabTest(this, '#partialLabTest');"><i class="glyphicon glyphicon-plus"></i>&nbsp;Add New Lab Test</a>
+    </div>
+</div>
+
+<div class="col-lg-12" style="width:100%;">
+    <div id="partialLabTest"></div>
+</div>
+
+<div class="col-lg-12" style="width:100%;">
+    <br />
+    <div style="margin:0 auto;" class="list-form">
+        <table id="grdLabTest" class="row-border" data-request-url="@Url.Action("GetAllLabTestDetails","LabTest")">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Id</th>
+                    <th>DSR Detail Id</th>
+                    <th>Item Of Work</th>
+                    @*<th>Brief Description</th>*@
+                    <th>Material</th>
+                    <th>Quantity</th>
+                    <th>Unit</th>
+                    <th>Name Of Test</th>
+                    <th>Frequency</th>
+                    <th>No of Test Required</th>
+                    <th>30% test to be taken from lab</th>
+                    <th>Rate</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+
+<script>
+    var grdLabTestTable;
+    $(document).ready(function () {
+
+        MakeReadOnlyIfNotLatestDSR("partialLabTest");
+        LoadGridData();
+    });
+
+    function LoadGridData() {
+
+          var indexurl = $("#grdLabTest").data('request-url');
+        $.ajax({
+            type: 'GET',
+            datatype: 'json',
+            cache:false,
+            contentType: "application/json; charset=utf-8",
+            url: '@Url.Action("GetAllLabTestDetails", "LabTest")',
+            success: function (data) {
+                var collapsedGroups = {};
+                var top = '';
+         grdLabTestTable = $('#grdLabTest').DataTable({
+             "aaData": data,
+             //"scrollX": true,
+            "aoColumns": [
+                {
+                    "orderable": false, "width": "10%", 
+                     "autoWidth": true,
+                                     "data": null,
+                                     "class": "text-center",
+                                "render": function (data, type, full) {
+                                    return '<a onclick="return ManageLabTest(this);" href="@Url.Content("~/LabTest/ManageLabTest")/' + full['id'] + '" style="display:none; text-decoration:underline;text-transform: uppercase"><img title="Edit" src="@Url.Content("~/Content/images/edit.svg")" align="middle" style="height:18px"/></a>'+
+                                        '<a  href="#" data-deleteId="' + full['id'] +'" onclick="DeleteConfirm(this);" style="display:none; text-decoration:underline;text-transform: uppercase"><img title="Delete" src="@Url.Content("~/Content/images/delete.svg")" align="middle" style="height:18px"/></a>';
+                                     }
+                },
+                { "data": "id", "title": "Id", "autoWidth": true, "visible": false, "autoWidth": true},
+                { "data": "DSRDetailId", "title": "DSRDetailId", "autoWidth": true, "visible": false, "autoWidth": true},
+                { "data": "ItemOfWork", "title": "Item Of Work", "autoWidth": true, "visible": false, "autoWidth": true},
+                //{ "data": "ItemOfWorkBriefDescription", "title": "Brief Description", "autoWidth": true },
+
+                { "data": "Material", "title": "Material", "autoWidth": true, "visible": false },
+                { "data": "Quantity", "title": "Quantity", "autoWidth": true, "visible": false },
+                { "data": "Unit", "title": "Unit", "autoWidth": true, "visible": true, "visible": false },
+
+                 { "data": "NameOfTest", "title": "Name Of Test",  "autoWidth": true },
+                { "data": "Frequency", "title": "Frequency", "autoWidth": true, "visible": true },
+                { "data": "NoOfTestReqd", "title": "No Of Test Reqd", "autoWidth": true, "visible": true },
+                { "data": "TestToBeTakenFromLab", "title": "30% Test To Be Taken From Lab", "autoWidth": true, "visible": true },
+                { "data": "Rate", "title": "Rate", "autoWidth": true, "visible": true },
+                { "data": "Amount", "title": "Amount", "autoWidth": true, "visible": true }
+             ],
+             //columnDefs: [
+             //    {
+             //        targets: [0],
+             //        className: "hide_column"
+             //    }
+             //],
+             order: [[4, 'asc'], [3, 'asc']],
+            rowGroup: {
+                // Uses the 'row group' plugin
+                dataSrc: ['ItemOfWork', 'Material'],
+                startRender: function (rows, group, level) {
+                    var all;
+                    if (level === 0) {
+                        top = group;
+                        all = group;
+                    } else {
+                        // if parent collapsed, nothing to do
+                        if (!!collapsedGroups[top]) {
+                            return;
+                        }
+                        all = top + group;
+                    }
+
+                    var collapsed = !!collapsedGroups[all];
+                    var id = 0;
+                    rows.nodes().each(function (r) {
+                        r.style.display = collapsed ? 'none' : '';
+                        if (level == 1) {
+                            id = $($(r.cells[0]).find('a')[1]).attr("data-deleteid");
+                        }
+                    });
+                    //debugger;
+                    // Add category name to the <tr>. NOTE: Hardcoded colspan
+                    if (level == 1) {
+                        return $('<tr/>')
+                            .append('<td><a onclick="return ManageLabTest(this);" href="@Url.Content("~/LabTest/ManageLabTest")/' + id + '" style="text-decoration:underline;text-transform: uppercase"><img title="Edit" src="@Url.Content("~/Content/images/edit.svg")" align="middle" style="height:18px"/></a>'+
+                            '<a  href="#" data-deleteId="' + id +'" onclick="DeleteConfirm(this);" style="text-decoration:underline;text-transform: uppercase"><img title="Delete" src="@Url.Content("~/Content/images/delete.svg")" align="middle" style="height:18px"/></a></td><td colspan="9">' + group + ' (' + rows.count() + ')</td>')
+                            .attr('data-name', all)
+                            .toggleClass('collapsed', collapsed);
+                    } else {
+                        return $('<tr/>')
+                            .append('<td colspan="10">' + group + ' (' + rows.count() + ')</td>')
+                            .attr('data-name', all)
+                            .toggleClass('collapsed', collapsed);
+                    }
+                }
+             },
+
+        });
+
+
+                //$('#grdLabTest tbody').on('click', 'tr.dtrg-start', function () {
+                //    var name = $(this).data('name');
+
+                //    collapsedGroups[name] = !collapsedGroups[name];
+                //    grdLabTestTable.draw(false);
+                //});
+
+
+            }
+        });
+    }
+
+    function ManageLabTest(obj) {
+        var url = obj.getAttribute("href");
+        $.get(url, function (data) {
+            if (data) {
+                $('#partialLabTest').html(data);
+                $('html,body').animate({
+                    scrollTop: $(".container-fluid").offset().top
+                },
+                    'slow');
+                $.validator.unobtrusive.parse("form");
+            }
+            else {
+                toastr.error("An Error occurred whilst saving changes to the Lab Test. Contact the system Administrator for further assistance.");
+            }
+        });
+
+        $('#lnkAddLabTest').hide();
+        return false;
+    }
+
+
+    function DeleteConfirm(obj) {
+        bootbox.confirm({
+            title: "Confirmation",
+            message: "Are you sure you want to delete this record?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: ' mybtn bootboxbutton'
+                },
+                cancel: {
+                    label: 'No',
+                    className: ' cancelbtn bootboxbutton'
+                }
+            },
+            callback: function (confirmation) {
+                if (confirmation) {
+                    var url = $("#hdnDeleteURL").val();
+
+                    $.ajax({
+                        url: url,
+                        type: 'Post',
+                        dataType: "json",
+                        data: { id: $(obj).attr("data-deleteId") },
+                        success: function (result) {
+                            if (result.success) {
+                                toastr.success("Lab Test deleted successfully!");
+
+                                $('#grdLabTest').DataTable().clear().destroy();
+                                LoadGridData();
+                                $('html,body').animate({
+                                    scrollTop: $(".container-fluid").offset().top
+                                },
+                                    'slow');
+                            }
+                            else {
+                                toastr.error("Error");
+                            }
+                        },
+                        error: function () {
+                            toastr.error("Error");
+                        }
+                    })
+                }
+            }
+        })
+    }
+
+    function LabTestCancel() {
+        $('#partialLabTest').html('');
+        $('#lnkAddLabTest').show();
+        window.scrollTo(0, 0);
+        return false;
+    }
+
+
+    //to convert jquery datatable data in json format
+    function datatableToJson(columns, data, ignoreCols) {
+        var obj = [];
+        for (var i = 0; i < data.length; i++) {
+            var row = {};
+            for (var j = 0; j < columns.length; j++) {
+                if ($.inArray(j, ignoreCols) < 0) {
+                    row[columns[j]] = data[i][j];
+                }
+            }
+            obj.push(row);
+        }
+        return obj;
+    }
+
+    //to get datatable all column headers
+    function getColumns(objTable) {
+        var cols = [];
+        objTable.columns().every(function () {
+            // Column header
+            cols.push($(this.header()).text().replace(/\s+/g, ''));
+        });
+        return cols;
+    }
+</script>
