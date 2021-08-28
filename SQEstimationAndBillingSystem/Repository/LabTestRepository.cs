@@ -78,6 +78,7 @@ namespace SQEstimationAndBillingSystem.Repository
             var pList = new SqlParameter("@NameOfTestList", SqlDbType.Structured);
             pList.TypeName = "dbo.LabTestMappingTableType";
             pList.Value = model.NameOfTestList == null ? ToDataTable(new List<NameOfTestModel>()) : ToDataTable(model.NameOfTestList);
+            model.NameOfTestList.ForEach(f=> { f.LabTestId = model.id; });
 
             string result = string.Empty;
 

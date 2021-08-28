@@ -11115,6 +11115,172 @@ BEGIN
 
 END
 GO
+
+
+ALTER PROCEDURE [dbo].[SQSPAddEditLabTest]	
+( @Id as bigint
+,@ProjectId  as bigint
+,@ItemOfWork as nvarchar(max)
+,@DSRDetailId as bigint NULL
+,@MaterialId as int NULL
+,@Quantity as decimal(18,3)
+,@Unit as nvarchar(50)
+,@NameOfTestList as dbo.[LabTestMappingTableType] readonly
+,@DSRId as int
+,@CreatedBy as bigint
+,@ModifiedBy as bigint
+)
+AS
+BEGIN
+
+SET NOCOUNT ON;
+
+	IF @Id = 0
+	BEGIN
+
+		 INSERT INTO LabTest(ProjectId,ItemOfWork,DSRDetailId,MaterialId,DSRId,Quantity,Unit,CreatedBy,ModifiedBy,CreatedOn,ModifiedOn) 
+		 VALUES(@ProjectId,@ItemOfWork,@DSRDetailId,@MaterialId,@DSRId,@Quantity,@Unit, @CreatedBy,@ModifiedBy,getdate(),getdate())
+
+		 SET @Id=SCOPE_IDENTITY()
+
+
+		 INSERT INTO dbo.LabTestDetails  
+			(  
+				 
+				NameOfTestId,  
+				NameOfTest,  
+				Frequency,  
+				NoOfTestReqd,
+				TestToBeTakenFromLab,
+				Rate,
+				Amount
+			)  
+		SELECT	  
+				NameOfTestId,  
+				NameOfTest,  
+				Frequency,  
+				NoOfTestReqd,
+				TestToBeTakenFromLab,
+				Rate,
+				Amount
+
+		FROM	@NameOfTestList  
+
+		 update LabTestDetails set LabTestId=@Id where isnull(LabTestId,0)=0
+
+	END
+	ELSE
+	BEGIN
+
+
+	  UPDATE LabTest SET 
+	  ProjectId = @ProjectId
+	  ,ItemOfWork=@ItemOfWork
+	  ,MaterialId=@MaterialId
+	  ,DSRDetailId=@DSRDetailId
+	  ,DSRId=@DSRId
+	  ,Unit=@Unit
+	  ,Quantity=@Quantity
+	  ,ModifiedBy=@ModifiedBy
+	  WHERE ID = @Id
+
+		--delete existing 
+		delete from LabTestDetails 
+		where LabTestId=@Id and
+		Id in (
+			select isnull(Id,0) from LabTestDetails where LabTestId=@Id and Id not in (select isnull(MapId,0) from @NameOfTestList where isnull(MapId,0)>0 )
+		)  
+
+	  --insert newly added test names
+	  	INSERT INTO dbo.LabTestDetails  
+			(   
+				NameOfTestId,  
+				NameOfTest,  
+				Frequency,  
+				NoOfTestReqd,
+				TestToBeTakenFromLab,
+				Rate,
+				Amount
+			)  
+		SELECT	
+				NameOfTestId,  
+				NameOfTest,  
+				Frequency,  
+				NoOfTestReqd,
+				TestToBeTakenFromLab,
+				Rate,
+				Amount
+
+		FROM	@NameOfTestList  where isnull(MapId,0)=0
+
+		 update LabTestDetails set LabTestId=@Id where isnull(LabTestId,0)=0
+
+
+
+		 --update existing lab test details 
+			DECLARE	@LTId BIGINT  ;
+		 DECLARE cursor_ld CURSOR
+		 FOR 
+
+			select Id 
+			from LabTestDetails ld
+			inner join @NameOfTestList n on ld.Id=n.MapId
+			
+		 OPEN cursor_ld;
+		 FETCH NEXT FROM cursor_ld INTO 
+				@LTId
+		 WHILE @@FETCH_STATUS = 0
+			BEGIN
+				
+			DECLARE	@LabTestId BIGINT ;
+			DECLARE	@NameOfTestId int ;
+			DECLARE	@NameOfTest nvarchar(500)  ;
+			DECLARE	@Frequency nvarchar(50)  ; 
+			DECLARE	@NoOfTestReqd int  ;
+			DECLARE	@TestToBeTakenFromLab int  ;
+			DECLARE	@Rate decimal(18,3)  ;
+			DECLARE	@Amount  decimal(18,3) ;
+
+			select 
+					@LabTestId =LabTestId
+					,@NameOfTestId =NameOfTestId
+					,@NameOfTest =NameOfTest
+					,@Frequency =Frequency
+					,@NoOfTestReqd =NoOfTestReqd
+					,@TestToBeTakenFromLab =TestToBeTakenFromLab
+					,@Rate=Rate
+					,@Amount  =Amount
+			from	@NameOfTestList where MapId=@LTId
+
+				update LabTestDetails
+				set 				 
+				NameOfTestId=@NameOfTestId,  
+				NameOfTest=@NameOfTest,  
+				Frequency=@Frequency,  
+				NoOfTestReqd=@NoOfTestReqd,
+				TestToBeTakenFromLab=@TestToBeTakenFromLab,
+				Rate=@Rate,
+				Amount=@Amount
+				where Id=@LTId
+						
+				FETCH NEXT FROM cursor_ld INTO 
+				@LTId
+			END;
+		 CLOSE cursor_ld;
+		 DEALLOCATE cursor_ld;
+
+	END
+
+update ProjectDetails set IsLabTest=1 where ID=@ProjectId
+SELECT @Id
+
+END
+
+
+
+
+
+
 USE [master]
 GO
 ALTER DATABASE [PWD] SET  READ_WRITE 
