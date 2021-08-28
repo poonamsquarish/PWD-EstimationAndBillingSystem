@@ -8,6 +8,7 @@
     .hide_column {
         display: none;
     }
+
     .group-end {
         border-bottom: 1px solid black !important;
     }
@@ -32,6 +33,37 @@
         color: gray;
         text-align: right;
         font-size: 10px;
+    }
+
+
+    table.dataTable tr.dtrg-group.dtrg-level-0 td {
+        font-weight: bold;
+    }
+
+    table.dataTable tr.dtrg-group td {
+        background-color: #e0e0e0;
+    }
+
+    table.dataTable tr.dtrg-group.dtrg-level-1 td:first-child {
+        padding-left: 2em;
+    }
+
+    table.dataTable tr.dtrg-group.dtrg-level-1 td {
+        background-color: #f0f0f0;
+        padding-top: 0.25em;
+        padding-bottom: 0.25em;
+    }
+
+    table.dataTable tr.dtrg-group.dtrg-level-2 td:first-child {
+        padding-left: 3em;
+    }
+
+    table.dataTable tr.dtrg-group.dtrg-level-2 td {
+        background-color: #fff0f0;
+    }
+
+    table.dataTable.compact tbody tr td.order_id {
+        padding-left: 4em;
     }
 </style>
 
@@ -82,6 +114,12 @@
 </div>
 
 
+@*<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script>
+    <script src="https://nightly.datatables.net/rowgroup/js/dataTables.rowGroup.js?_=bc3763029fa6dfaf4c947ef25f079107"></script>*@
+
+
+
 <script>
     var grdLabTestTable;
     $(document).ready(function () {
@@ -90,6 +128,7 @@
         LoadGridData();
     });
 
+    //http://live.datatables.net/gasoculo/1/edit
     function LoadGridData() {
 
           var indexurl = $("#grdLabTest").data('request-url');
@@ -107,7 +146,7 @@
              //"scrollX": true,
             "aoColumns": [
                 {
-                    "orderable": false, "width": "10%", 
+                    "orderable": false, "width": "10%",
                      "autoWidth": true,
                                      "data": null,
                                      "class": "text-center",
@@ -132,16 +171,13 @@
                 { "data": "Rate", "title": "Rate", "autoWidth": true, "visible": true },
                 { "data": "Amount", "title": "Amount", "autoWidth": true, "visible": true }
              ],
-             //columnDefs: [
-             //    {
-             //        targets: [0],
-             //        className: "hide_column"
-             //    }
-             //],
+
+
              order: [[4, 'asc'], [3, 'asc']],
             rowGroup: {
                 // Uses the 'row group' plugin
                 dataSrc: ['ItemOfWork', 'Material'],
+               // dataSrc: ['ItemOfWork'],
                 startRender: function (rows, group, level) {
                     var all;
                     if (level === 0) {
@@ -163,7 +199,7 @@
                             id = $($(r.cells[0]).find('a')[1]).attr("data-deleteid");
                         }
                     });
-                    //debugger;
+
                     // Add category name to the <tr>. NOTE: Hardcoded colspan
                     if (level == 1) {
                         return $('<tr/>')

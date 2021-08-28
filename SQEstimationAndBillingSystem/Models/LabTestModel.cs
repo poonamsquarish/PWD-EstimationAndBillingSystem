@@ -22,7 +22,7 @@ namespace SQEstimationAndBillingSystem.Models
         public string ItemOfWorkBriefDescription { get; set; }
 
         //Material
-        public Nullable<long> MaterialId { get; set; }
+        public Nullable<int> MaterialId { get; set; }
         public string Material { get; set; }
         [Required(ErrorMessage = "Quantity Required")]
         public Nullable<decimal> Quantity { get; set; }
@@ -61,7 +61,7 @@ namespace SQEstimationAndBillingSystem.Models
 
         //Material
         [Required(ErrorMessage = "Material Required")]
-        public Nullable<long> MaterialId { get; set; }
+        public Nullable<int> MaterialId { get; set; }
         [Required(ErrorMessage = "Material Required")]
         public string Material { get; set; }
         [Required(ErrorMessage = "Quantity Required")]

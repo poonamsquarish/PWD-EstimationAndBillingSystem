@@ -97,6 +97,7 @@ namespace SQEstimationAndBillingSystem.Controllers
                     if (objLabTestModel != null)
                     {
                         objLabTestModel = _repository.GetLabTestById(Convert.ToInt64(id));
+                        objLabTestModel.NameOfTestList = JsonConvert.DeserializeObject<List<NameOfTestModel>>(objLabTestModel.NameOfTestJson);
                     }
                 }
                 else

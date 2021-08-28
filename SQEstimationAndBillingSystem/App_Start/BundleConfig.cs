@@ -55,7 +55,7 @@ namespace SQEstimationAndBillingSystem
 
             bundles.Add(new StyleBundle(ProgConstant.DataTables)
                     .Include(ProgConstant.bootstrapcss, new CssRewriteUrlTransform())
-                    .Include(ProgConstant.dataTablesbootstrapmincss, new CssRewriteUrlTransform())
+                    .Include("~/Content/DataTables/css/dataTables.bootstrap.min.css", new CssRewriteUrlTransform())
                     .Include("~/Content/DataTables/css/jquery.dataTables.min.css", new CssRewriteUrlTransform())
                     .Include("~/Content/DataTables/css/buttons.dataTables.min.css", new CssRewriteUrlTransform())
                      .Include("~/Content/DataTables/css/fixedHeader.dataTables.min.css", new CssRewriteUrlTransform())
@@ -70,13 +70,16 @@ namespace SQEstimationAndBillingSystem
 
 
             #region script Bundle
-            bundles.Add(new ScriptBundle(ProgConstant.jquery).Include(ProgConstant.jqueryversion,
+            bundles.Add(new ScriptBundle(ProgConstant.jquery).Include(
+                ProgConstant.jqueryversion,
                        ProgConstant.jqueryui,
                        ProgConstant.jqueryblockUI,
                       ProgConstant.jquerycolorboxmin,
                        ProgConstant.bootboxmin,
                        "~/Scripts/jquery.auto-complete.min.js"
                        ));
+
+            
 
             bundles.Add(new ScriptBundle(ProgConstant.jqueryval).Include(
                       ProgConstant.jqueryvalidate));
@@ -125,7 +128,8 @@ namespace SQEstimationAndBillingSystem
                       "~/Scripts/DataTables/buttons.print.min.js",
                     "~/Scripts/DataTables/dataTables.select.min.js",
                     "~/Scripts/DataTables/dataTables.fixedHeader.min.js",
-                     "~/Scripts/DataTables/dataTables.rowGroup.min.js"
+                    // "~/Scripts/DataTables/dataTables.rowGroup.min.js"
+                    "~/Scripts/DataTables/dataTables.rowGroupV1.1.2.js"
                     ));
 
             bundles.Add(new ScriptBundle(ProgConstant.jstoastr).Include(

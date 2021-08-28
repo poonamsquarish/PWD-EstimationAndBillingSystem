@@ -6599,6 +6599,7 @@
     <Content Include="Content\DataTables\css\dataTables.checkboxes.css" />
     <Content Include="Content\DataTables\css\fixedColumns.dataTables.min.css" />
     <Content Include="Content\DataTables\css\fixedHeader.dataTables.min.css" />
+    <Content Include="Content\DataTables\css\jquery.dataTables.css" />
     <Content Include="Content\DataTables\css\jquery.dataTables.min.css" />
     <Content Include="Content\DataTables\css\rowGroup.dataTables.min.css" />
     <Content Include="Content\font-awesome.css" />
@@ -7465,6 +7466,7 @@
     <Content Include="Scripts\DataTables\dataTables.responsive.min.js" />
     <Content Include="Scripts\DataTables\dataTables.rowGroup.js" />
     <Content Include="Scripts\DataTables\dataTables.rowGroup.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.rowGroupOLD.js" />
     <Content Include="Scripts\DataTables\dataTables.rowReorder.js" />
     <Content Include="Scripts\DataTables\dataTables.rowReorder.min.js" />
     <Content Include="Scripts\DataTables\dataTables.scroller.js" />
@@ -7477,6 +7479,7 @@
     <Content Include="Scripts\DataTables\dataTables.uikit.min.js" />
     <Content Include="Scripts\DataTables\jquery.dataTables.js" />
     <Content Include="Scripts\DataTables\jquery.dataTables.min.js" />
+    <Content Include="Scripts\DataTables\jquery.dataTablesOLD.js" />
     <Content Include="Scripts\DataTables\jszip.min.js" />
     <Content Include="Scripts\DataTables\pdfmake.min.js" />
     <Content Include="Scripts\DataTables\responsive.bootstrap.js" />
@@ -7492,6 +7495,7 @@
     <Content Include="Scripts\DataTables\vfs_fonts.js" />
     <Content Include="Scripts\edit.js" />
     <Content Include="Scripts\editor.dataTables.min.css" />
+    <Content Include="Scripts\jquery-1.11.3.min.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
@@ -7595,8 +7599,11 @@
     <Content Include="Uploads\01. Praposed Construction Of  Ladies Toilet Block %40 Satana  .xls" />
     <Content Include="Uploads\0_02. Construction of Concrete Road at Proposed Construction of Concrete Road  %40 From Sanmitra Housing Society    ..xls" />
     <Content Include="Uploads\4_SSR 18-19.pdf" />
-    <Content Include="Views\LabTest\CreateEdit.cshtml" />
+    <Content Include="Views\LabTest\CreateEdit1.cshtml" />
     <Content Include="Views\LabTest\Index.cshtml" />
+    <Content Include="Views\Shared\_ListDSRPartial.cshtml" />
+    <Content Include="Views\Shared\_ListDSRProjectsPartial.cshtml" />
+    <Content Include="Views\LabTest\CreateEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

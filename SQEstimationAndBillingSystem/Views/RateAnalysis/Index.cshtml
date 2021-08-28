@@ -278,7 +278,7 @@
             },
             onSelect: function (e, term, item) {
                 $("#txtItemDescription").val(item.data('itemofworkdesc'));
-                debugger;
+               
                 $("#DSRDetailsId").val(item.data('itemofworkid'));
 
                 $("#txtUnit").val(item.data('unit'));
@@ -601,7 +601,7 @@
             url: '@Url.Action("CreateEdit", "RateAnalysis")',
             data: { id: id },
             success: function (response) {
-                debugger;
+              
                 $("#txtContractorsProfitPer").val(response.ContractorsProfitPer);
 
                 $("#txtItemDescription").val(response.ItemDescription);

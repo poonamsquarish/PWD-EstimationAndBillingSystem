@@ -79,11 +79,12 @@ namespace SQEstimationAndBillingSystem.Repository
             pList.TypeName = "dbo.LabTestMappingTableType";
             pList.Value = model.NameOfTestList == null ? ToDataTable(new List<NameOfTestModel>()) : ToDataTable(model.NameOfTestList);
 
+            string result = string.Empty;
 
-            return _dbContext.Database.SqlQuery<string>("SQSPAddEditLabTest @Id ,@ProjectId,@DSRDetailId ,@MaterialId,@Quantity ,@Unit ,@NameOfTestList ,@DSRId ,@CreatedBy,@ModifiedBy",
+           var res = _dbContext.Database.SqlQuery<long>("SQSPAddEditLabTest @Id ,@ProjectId,@ItemOfWork,@DSRDetailId ,@MaterialId,@Quantity ,@Unit ,@NameOfTestList ,@DSRId ,@CreatedBy,@ModifiedBy",
               new SqlParameter("Id", model.id),
               new SqlParameter("ProjectId", model.ProjectId),
-              //new SqlParameter("ItemOfWorkBriefDescription", model.ItemOfWorkBriefDescription),
+              new SqlParameter("ItemOfWork", model.ItemOfWork),
               new SqlParameter("DSRDetailId", model.DSRDetailId.HasValue ? model.DSRDetailId.Value : ToDBNull(null)),
                 new SqlParameter("MaterialId", model.MaterialId),
                 new SqlParameter("Quantity", model.Quantity),
@@ -93,6 +94,8 @@ namespace SQEstimationAndBillingSystem.Repository
               new SqlParameter("CreatedBy", model.CreatedBy),
               new SqlParameter("ModifiedBy", model.ModifiedBy)
                 ).FirstOrDefault();
+            result = Convert.ToString(res);
+            return result;
         }
         public static object ToDBNull(object value)
         {

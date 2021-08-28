@@ -1,15 +1,15 @@
-/*! RowGroup 1.1.4-dev
- * ©2017-2021 SpryMedia Ltd - datatables.net/license
+/*! RowGroup 1.0.0
+ * ©2017 SpryMedia Ltd - datatables.net/license
  */
 
 /**
  * @summary     RowGroup
  * @description RowGrouping for DataTables
- * @version     1.1.4-dev
+ * @version     1.0.0
  * @file        dataTables.rowGroup.js
  * @author      SpryMedia Ltd (www.sprymedia.co.uk)
  * @contact     datatables.net
- * @copyright   Copyright 2017-2021 SpryMedia Ltd.
+ * @copyright   Copyright 2017 SpryMedia Ltd.
  *
  * This source file is free software, available under the following license:
  *   MIT license - http://datatables.net/license/mit
@@ -66,7 +66,9 @@ var RowGroup = function ( dt, opts ) {
 
 	// Internal settings
 	this.s = {
-		dt: new DataTable.Api( dt )
+		dt: new DataTable.Api( dt ),
+
+		dataFn: DataTable.ext.oApi._fnGetObjectDataFn( this.c.dataSrc ),
 	};
 
 	// DOM items
@@ -105,6 +107,7 @@ $.extend( RowGroup.prototype, {
 		var dt = this.s.dt;
 
 		this.c.dataSrc = val;
+		this.s.dataFn = DataTable.ext.oApi._fnGetObjectDataFn( this.c.dataSrc );
 
 		$(dt.table().node()).triggerHandler( 'rowgroup-datasrc.dt', [ dt, val ] );
 
@@ -135,15 +138,6 @@ $.extend( RowGroup.prototype, {
 		return this;
 	},
 
-	/**
-	 * Get enabled flag
-	 * @returns boolean
-	 */
-	enabled: function ()
-	{
-		return this.c.enable;
-	},
-
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 * Constructor
@@ -152,15 +146,14 @@ $.extend( RowGroup.prototype, {
 	{
 		var that = this;
 		var dt = this.s.dt;
-		var hostSettings = dt.settings()[0];
 
-		dt.on( 'draw.dtrg', function (e, s) {
-			if ( that.c.enable && hostSettings === s ) {
+		dt.on( 'draw.dtrg', function () {
+			if ( that.c.enable ) {
 				that._draw();
 			}
 		} );
 
-		dt.on( 'column-visibility.dt.dtrg responsive-resize.dt.dtrg', function () {
+		dt.on( 'column-visibility.dtrg', function () {
 			that._adjustColspan();
 		} );
 
@@ -180,7 +173,7 @@ $.extend( RowGroup.prototype, {
 	 */
 	_adjustColspan: function ()
 	{
-		$( 'tr.'+this.c.className, this.s.dt.table().body() ).find('td:visible')
+		$( 'tr.'+this.c.className, this.s.dt.table().body() )
 			.attr( 'colspan', this._colspan() );
 	},
 
@@ -190,120 +183,52 @@ $.extend( RowGroup.prototype, {
 	 */
 	_colspan: function ()
 	{
-		return this.s.dt.columns().visible().reduce( function (a, b) {
-			return a + b;
-		}, 0 );
+		return $( this.s.dt.columns().header() ).filter(':visible').length;
 	},
 
-
 	/**
-	 * Update function that is called whenever we need to draw the grouping rows.
-	 * This is basically a bootstrap for the self iterative _group and _groupDisplay
-	 * methods
+	 * Update function that is called whenever we need to draw the grouping rows
 	 * @private
 	 */
 	_draw: function ()
 	{
-		var dt = this.s.dt;
-		var groupedRows = this._group( 0, dt.rows( { page: 'current' } ).indexes() );
-
-		this._groupDisplay( 0, groupedRows );
-	},
-
-	/**
-	 * Get the grouping information from a data set (index) of rows
-	 * @param {number} level Nesting level
-	 * @param {DataTables.Api} rows API of the rows to consider for this group
-	 * @returns {object[]} Nested grouping information - it is structured like this:
-	 *	{
-	 *		dataPoint: 'Edinburgh',
-	 *		rows: [ 1,2,3,4,5,6,7 ],
-	 *		children: [ {
-	 *			dataPoint: 'developer'
-	 *			rows: [ 1, 2, 3 ]
-	 *		},
-	 *		{
-	 *			dataPoint: 'support',
-	 *			rows: [ 4, 5, 6, 7 ]
-	 *		} ]
-	 *	}
-	 * @private
-	 */
-	_group: function ( level, rows ) {
-		var fns = Array.isArray( this.c.dataSrc ) ? this.c.dataSrc : [ this.c.dataSrc ];
-		var fn = DataTable.ext.oApi._fnGetObjectDataFn( fns[ level ] );
-		var dt = this.s.dt;
-		var group, last;
-		var data = [];
 		var that = this;
+		var dt = this.s.dt;
+		var rows = dt.rows( { page: 'current' } );
+		var groupedRows = [];
+		var last, display;
 
-		for ( var i=0, ien=rows.length ; i<ien ; i++ ) {
-			var rowIndex = rows[i];
-			var rowData = dt.row( rowIndex ).data();
-			var group = fn( rowData );
+		rows.every( function () {
+			var d = this.data();
+			var group = that.s.dataFn( d );
 
-			if ( group === null || group === undefined ) {
-				group = that.c.emptyDataGroup;
-			}
-			
 			if ( last === undefined || group !== last ) {
-				data.push( {
-					dataPoint: group,
-					rows: []
-				} );
-
+				groupedRows.push( [] );
 				last = group;
 			}
+			
+			groupedRows[ groupedRows.length - 1 ].push( this.index() );
+		} );
 
-			data[ data.length-1 ].rows.push( rowIndex );
-		}
-
-		if ( fns[ level+1 ] !== undefined ) {
-			for ( var i=0, ien=data.length ; i<ien ; i++ ) {
-				data[i].children = this._group( level+1, data[i].rows );
-			}
-		}
-
-		return data;
-	},
-
-	/**
-	 * Row group display - insert the rows into the document
-	 * @param {number} level Nesting level
-	 * @param {object[]} groups Takes the nested array from `_group`
-	 * @private
-	 */
-	_groupDisplay: function ( level, groups )
-	{
-		var dt = this.s.dt;
-		var display;
-	
-		for ( var i=0, ien=groups.length ; i<ien ; i++ ) {
-			var group = groups[i];
-			var groupName = group.dataPoint;
-			var row;
-			var rows = group.rows;
+		for ( var i=0, ien=groupedRows.length ; i<ien ; i++ ) {
+			var group = groupedRows[i];
+			var firstRow = dt.row(group[0]);
+			var groupName = this.s.dataFn( firstRow.data() );
 
 			if ( this.c.startRender ) {
-				display = this.c.startRender.call( this, dt.rows(rows), groupName, level );
-				row = this._rowWrap( display, this.c.startClassName, level );
-
-				if ( row ) {
-					row.insertBefore( dt.row( rows[0] ).node() );
-				}
+				display = this.c.startRender.call( this, dt.rows(group), groupName );
+				
+				this
+					._rowWrap( display, this.c.startClassName )
+					.insertBefore( firstRow.node() );
 			}
 
 			if ( this.c.endRender ) {
-				display = this.c.endRender.call( this, dt.rows(rows), groupName, level );
-				row = this._rowWrap( display, this.c.endClassName, level );
-
-				if ( row ) {
-					row.insertAfter( dt.row( rows[ rows.length-1 ] ).node() );
-				}
-			}
-
-			if ( group.children ) {
-				this._groupDisplay( level+1, group.children );
+				display = this.c.endRender.call( this, dt.rows(group), groupName );
+				
+				this
+					._rowWrap( display, this.c.endClassName )
+					.insertAfter( dt.row( group[ group.length-1 ] ).node() );
 			}
 		}
 	},
@@ -311,23 +236,13 @@ $.extend( RowGroup.prototype, {
 	/**
 	 * Take a rendered value from an end user and make it suitable for display
 	 * as a row, by wrapping it in a row, or detecting that it is a row.
-	 * @param {node|jQuery|string} display Display value
-	 * @param {string} className Class to add to the row
-	 * @param {array} group
-	 * @param {number} group level
+	 * @param [node|jQuery|string] display Display value
+	 * @param [string] className Class to add to the row
 	 * @private
 	 */
-	_rowWrap: function ( display, className, level )
+	_rowWrap: function ( display, className )
 	{
 		var row;
-		
-		if ( display === null || display === '' ) {
-			display = this.c.emptyDataGroup;
-		}
-
-		if ( display === undefined || display === null ) {
-			return null;
-		}
 		
 		if ( typeof display === 'object' && display.nodeName && display.nodeName.toLowerCase() === 'tr') {
 			row = $(display);
@@ -346,8 +261,7 @@ $.extend( RowGroup.prototype, {
 
 		return row
 			.addClass( this.c.className )
-			.addClass( className )
-			.addClass( 'dtrg-level-'+level );
+			.addClass( className );
 	}
 } );
 
@@ -365,19 +279,13 @@ RowGroup.defaults = {
 	 * end grouping rows.
 	 * @type string
 	 */
-	className: 'dtrg-group',
+	className: 'group',
 
 	/**
 	 * Data property from which to read the grouping information
-	 * @type string|integer|array
+	 * @type string|integer
 	 */
 	dataSrc: 0,
-
-	/**
-	 * Text to show if no data is found for a group
-	 * @type string
-	 */
-	emptyDataGroup: 'No group',
 
 	/**
 	 * Initial enablement state
@@ -389,7 +297,7 @@ RowGroup.defaults = {
 	 * Class name to give to the end grouping row
 	 * @type string
 	 */
-	endClassName: 'dtrg-end',
+	endClassName: 'group-end',
 
 	/**
 	 * End grouping label function
@@ -401,7 +309,7 @@ RowGroup.defaults = {
 	 * Class name to give to the start grouping row
 	 * @type string
 	 */
-	startClassName: 'dtrg-start',
+	startClassName: 'group-start',
 
 	/**
 	 * Start grouping label function
@@ -413,7 +321,7 @@ RowGroup.defaults = {
 };
 
 
-RowGroup.version = "1.1.4-dev";
+RowGroup.version = "1.0.0";
 
 
 $.fn.dataTable.RowGroup = RowGroup;
@@ -438,14 +346,6 @@ DataTable.Api.register( 'rowGroup().enable()', function ( opts ) {
 			ctx.rowGroup.enable( opts === undefined ? true : opts );
 		}
 	} );
-} );
-
-DataTable.Api.register( 'rowGroup().enabled()', function () {
-	var ctx = this.context;
-
-	return ctx.length && ctx[0].rowGroup ?
-		ctx[0].rowGroup.enabled() :
-		false;
 } );
 
 DataTable.Api.register( 'rowGroup().dataSrc()', function ( val ) {

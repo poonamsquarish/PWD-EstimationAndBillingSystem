@@ -36,7 +36,7 @@
         public const string bootboxmin = "~/Scripts/bootbox.min.js";
         public const string jqueryval = "~/bundles/js/jqueryval";
         public const string jqueryvalidate = "~/Scripts/jquery.validate*";
-        public const string Unobtrusive_ajax = "~/bundles/js/Unobtrucsive_ajax";
+        public const string Unobtrusive_ajax = "~/bundles/js/Unobtrusive_ajax";
         public const string jqueryunobtrusive = "~/Scripts/jquery.unobtrusive-ajax.min.js";
         public const string jsmodernizr = "~/bundles/js/modernizr";
         public const string modernizr = "~/Scripts/modernizr-*";
