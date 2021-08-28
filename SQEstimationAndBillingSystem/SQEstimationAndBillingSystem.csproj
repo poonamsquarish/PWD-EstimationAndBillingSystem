@@ -6762,7 +6762,10 @@
     </Content>
     <Content Include="DBScripts\18Jan2020InitialScript.sql" />
     <Content Include="DBScripts\21Apr2020FullDbScript.sql" />
+    <Content Include="DBScripts\24Jul2021PWDSchemaDataScript.sql" />
+    <Content Include="DBScripts\26June2021 schema and data script Working till dsr upload.sql" />
     <Content Include="DBScripts\26June2021 schema and data script.sql" />
+    <Content Include="DBScripts\28 Aug 2021 schema and data script working.sql" />
     <Content Include="DBScripts\CleanDbScript.sql" />
     <Content Include="DBScripts\FinalSchemaAndDataScrript.sql" />
     <Content Include="DBScripts\Script_V1.txt" />
@@ -7408,6 +7411,7 @@
     <Content Include="Documents\02. Construction of Concrete Road at Proposed Construction of Concrete Road  %40 From Sanmitra Housing Society    ..xls" />
     <Content Include="Documents\New folder\SSR_2019-20.xlsx" />
     <Content Include="Documents\SSR_2019-20.xlsx" />
+    <Content Include="DBScripts\SSR_2020-21.xlsx" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\dataTables.editor.min.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
@@ -7528,6 +7532,8 @@
     <Content Include="Scripts\jquery.auto-complete.js" />
     <Content Include="Scripts\jquery.auto-complete.min.js" />
     <Content Include="Scripts\jquery.event.drag.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />

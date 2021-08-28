@@ -53,7 +53,7 @@ namespace SQEstimationAndBillingSystem.Controllers
                         objLabTestModel.NameOfTestList = JsonConvert.DeserializeObject<List<NameOfTestModel>>(objLabTestModel.NameOfTestJson);
                     }
                     var Result = _repository.AddEditLabTest(objLabTestModel);
-                    return Json(new { success = true, message = "Saved successfully !!!" });
+                    return Json(new { success = true, message = "Saved successfully !!!" }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {

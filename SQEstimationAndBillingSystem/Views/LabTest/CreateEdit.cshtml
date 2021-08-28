@@ -3,6 +3,8 @@
     ViewBag.Title = "Add/Edit Lab Test";
 }
 
+
+
 <section class="content-header">
     <h3>
         Add/Edit Lab Test
@@ -759,7 +761,7 @@
     }
 
     function OnLabTestSuccess(data) {
-
+        debugger;
         if (data.success) {
             $('#partialLabTest').html('');
             $('#lnkAddLabTest').show();
