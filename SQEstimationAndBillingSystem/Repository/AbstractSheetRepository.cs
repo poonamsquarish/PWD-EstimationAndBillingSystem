@@ -41,8 +41,6 @@ namespace SQEstimationAndBillingSystem.Repository
 
         public string AddMeasurementSheet(AbstractSheetModel model)
         {
-            //model.DSRId = 2;
-            //model.ProjectId = 1;
             return _dbContext.Database.SqlQuery<string>("SQSPAddAbstractSheet @ID ,@ProjectId,@DSRId,@CreatedBy,@ModifiedBy",
               new SqlParameter("ID", model.id),
               new SqlParameter("ProjectId", model.ProjectId),

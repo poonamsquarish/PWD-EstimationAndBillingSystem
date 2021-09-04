@@ -94,10 +94,21 @@ namespace SQEstimationAndBillingSystem.Controllers
                 AbstractSheetModel model = new AbstractSheetModel();
                 model.id = 0;
                 if (ModelState.IsValid)
-                {
+                {                    
+                    LoggedInUserSessionModel objLoggedInUserSession = new LoggedInUserSessionModel();
+                    if (Session["LoggedInUserSession"] != null)
+                    {
+                        objLoggedInUserSession = (LoggedInUserSessionModel)(Session["LoggedInUserSession"]);
+                    }
+                    model.ProjectId = objLoggedInUserSession.SelectedProjectId;
+                    model.DSRId = Convert.ToInt32(objLoggedInUserSession.SelectedDSRId);
                     if (model.id == 0)
                     {
-                        model.CreatedBy = model.ModifiedBy = Convert.ToInt32(Session["UserId"]);
+                        model.CreatedBy = model.ModifiedBy = Convert.ToInt32(objLoggedInUserSession.LoggedInUserId);
+                    }
+                    else
+                    {
+                        model.ModifiedBy = Convert.ToInt32(objLoggedInUserSession.LoggedInUserId);
                     }
                     var Result = _repository.AddMeasurementSheet(model);
 
