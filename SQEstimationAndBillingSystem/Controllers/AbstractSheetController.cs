@@ -5,6 +5,7 @@ using SQEstimationAndBillingSystem.Repository;
 
 namespace SQEstimationAndBillingSystem.Controllers
 {
+    [Authorize]
     public class AbstractSheetController : Controller
     {
         AbstractSheetRepository _repository = new AbstractSheetRepository();

@@ -3,7 +3,7 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<!DOCTYPE html>
 <link href="~/Content/slick.grid.css" rel="stylesheet" />
 <link href="~/Content/jquery-ui-1.12.1/jquery-ui.css" rel="stylesheet" />
 <link href="~/Content/slick.pager.css" rel="stylesheet" />
@@ -99,7 +99,7 @@
                         <td style="border-top: 1px solid #000000" align="center"><b><font size=3>A</font></b></td>
                         <td style="border-top: 1px solid #000000" align="center">  =</td>
                         <td style="border-top: 1px solid #000000" align="center">Rs.</td>
-                        <td style="border-top: 1px solid #000000" align="right"><b>@Model.Total</b></td>
+                        <td style="border-top: 1px solid #000000" align="right"><b><div id="divTotalWorkPortion">@Model.Total</div></b></td>
                     </tr>
                     <tr>
                         <td height="24" align="left"><b><br></b></td>
@@ -114,22 +114,28 @@
                     <tr>
                         <td height="24" align="left"><b><br></b></td>
                         <td align="left"><br></td>
-                        <td align="left"><b>Deduct For Royalty</b></td>
-                        <td align="left"><br></td>
+                        <td align="left" colspan="2"><b>Deduct For Royalty</b></td>
+                        @*<td align="left"><br></td>*@
                         <td align="left"><br></td>
                         <td align="center">  =</td>
                         <td align="center">Rs.</td>
-                        <td align="right" ><b>@Model.DeductForRoyalty</b></td>
+                        <td align="right"><b><div id="divDeductForRoyalty">@Model.DeductForRoyalty</div></b></td>
                     </tr>
                     <tr>
                         <td height="24" align="left"><b><br></b></td>
                         <td align="left"><b><br></b></td>
-                        <td align="left"><b>Deduct For Testing Charges</b></td>
-                        <td align="left"><br></td>
-                        <td align="left"><br></td>
+                        <td align="left" colspan="3"><b>Deduct For Testing Charges</b></td>
+                        @*<td align="left"><br></td>*@
+                        @*<td align="left"><br></td>*@
                         <td align="center">  =</td>
                         <td align="center">Rs.</td>
-                        <td align="right" ><b>@Model.DeductForTestingCharges</b></td>
+                        <td align="right">
+                            <b>
+                                <div id="divDeductForTestingCharges">
+                                    @Model.DeductForTestingCharges
+                                </div>
+                            </b>
+                        </td>
                     </tr>
                     <tr>
                         <td style="border-bottom: 1px solid #000000" height="24" align="left"><br></td>
@@ -144,12 +150,12 @@
                     <tr>
                         <td height="24" align="left"><br></td>
                         <td align="left"><br></td>
-                        <td align="left"><font size=3>Total Cost of Work Portion</font></td>
-                        <td align="left"><br></td>
-                        <td align="left"><br></td>
+                        <td align="left" colspan="3"><font size=3>Total Cost of Work Portion</font></td>
+                        @*<td align="left"><br></td>*@
+                        @*<td align="left"><br></td>*@
                         <td align="center">  =</td>
                         <td align="center">Rs.</td>
-                        <td align="right" ><b>@Model.TotalCostofWorkPortion</b></td>
+                        <td align="right"><div id="divTotalCostofWorkPortion"><b>@Model.TotalCostofWorkPortion</b></div></td>
                     </tr>
                     <tr>
                         <td height="24" align="left"><br></td>
@@ -163,43 +169,43 @@
                     </tr>
                     <tr>
                         <td height="24" align="left"><br></td>
-                        <td align="left"><b>ADD 12 % For GST</b></td>
-                        <td align="left"><b><br></b></td>
-                        <td align="left"><br></td>
+                        <td align="left" colspan="3"><b>ADD <span><input id="txtGSTPer" class="allow_decimalPercentage" max="100" style="width: 50px;" type="text" value="@Model.GST" /></span> % For GST</b></td>
+                        @*<td align="left"><b><br></b></td>*@
+                        @*<td align="left"><br></td>*@
                         <td align="center" valign=middle><b>B</b></td>
                         <td align="center">  =</td>
                         <td align="center">Rs.</td>
-                        <td align="right"><b>@Model.GST</b></td>
+                        <td align="right"><b><div id="divGSTValue">@Model.GSTAmt</div></b></td>
                     </tr>
                     <tr>
                         <td height="24" align="left"><br></td>
-                        <td align="left"><b>Labour Insurance  1.00  % </b></td>
-                        <td align="left"><br></td>
-                        <td align="left"><br></td>
+                        <td align="left" colspan="3"><b>Labour Insurance  <span><input id="txtLabourInsurance" class="allow_decimalPercentage" max="100" style="width: 50px;" type="text" value="@Model.LabourInsurancePer" /></span> % </b></td>
+                        @*<td align="left"><br></td>*@
+                        @*<td align="left"><br></td>*@
                         <td align="center" valign=middle><b>C</b></td>
                         <td align="center">  =</td>
                         <td align="center">Rs.</td>
-                        <td align="right" ><b>@Model.LabourInsurancePer</b></td>
+                        <td align="right"><b><div id="divLabourInsurance">@Model.LabourInsuranceAmt</div></b></td>
                     </tr>
                     <tr>
                         <td height="24" align="left"><br></td>
-                        <td align="left"><b>Add 4% Contingency Charges </b></td>
-                        <td align="left"><br></td>
-                        <td align="left"><br></td>
+                        <td align="left" colspan="3"><b>Add <span><input id="txtContingencyChargesPer" class="allow_decimalPercentage" max="100" style="width: 50px;" type="text" value="@Model.ContingencyChargesPer" /></span> % Contingency Charges </b></td>
+                        @*<td align="left"><br></td>*@
+                        @*<td align="left"><br></td>*@
                         <td align="center" valign=middle><b>D</b></td>
                         <td align="center">  =</td>
                         <td align="center">Rs.</td>
-                        <td align="right" ><b>@Model.ContingencyChargesPer</b></td>
+                        <td align="right"><b><div id="divContingencyChargesPer">@Model.ContigencyAmt</div></b></td>
                     </tr>
                     <tr>
                         <td height="24" align="left"><br></td>
-                        <td align="left"><b>Add 4% Administrative Charges </b></td>
-                        <td align="left"><br></td>
-                        <td align="left"><br></td>
+                        <td align="left" colspan="3"><b>Add <span><input id="txtAdministrativeChargesPer" class="allow_decimalPercentage" max="100" style="width: 50px;" type="text" value="@Model.AdministrativeChargesPer" /></span> % Administrative Charges </b></td>
+                        @*<td align="left"><br></td>*@
+                        @*<td align="left"><br></td>*@
                         <td align="center" valign=middle><b>E</b></td>
                         <td align="center">  =</td>
                         <td align="center">Rs.</td>
-                        <td align="right" ><b>@Model.AdministrativeChargesPer</b></td>
+                        <td align="right"><b><div id="divAdministrativeChargesPer">@Model.AdministrativeAmt</div></b></td>
                     </tr>
                     <tr>
                         <td height="24" align="left"><br></td>
@@ -215,7 +221,7 @@
                         <td colspan=5 height="24" align="center"><b>Total Gross Amount =   A + B + C + D + E</b></td>
                         <td align="center">  =</td>
                         <td align="center">Rs.</td>
-                        <td align="right" ><b><font size=3>@Model.TotalGrossAmount</font></b></td>
+                        <td align="right"><b><font size=3><div id="divTotalGrossAmount">@Model.TotalGrossAmount</div></font></b></td>
                     </tr>
                     <tr>
                         <td height="24" align="left"><br></td>
@@ -235,7 +241,7 @@
                         <td align="left"><b><font size=3>Say </font></b></td>
                         <td align="center">=</td>
                         <td align="center"><b>Rs.</b></td>
-                        <td style="border-top: 2px solid #000000; border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="right"><b><font size=3>@Model.Say</font></b></td>
+                        <td style="border-top: 2px solid #000000; border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="right"><b><font size=3><div id="divTotalGrossAmountRound">@Model.Say</div></font></b></td>
                     </tr>
                     <tr>
                         <td height="17" align="left"><br></td>
@@ -259,6 +265,8 @@
                     </tr>
 
                 </table>
+
+                <input style="float:right;" type="button" id="btnRecaptionalSubmit" value="Save" name="Save" class="btn btn-primary" />
             </div>
         </div>
     </div>
@@ -267,9 +275,96 @@
 
 <script>
 
+
     $(document).ready(function () {
         MakeReadOnlyIfNotLatestDSR("divRecaptional");
-        LoadGridData();
+
+        var pastValue, pastSelectionStart, pastSelectionEnd;
+
+        $("input").on("keydown", function () {
+            pastValue = this.value;
+            pastSelectionStart = this.selectionStart;
+            pastSelectionEnd = this.selectionEnd;
+
+        }).on("input propertychange", function () {
+            var regex = /^(100(\.0{0,2})?|(\d|[1-9]\d)(\.\d{0,2})?)$/;
+
+            if (this.value.length > 0 && !regex.test(this.value)) {
+                this.value = pastValue;
+                this.selectionStart = pastSelectionStart;
+                this.selectionEnd = pastSelectionEnd;
+            }
+            if (this.id == "txtGSTPer") {
+                var total = parseFloat($("#divTotalCostofWorkPortion").text()).toFixed(2);
+                var GSTAmt = (((this.value) * total) / 100).toFixed(2);
+                $("#divGSTValue").text(GSTAmt);
+                CalculateGrossTotal();
+            }
+            if (this.id == "txtLabourInsurance") {
+                var total = parseFloat($("#divTotalCostofWorkPortion").text()).toFixed(2);
+                var GSTAmt = (((this.value) * total) / 100).toFixed(2);
+                $("#divLabourInsurance").text(GSTAmt);
+                CalculateGrossTotal();
+            }
+            if (this.id == "txtContingencyChargesPer") {
+                var total = parseFloat($("#divTotalCostofWorkPortion").text()).toFixed(2);
+                var GSTAmt = (((this.value) * total) / 100).toFixed(2);
+                $("#divContingencyChargesPer").text(GSTAmt);
+                CalculateGrossTotal();
+            }
+            if (this.id == "txtAdministrativeChargesPer") {
+                var total = parseFloat($("#divTotalCostofWorkPortion").text()).toFixed(2);
+                var GSTAmt = (((this.value) * total) / 100).toFixed(2);
+                $("#divAdministrativeChargesPer").text(GSTAmt);
+                CalculateGrossTotal();
+            }
+
+        });
+
+
+        function CalculateGrossTotal() {
+            var total = parseFloat($("#divTotalWorkPortion").text()) + parseFloat($("#divGSTValue").text()) + parseFloat($("#divLabourInsurance").text()) + parseFloat($("#divContingencyChargesPer").text())+parseFloat($("#divAdministrativeChargesPer").text());
+            $("#divTotalGrossAmount").text(total.toFixed(2));
+            $("#divTotalGrossAmountRound").text(Math.round(total.toFixed(2)));
+        }
+
+        $("#btnRecaptionalSubmit").click(function () {
+
+            var model =  {
+                WorkPortion: $('#divTotalWorkPortion').text(),
+                Total: $('#divTotalWorkPortion').text(),
+                        DeductForRoyalty: $('#divDeductForRoyalty').text(),
+                            DeductForTestingCharges: $('#divDeductForTestingCharges').text(),
+                                TotalCostofWorkPortion: $('#divDeductForRoyalty').text(),
+                                    GST: $('#txtGSTPer').val(),
+                                        LabourInsurancePer: $('#txtLabourInsurance').val(),
+                                            ContingencyChargesPer: $('#txtContingencyChargesPer').val(),
+                                                AdministrativeChargesPer: $('#txtAdministrativeChargesPer').val(),
+                                                    GSTAmt: $('#divGSTValue').text(),
+                                                        LabourInsuranceAmt: $('#divLabourInsurance').text(),
+                                                            ContigencyAmt: $('#divContingencyChargesPer').text(),
+                                                                AdministrativeAmt: $('#divAdministrativeChargesPer').text(),
+                                                                    TotalGrossAmount: $('#divTotalGrossAmount').text(),
+                                                                        Say: $('#divTotalGrossAmountRound').text(),
+            };
+
+            $.ajax({
+                url: '@Url.Action("AddEditRecaptional", "RecaptionalSheet")',
+                method: "Post",
+                data: JSON.stringify(model),
+                contentType: "application/json",
+                dataType: "json",
+                success: function (response) {
+                    if (response == "success") {
+                        window.location = '@Url.Action("Index", "RecaptionalSheet")';
+                    }
+                },
+                error: function (jqXHR, textStatus, ex) {
+                    //alert(textStatus + "," + ex + "," + jqXHR.responseText);
+                }
+            });
+
+        });
     });
 
 

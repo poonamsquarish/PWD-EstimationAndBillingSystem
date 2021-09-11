@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using SQEstimationAndBillingSystem.FilterAttributes;
+using System.Web;
 using System.Web.Mvc;
 
 namespace SQEstimationAndBillingSystem
@@ -8,6 +9,7 @@ namespace SQEstimationAndBillingSystem
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
+           // filters.Add(new CheckSessionOutAttribute());
         }
     }
 }

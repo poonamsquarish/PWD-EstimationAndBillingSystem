@@ -173,6 +173,7 @@
     <Compile Include="DAL\M_Users.cs">
       <DependentUpon>FeedbackEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="FilterAttributes\CheckSessionOutAttribute.cs" />
     <Compile Include="FilterAttributes\ValidateAjaxAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

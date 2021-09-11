@@ -319,7 +319,7 @@ namespace SQEstimationAndBillingSystem.Repository
 
         public string AddEditDSRDetails(DSRModel model)
         {
-            return _dbContext.Database.SqlQuery<string>("SQSPAddEditDSRDetails @ID,@SrNo,@Chapter,@SSRItemNo, @ReferenceNo,@DescriptionOfTheItem,@AdditionalSpecification,@Unit,@CompletedRateExcludingGSTInRs,@LabourRateExcludingGSTInRs,@DSRId,@CreatedBy,@ModifiedBy",
+            return _dbContext.Database.SqlQuery<string>("SQSPAddEditDSRDetails @ID,@SrNo,@Chapter,@SSRItemNo, @ReferenceNo,@DescriptionOfTheItem,@AdditionalSpecification,@Unit,@CompletedRateExcludingGSTInRs,@LabourRateExcludingGSTInRs,@IsNonDSRItem,@DSRId,@CreatedBy,@ModifiedBy",
               new SqlParameter("ID", model.id),
               new SqlParameter("SrNo", "0"),
               new SqlParameter("Chapter", model.Chapter),
@@ -330,6 +330,7 @@ namespace SQEstimationAndBillingSystem.Repository
               new SqlParameter("Unit", model.Unit),
               new SqlParameter("CompletedRateExcludingGSTInRs", model.CompletedRateExcludingGSTInRs),
               new SqlParameter("LabourRateExcludingGSTInRs", model.LabourRateExcludingGSTInRs),
+              new SqlParameter("IsNonDSRItem", model.IsNonDSRItem),
               new SqlParameter("DSRId", model.DSRId),
               new SqlParameter("CreatedBy", model.CreatedBy),
               new SqlParameter("ModifiedBy", model.ModifiedBy)

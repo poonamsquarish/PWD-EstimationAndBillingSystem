@@ -7,7 +7,7 @@ namespace SQEstimationAndBillingSystem.Models
 {
     public class RecaptionalModel
     {
-        public int    ProjectId { get; set; }
+        public long    ProjectId { get; set; }
         public decimal WorkPortion { get; set; }
         public decimal Total { get; set; }
         public decimal DeductForRoyalty { get; set; }
@@ -18,8 +18,18 @@ namespace SQEstimationAndBillingSystem.Models
         public decimal ContingencyChargesPer { get; set; }
         public decimal AdministrativeChargesPer { get; set; }
 
+        public decimal GSTAmt { get; set; }
+        public decimal LabourInsuranceAmt { get; set; }
+        public decimal ContigencyAmt { get; set; }
+        public decimal AdministrativeAmt { get; set; }
+
         public decimal TotalGrossAmount { get; set; }
         public decimal Say { get; set; }
-        
+
+        public int DSRId { get; set; }
+        public long CreatedBy { get; set; }
+        public long ModifiedBy { get; set; }
+        public long id { get; set; }
+
     }
 }
